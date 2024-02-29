@@ -1,6 +1,6 @@
 import fetcher from "lib/fetcher"
 import { useQuery } from '@tanstack/react-query'
-import { Cards } from "components/ProductCard"
+import { ProductCards } from "components/ProductCards"
 import { ProductDto } from "../lib/dto/types"
 
 export const Products = () => {
@@ -16,12 +16,11 @@ export const Products = () => {
   return (
     <>
       {data.map((product) => (
-        <Cards
+        <ProductCards
           key={product.id}
           {...product}
         />
       ))}
     </>
   )
-
 }

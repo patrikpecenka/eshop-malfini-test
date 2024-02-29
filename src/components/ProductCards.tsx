@@ -2,10 +2,13 @@ import { Anchor, Badge, Card, Group, Image, NumberFormatter, Rating, Text, Title
 import { ProductDto } from "../lib/dto/types"
 import { AddCartButton } from "./AddCartButton"
 import { useCart } from "../store/shopStore"
+import { useNavigate } from "react-router-dom"
 
 
-export const Cards = ({ id, title, image, price, description, rating }: ProductDto) => {
-  const addCartItems = useCart((state) => state.addItem)
+
+export const ProductCards = ({ id, title, image, price, description, rating }: ProductDto) => {
+  const addCartItems = useCart((state) => state.addItem);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     addCartItems({
@@ -22,7 +25,7 @@ export const Cards = ({ id, title, image, price, description, rating }: ProductD
       padding="md"
     >
 
-      <Card.Section className="self-center select-none">
+      <Card.Section className="self-center select-none" onClick={() => navigate(`/products/${id}`)}>
         <Anchor underline="never" >
           <Image
             className="hover:scale-110 duration-200"

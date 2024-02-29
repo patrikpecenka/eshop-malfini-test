@@ -1,7 +1,7 @@
 import { SimpleGrid } from "@mantine/core"
 import { Products } from "components/Products"
 
-export const ProductsPage = () => {
+export const AllProducts = () => {
   return (
     <SimpleGrid
       p={20}

@@ -1,4 +1,4 @@
-import { Badge, Drawer, Flex, Group, Indicator, Title, Button, NumberFormatter } from "@mantine/core"
+import { Badge, Drawer, Flex, Group, Indicator, Title, Button, NumberFormatter, Text } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import { IconShoppingCart } from '@tabler/icons-react';
 import { CartItem } from "components/CartItem";
@@ -10,10 +10,19 @@ export const Navbar = () => {
   const { totalPrice, clearCart } = useCart()
   const { cart } = useCart()
 
+
   return (
     <>
       <Title order={1}>
-        EasyShop
+        Easy
+        <Text
+          span
+          inherit
+          variant="gradient"
+          gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
+        >
+          Shop
+        </Text>
       </Title>
       <Flex align="center" gap={10} h={40} >
         <Badge
@@ -96,6 +105,22 @@ export const Navbar = () => {
             ))}
           </Group>
         </Flex>
+        <Group w="100%" align="center" justify="center">
+          <Button
+            disabled={cart.length === 0}
+            className="hover:opacity-70 duration-200"
+            mx={15}
+            w="100%"
+            mt={15}
+            variant="gradient"
+            gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
+            size="md"
+            radius="xl"
+          >
+
+            Checkout
+          </Button>
+        </Group>
       </Drawer >
     </>
   )
