@@ -6,3 +6,7 @@ export interface CartProps {
   amount: number;
   id: string;
 }
+
+export interface ConfirmDeleteModalProps {
+  confirm: () => void;
+}

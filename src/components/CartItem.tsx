@@ -2,6 +2,7 @@ import { ActionIcon, Box, Card, Flex, Image, NumberInput, Title } from "@mantine
 import { IconTrash, IconPlus, IconMinus } from "@tabler/icons-react"
 import { CartProps } from "../lib/props/types"
 import { useCart } from "../store/shopStore"
+import { ConfirmDeleteModal } from "./ConfirmDeleteModal"
 
 export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) => {
   const deleteItem = useCart((state) => state.deleteItem)
@@ -10,6 +11,10 @@ export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) =>
 
   const handleDelete = () => {
     deleteItem(id)
+  }
+
+  const deleteConfirmModal = () => {
+    ConfirmDeleteModal({ confirm: () => deleteItem(id) })
   }
 
   const handleIncrease = () => {
@@ -50,7 +55,7 @@ export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) =>
             <ActionIcon
               variant="light"
               color="gray"
-              onClick={handleDecrease}
+              onClick={amount < 2 ? deleteConfirmModal : handleDecrease}
             >
               <IconMinus size="20" />
             </ActionIcon>

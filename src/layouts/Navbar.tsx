@@ -1,4 +1,4 @@
-import { Badge, Drawer, Flex, Group, Indicator, Title, Text, Button, NumberFormatter } from "@mantine/core"
+import { Badge, Drawer, Flex, Group, Indicator, Title, Button, NumberFormatter } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import { IconShoppingCart } from '@tabler/icons-react';
 import { CartItem } from "components/CartItem";
@@ -59,12 +59,12 @@ export const Navbar = () => {
         transitionProps={{ transition: "slide-left", duration: 400, timingFunction: 'ease' }}
         overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
       >
-        <Flex justify="center" align="center" direction="column"  >
+        <Flex justify="center" align="center" direction="column">
           <Flex justify="space-between" w="100%" px={15}>
             <Button onClick={clearCart} variant="light" color="red">
               Clear cart
             </Button>
-            <Text className="place-self-start" c="black" fw={600}>
+            <Title order={4} className="place-self-start" c="black" fw={600}>
               Total price:
               <Badge
                 color="black"
@@ -76,7 +76,7 @@ export const Navbar = () => {
               >
                 <NumberFormatter prefix=" $" value={totalPrice()} decimalScale={2} />
               </Badge>
-            </Text>
+            </Title>
           </Flex>
           <Title order={2} >
             My Cart
