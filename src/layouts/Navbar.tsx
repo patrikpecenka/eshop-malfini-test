@@ -3,27 +3,35 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconShoppingCart } from '@tabler/icons-react';
 import { CartItem } from "components/CartItem";
 import { useCart } from "../store/shopStore"
+import { useNavigate } from "react-router-dom"
 
 
 export const Navbar = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const { totalPrice, clearCart } = useCart()
   const { cart } = useCart()
+  const navigate = useNavigate();
 
 
   return (
     <>
-      <Title order={1}>
-        Easy
-        <Text
-          span
-          inherit
-          variant="gradient"
-          gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
-        >
-          Shop
-        </Text>
-      </Title>
+      <Button
+        variant="transparent"
+        h="100%"
+        onClick={() => navigate("/")}
+      >
+        <Title order={1}>
+          Easy
+          <Text
+            span
+            inherit
+            variant="gradient"
+            gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
+          >
+            Shop
+          </Text>
+        </Title>
+      </Button>
       <Flex align="center" gap={10} h={40} >
         <Badge
           color="red.5."
