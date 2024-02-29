@@ -19,6 +19,7 @@ export const Navbar = () => {
         variant="transparent"
         h="100%"
         onClick={() => navigate("/")}
+        c="black"
       >
         <Title order={1}>
           Easy
