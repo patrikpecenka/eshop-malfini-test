@@ -91,6 +91,7 @@ export const Navbar = () => {
                 title={item.title}
                 price={item.price}
                 amount={item.amount}
+                totalPrice={item.totalPrice}
               />
             ))}
           </Group>

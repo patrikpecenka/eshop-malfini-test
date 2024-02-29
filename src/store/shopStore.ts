@@ -22,7 +22,12 @@ export const useCart = create(
           cart: state.cart.find((cartItem) => cartItem.id === item.id)
             ? state.cart.map((cartItem) =>
               cartItem.id === item.id
-                ? { ...cartItem, amount: cartItem.amount + 1 }
+                ? {
+                  ...cartItem,
+                  amount: cartItem.amount + 1,
+                  price: item.price,
+                  totalPrice: item.price * (cartItem.amount + 1)
+                }
                 : cartItem
             )
             : [...state.cart, item],
@@ -45,19 +50,27 @@ export const useCart = create(
       increaseAmount: (id: string) => set((state) => ({
         cart: state.cart.map((item) =>
           item.id === id
-            ? { ...item, amount: item.amount + 1 }
+            ? {
+              ...item,
+              amount: item.amount + 1,
+              totalPrice: Math.round(item.totalPrice * 100 + item.price * 100) / 100
+            }
             : item
         )
       })),
       decreaseAmount: (id: string) => set((state) => ({
         cart: state.cart.map((item) =>
           item.id === id
-            ? { ...item, amount: item.amount === 0 ? 0 : item.amount - 1 }
+            ? {
+              ...item,
+              amount: item.amount === 0 ? 0 : item.amount - 1,
+              totalPrice: item.amount === 0 ? 0 : Math.round(item.totalPrice * 100 - item.price * 100) / 100
+            }
             : item
         )
       })),
       totalPrice: () =>
-        get().cart.reduce((acc, item) => acc + item.price * item.amount, 0)
+        get().cart.reduce((acc, item) => acc + item.totalPrice, 0)
     }),
 
 

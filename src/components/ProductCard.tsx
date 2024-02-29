@@ -8,7 +8,10 @@ export const Cards = ({ id, title, image, price, description, rating }: ProductD
   const addCartItems = useCart((state) => state.addItem)
 
   const handleClick = () => {
-    addCartItems({ id, title, image, price, amount: 1 })
+    addCartItems({
+      id, title, image, price, amount: 1,
+      totalPrice: price
+    })
   }
 
   return (

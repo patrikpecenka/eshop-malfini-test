@@ -1,7 +1,7 @@
 import fetcher from "lib/fetcher"
 import { useQuery } from '@tanstack/react-query'
 import { Cards } from "components/ProductCard"
-import { ProductDto } from "utils/types"
+import { ProductDto } from "../lib/dto/types"
 
 export const Products = () => {
   const { status, data } = useQuery({

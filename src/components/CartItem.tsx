@@ -3,7 +3,7 @@ import { IconTrash, IconPlus, IconMinus } from "@tabler/icons-react"
 import { CartProps } from "../lib/props/types"
 import { useCart } from "../store/shopStore"
 
-export const CartItem = ({ id, title, image, price, amount }: CartProps) => {
+export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) => {
   const deleteItem = useCart((state) => state.deleteItem)
   const increaseAmount = useCart((state) => state.increaseAmount)
   const decreaseAmount = useCart((state) => state.decreaseAmount)
@@ -19,7 +19,6 @@ export const CartItem = ({ id, title, image, price, amount }: CartProps) => {
   const handleDecrease = () => {
     decreaseAmount(id)
   }
-
 
   return (
     <Card
@@ -69,7 +68,7 @@ export const CartItem = ({ id, title, image, price, amount }: CartProps) => {
 
           <Flex gap={10} w={100} align="center" justify="end">
             <Title order={5} className="self-center" >
-              ${price}
+              ${totalPrice}
             </Title>
             <ActionIcon variant="light" color="red" onClick={handleDelete}>
               <IconTrash
