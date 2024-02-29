@@ -14,7 +14,7 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <MantineProvider>
         <ModalsProvider >
-          <BrowserRouter>
+          <BrowserRouter >
             <Notifications position="bottom-right" />
             <StoreRoutes />
           </BrowserRouter>

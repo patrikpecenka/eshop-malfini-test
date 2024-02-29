@@ -9,5 +9,15 @@ export default defineConfig({
     open: true,
     port: 3000,
     host: '0.0.0.0',
+  },
+  build: {
+    rollupOptions: {
+      external: ["react", "react-router", "react-router-dom"],
+      output: {
+        globals: {
+          react: "React",
+        },
+      },
+    },
   }
 })
