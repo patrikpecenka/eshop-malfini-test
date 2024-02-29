@@ -12,18 +12,18 @@ const TempLayout = () => {
           justify="space-between"
           align="center"
           h="100%"
-          mx={100}
+          mx={40}
         >
           <Navbar />
-          <Burger
+          {/* <Burger
             hiddenFrom="sm"
             size="md"
-          />
+          /> */}
         </Flex>
       </AppShell.Header>
 
       <AppShell.Main
-        mx={80}
+        mx={10}
       >
         <Outlet />
       </AppShell.Main>
