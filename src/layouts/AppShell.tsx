@@ -1,4 +1,4 @@
-import { AppShell, Burger, Flex } from '@mantine/core';
+import { AppShell, Flex } from '@mantine/core';
 import { Navbar } from 'layouts/Navbar';
 import { Outlet } from 'react-router-dom';
 
