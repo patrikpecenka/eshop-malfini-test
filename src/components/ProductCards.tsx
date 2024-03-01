@@ -1,14 +1,9 @@
 import { Anchor, Badge, Card, Group, Image, NumberFormatter, Rating, Text, Title, Tooltip } from "@mantine/core"
 import { ProductDto } from "../lib/dto/types"
-import { AddCartButton } from "./AddCartButton"
+import { AddCartButton } from "./Buttons/AddCartButton"
 import { useCart } from "../store/shopStore"
-import { useNavigate } from "react-router-dom"
-
-
-
 export const ProductCards = ({ id, title, image, price, description, rating }: ProductDto) => {
   const addCartItems = useCart((state) => state.addItem);
-  const navigate = useNavigate();
 
   const handleClick = () => {
     addCartItems({
@@ -25,8 +20,11 @@ export const ProductCards = ({ id, title, image, price, description, rating }: P
       padding="md"
     >
 
-      <Card.Section className="self-center select-none" onClick={() => navigate(`/products/${id}`)}>
-        <Anchor underline="never" >
+      <Card.Section className="self-center select-none">
+        <Anchor
+          href={`/products/${id}`}
+          underline="never"
+        >
           <Image
             className="hover:scale-110 duration-200"
             m={20}
@@ -42,8 +40,15 @@ export const ProductCards = ({ id, title, image, price, description, rating }: P
         h={100}
         gap={1}
       >
-        <Anchor underline="never" c="black">
-          <Title order={4} lineClamp={1}>
+        <Anchor
+          href={`/products/${id}`}
+          underline="never"
+          c="black">
+          <Title
+            order={4}
+            lineClamp={1}
+            className="hover:text-violet-600"
+          >
             {title}
           </Title>
           <Text lineClamp={3} size="xs" mt={10}>{description}</Text>

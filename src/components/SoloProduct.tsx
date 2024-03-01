@@ -26,7 +26,6 @@ export const SoloProduct = ({ id, title, image, price, description, rating, cate
                 h={120}
               >
                 <Image
-
                   h="100%"
                   alt="Random unsplash image"
                   fit="contain"

@@ -1,7 +1,7 @@
 import { Badge, Drawer, Flex, Group, Indicator, Title, Button, NumberFormatter, Text } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import { IconShoppingCart } from '@tabler/icons-react';
-import { CartItem } from "components/CartItem";
+import { CartItem } from "components/Cart/CartItem";
 import { useCart } from "../store/shopStore"
 import { useNavigate } from "react-router-dom"
 
@@ -9,9 +9,13 @@ import { useNavigate } from "react-router-dom"
 export const Navbar = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const { totalPrice, clearCart } = useCart()
-  const { cart } = useCart()
+  const { cart, getSumCartItems } = useCart()
   const navigate = useNavigate();
 
+  const handleCheckoutRedirect = () => {
+    close()
+    navigate("/Order1")
+  }
 
   return (
     <>
@@ -46,7 +50,7 @@ export const Navbar = () => {
 
         <Indicator
           h="100%"
-          label={cart.length}
+          label={getSumCartItems()}
           inline
           size={22}
           offset={7}
@@ -79,7 +83,7 @@ export const Navbar = () => {
       >
         <Flex justify="center" align="center" direction="column">
           <Flex justify="space-between" w="100%" px={15}>
-            <Button onClick={clearCart} variant="light" color="red">
+            <Button onClick={clearCart} variant="light" color="red" disabled={cart.length === 0}>
               Clear cart
             </Button>
             <Title order={4} className="place-self-start" c="black" fw={600}>
@@ -125,8 +129,8 @@ export const Navbar = () => {
             gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
             size="md"
             radius="xl"
+            onClick={handleCheckoutRedirect}
           >
-
             Checkout
           </Button>
         </Group>

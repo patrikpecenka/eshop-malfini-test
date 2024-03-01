@@ -6,7 +6,7 @@ export const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <Flex align="center" justify="center">
+    <Flex align="center" justify="center" direction="column">
       <Button
 
         h={60}

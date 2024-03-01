@@ -1,8 +1,8 @@
 import { ActionIcon, Box, Card, Flex, Image, NumberInput, Title } from "@mantine/core"
 import { IconTrash, IconPlus, IconMinus } from "@tabler/icons-react"
-import { CartProps } from "../lib/props/types"
-import { useCart } from "../store/shopStore"
-import { ConfirmDeleteModal } from "./ConfirmDeleteModal"
+import { CartProps } from "../../lib/props/types"
+import { useCart } from "../../store/shopStore"
+import { ConfirmDeleteModal } from "../ConfirmDeleteModal"
 
 export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) => {
   const deleteItem = useCart((state) => state.deleteItem)

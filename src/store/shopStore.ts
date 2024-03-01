@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { CartProps } from "../lib/props/types";
+import { CartProps, UserProps } from "../lib/props/types";
 import { persist } from 'zustand/middleware';
 import { notifications } from "@mantine/notifications";
 
@@ -11,6 +11,12 @@ interface CartStore {
   decreaseAmount: (id: string) => void;
   totalPrice: () => number;
   clearCart: () => void;
+  getSumCartItems: () => number;
+}
+
+interface UserStore {
+  userData: UserProps[];
+  createUser: (user: UserProps) => void;
 }
 
 export const useCart = create(
@@ -36,7 +42,7 @@ export const useCart = create(
             title: "Success",
             message: "Item added successfully.",
             color: "green",
-            autoClose: 2000
+            autoClose: 1000
           })
       },
       deleteItem: (id: string) =>
@@ -70,14 +76,32 @@ export const useCart = create(
         )
       })),
       totalPrice: () =>
-        get().cart.reduce((acc, item) => acc + item.totalPrice, 0)
+        get().cart.reduce((acc, item) => acc + item.totalPrice, 0),
+
+      getSumCartItems: () =>
+        get().cart.reduce((acc, item) => acc + item.amount, 0)
     }),
-
-
-
     {
       name: "cart-items/easyshop-malfini",
+    }
+  )
+)
 
+export const useUserData = create(
+  persist<UserStore>(
+    (set) => ({
+      userData: [],
+      createUser: (user) =>
+        set((state) => ({
+          userData:
+            [...state.userData,
+              user
+            ],
+        }))
+
+    }),
+    {
+      name: "userData/easyshop-malfini"
     }
   )
 )
