@@ -1,7 +1,8 @@
 import { create } from "zustand"
-import { CartProps, UserProps } from "../lib/props/types";
+import { OrderCart } from "../lib/props/types";
 import { persist } from 'zustand/middleware';
 import { notifications } from "@mantine/notifications";
+import { CartProps } from "components/Cart/CartItem";
 
 interface CartStore {
   cart: CartProps[];
@@ -15,8 +16,8 @@ interface CartStore {
 }
 
 interface UserStore {
-  userData: UserProps[];
-  createUser: (user: UserProps) => void;
+  userData: OrderCart[];
+  createUser: (user: OrderCart) => void;
 }
 
 export const useCart = create(
@@ -59,7 +60,7 @@ export const useCart = create(
             ? {
               ...item,
               amount: item.amount + 1,
-              totalPrice: Math.round(item.totalPrice * 100 + item.price * 100) / 100
+              totalPrice: item.totalPrice + item.price
             }
             : item
         )
@@ -70,7 +71,7 @@ export const useCart = create(
             ? {
               ...item,
               amount: item.amount === 0 ? 0 : item.amount - 1,
-              totalPrice: item.amount === 0 ? 0 : Math.round(item.totalPrice * 100 - item.price * 100) / 100
+              totalPrice: item.amount === 0 ? 0 : item.totalPrice - item.price
             }
             : item
         )
@@ -79,7 +80,7 @@ export const useCart = create(
         get().cart.reduce((acc, item) => acc + item.totalPrice, 0),
 
       getSumCartItems: () =>
-        get().cart.reduce((acc, item) => acc + item.amount, 0)
+        get().cart.reduce((acc, item) => acc + item.amount, 0),
     }),
     {
       name: "cart-items/easyshop-malfini",
@@ -87,7 +88,7 @@ export const useCart = create(
   )
 )
 
-export const useUserData = create(
+export const useOrderCart = create(
   persist<UserStore>(
     (set) => ({
       userData: [],
@@ -98,10 +99,9 @@ export const useUserData = create(
               user
             ],
         }))
-
     }),
     {
-      name: "userData/easyshop-malfini"
+      name: "orderCartData/easyshop-malfini"
     }
   )
 )

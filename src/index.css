@@ -4,5 +4,10 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: linear-gradient(180deg, #9354e0 0%, #7a84ba 100%);
 }

@@ -1,13 +1,6 @@
-export interface CartProps {
-  image: string;
-  title: string;
-  price: number;
-  totalPrice: number;
-  amount: number;
-  id: string;
-}
+import { CartProps } from "components/Cart/CartItem";
 
-export interface UserProps {
+export interface OrderCart {
   id: string;
   userDetails: {
     email: string;
@@ -24,24 +17,4 @@ export interface UserProps {
   deliveryOption: string;
   deliveryPrice: number;
   cart: CartProps[]
-}
-
-export interface PaymentItemProps {
-  id: string;
-  name: string;
-  icon: string;
-  fee: string;
-}
-
-
-export interface cartCheckoutProps {
-  image: string;
-  title: string;
-  id: string;
-  amount: number;
-  totalPrice: number;
-}
-
-export interface ConfirmDeleteModalProps {
-  confirm: () => void;
 }

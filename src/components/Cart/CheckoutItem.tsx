@@ -1,33 +1,37 @@
-import { ActionIcon, Anchor, Box, Card, Flex, Group, Image, NumberInput, Title } from "@mantine/core"
+import { ActionIcon, Anchor, Box, Card, CardProps, Flex, Group, Image, NumberInput, Title } from "@mantine/core"
 import { IconTrash, IconPlus, IconMinus } from "@tabler/icons-react"
-import { CartProps } from "../../lib/props/types"
 import { useCart } from "../../store/shopStore"
-import { ConfirmDeleteModal } from "../ConfirmDeleteModal"
+import { openConfirmDeleteModal } from "../../utils/openConfirmDeleteModal"
+import { CartProps } from "./CartItem"
 
-export const CheckoutItem = ({ id, title, image, totalPrice, amount }: CartProps) => {
+interface CheckoutItemProps extends CardProps {
+  checkoutProduct: CartProps
+}
+
+export const CheckoutItem = ({ checkoutProduct, ...rest }: CheckoutItemProps) => {
   const deleteItem = useCart((state) => state.deleteItem)
   const increaseAmount = useCart((state) => state.increaseAmount)
   const decreaseAmount = useCart((state) => state.decreaseAmount)
 
   const handleDelete = () => {
-    deleteItem(id)
+    deleteItem(checkoutProduct.id)
   }
 
   const deleteConfirmModal = () => {
-    ConfirmDeleteModal({ confirm: () => deleteItem(id) })
+    openConfirmDeleteModal({ confirm: () => deleteItem(checkoutProduct.id) })
   }
 
   const handleIncrease = () => {
-    increaseAmount(id)
+    increaseAmount(checkoutProduct.id)
   }
 
   const handleDecrease = () => {
-    decreaseAmount(id)
+    decreaseAmount(checkoutProduct.id)
   }
 
   return (
     <Card
-      id={id}
+      {...rest}
       shadow="sm"
       withBorder
       radius="lg"
@@ -36,7 +40,7 @@ export const CheckoutItem = ({ id, title, image, totalPrice, amount }: CartProps
     >
       <Flex h="100%" px={15} align="center" gap={10}>
         <Image
-          src={image}
+          src={checkoutProduct.image}
           fit="contain"
           h={100}
           p={5}
@@ -46,10 +50,10 @@ export const CheckoutItem = ({ id, title, image, totalPrice, amount }: CartProps
           <Box maw={500}>
             <Anchor
               c="black"
-              href={`/products/${id}`}
+              href={`/products/${checkoutProduct.id}`}
             >
               <Title order={5}>
-                {title}
+                {checkoutProduct.title}
               </Title>
             </Anchor>
           </Box>
@@ -58,11 +62,11 @@ export const CheckoutItem = ({ id, title, image, totalPrice, amount }: CartProps
               <ActionIcon
                 variant="light"
                 color="gray"
-                onClick={amount < 2 ? deleteConfirmModal : handleDecrease}
+                onClick={checkoutProduct.amount < 2 ? deleteConfirmModal : handleDecrease}
               >
                 <IconMinus size="20" />
               </ActionIcon>
-              <NumberInput size="xs" w={40} value={amount} hideControls />
+              <NumberInput size="xs" w={40} value={checkoutProduct.amount} hideControls />
               <ActionIcon
                 variant="light"
                 color="gray"
@@ -76,7 +80,7 @@ export const CheckoutItem = ({ id, title, image, totalPrice, amount }: CartProps
 
             <Flex gap={10} w={100} align="center" justify="end">
               <Title order={5} className="self-center" >
-                ${totalPrice}
+                $ {Intl.NumberFormat("en-US").format(checkoutProduct.totalPrice)}
               </Title>
               <ActionIcon variant="light" color="red" onClick={handleDelete}>
                 <IconTrash

@@ -12,9 +12,13 @@ export const Navbar = () => {
   const { cart, getSumCartItems } = useCart()
   const navigate = useNavigate();
 
+  const roundTotalPrice = () => {
+    return Intl.NumberFormat("en-US").format(totalPrice())
+  }
+
   const handleCheckoutRedirect = () => {
     close()
-    navigate("/Order1")
+    navigate("/checkout")
   }
 
   return (
@@ -45,7 +49,7 @@ export const Navbar = () => {
           h="100%"
           variant={cart.length > 0 ? "dot" : "transparent"}
         >
-          <NumberFormatter prefix="$" value={totalPrice()} decimalScale={2} />
+          <NumberFormatter prefix="$" value={roundTotalPrice()} decimalScale={2} />
         </Badge>
 
         <Indicator
@@ -96,7 +100,7 @@ export const Navbar = () => {
                 ml={10}
                 variant={cart.length > 0 ? "light" : "transparent"}
               >
-                <NumberFormatter prefix=" $" value={totalPrice()} decimalScale={2} />
+                <NumberFormatter prefix=" $" value={roundTotalPrice()} decimalScale={2} />
               </Badge>
             </Title>
           </Flex>
@@ -105,15 +109,10 @@ export const Navbar = () => {
           </Title>
           {/* Shop item inside the cart  */}
           <Group mt="10" w="100%" gap={10} p={10} >
-            {cart.map((item) => (
+            {cart.map((product) => (
               <CartItem
-                key={item.id}
-                id={item.id}
-                image={item.image}
-                title={item.title}
-                price={item.price}
-                amount={item.amount}
-                totalPrice={item.totalPrice}
+                key={product.id}
+                cartProduct={product}
               />
             ))}
           </Group>

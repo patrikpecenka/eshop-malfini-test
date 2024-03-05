@@ -8,10 +8,6 @@
       "Webworker"
     ],
     "baseUrl": "src",
-    "typeRoots": [
-      "node_modules/@types",
-      "src/@types"
-    ],
     "types": [
       "vite/client"
     ],

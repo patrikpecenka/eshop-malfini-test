@@ -1,33 +1,46 @@
 import { ActionIcon, Box, Card, Flex, Image, NumberInput, Title } from "@mantine/core"
 import { IconTrash, IconPlus, IconMinus } from "@tabler/icons-react"
-import { CartProps } from "../../lib/props/types"
 import { useCart } from "../../store/shopStore"
-import { ConfirmDeleteModal } from "../ConfirmDeleteModal"
+import { openConfirmDeleteModal } from "../../utils/openConfirmDeleteModal"
 
-export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) => {
+export interface CartProps {
+  image: string;
+  title: string;
+  price: number;
+  totalPrice: number;
+  amount: number;
+  id: string;
+}
+
+interface CartItemProps {
+  cartProduct: CartProps;
+}
+
+
+export const CartItem = ({ cartProduct, ...rest }: CartItemProps) => {
   const deleteItem = useCart((state) => state.deleteItem)
   const increaseAmount = useCart((state) => state.increaseAmount)
   const decreaseAmount = useCart((state) => state.decreaseAmount)
 
   const handleDelete = () => {
-    deleteItem(id)
+    deleteItem(cartProduct.id)
   }
 
   const deleteConfirmModal = () => {
-    ConfirmDeleteModal({ confirm: () => deleteItem(id) })
+    openConfirmDeleteModal({ confirm: () => deleteItem(cartProduct.id) })
   }
 
   const handleIncrease = () => {
-    increaseAmount(id)
+    increaseAmount(cartProduct.id)
   }
 
   const handleDecrease = () => {
-    decreaseAmount(id)
+    decreaseAmount(cartProduct.id)
   }
 
   return (
     <Card
-      id={id}
+      {...rest}
       shadow="xs"
       padding="xs"
       withBorder
@@ -37,7 +50,7 @@ export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) =>
     >
       <Flex h="100%" px={15} align="center" gap={10} >
         <Image
-          src={image}
+          src={cartProduct.image}
           fit="contain"
           h="100%"
           w={60}
@@ -47,7 +60,7 @@ export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) =>
         <Flex justify="space-between" w="100%">
           <Box maw={130} >
             <Title order={5} lineClamp={1}>
-              {title}
+              {cartProduct.title}
             </Title>
           </Box>
 
@@ -55,11 +68,11 @@ export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) =>
             <ActionIcon
               variant="light"
               color="gray"
-              onClick={amount < 2 ? deleteConfirmModal : handleDecrease}
+              onClick={cartProduct.amount < 2 ? deleteConfirmModal : handleDecrease}
             >
               <IconMinus size="20" />
             </ActionIcon>
-            <NumberInput size="xs" w={40} value={amount} hideControls />
+            <NumberInput size="xs" w={40} value={cartProduct.amount} hideControls />
             <ActionIcon
               variant="light"
               color="gray"
@@ -73,7 +86,7 @@ export const CartItem = ({ id, title, image, totalPrice, amount }: CartProps) =>
 
           <Flex gap={10} w={100} align="center" justify="end">
             <Title order={5} className="self-center" >
-              ${totalPrice}
+              $ {Intl.NumberFormat("en-US").format(cartProduct.totalPrice)}
             </Title>
             <ActionIcon variant="light" color="red" onClick={handleDelete}>
               <IconTrash

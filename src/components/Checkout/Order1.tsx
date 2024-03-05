@@ -1,10 +1,14 @@
 import { Button, Card, Flex, NumberFormatter, Text } from "@mantine/core"
-import { CheckoutItem } from "components/Cart/OrderOneItem"
+import { CheckoutItem } from "components/Cart/CheckoutItem"
 import { useCart } from "store/shopStore"
 import { IconCaretLeftFilled } from "@tabler/icons-react"
 import { useNavigate } from "react-router-dom"
 
-export const OrderOne = () => {
+interface OrderOneProps {
+  handleStepForward: () => void
+}
+
+export const OrderOne = ({ handleStepForward }: OrderOneProps) => {
   const { cart, totalPrice } = useCart()
   const navigate = useNavigate()
 
@@ -17,15 +21,10 @@ export const OrderOne = () => {
       m={20}
     >
       <Flex direction="column" gap={10}>
-        {cart.map((item) => (
+        {cart.map((product) => (
           <CheckoutItem
-            key={item.id}
-            id={item.id}
-            image={item.image}
-            title={item.title}
-            price={item.price}
-            amount={item.amount}
-            totalPrice={item.totalPrice}
+            key={product.id}
+            checkoutProduct={product}
           />
         ))}
       </Flex>
@@ -33,7 +32,7 @@ export const OrderOne = () => {
         <Flex direction="row" gap={30} justify="end" align="center">
           <Text size="sm" > Total excl. VAT:</Text>
           <Text>
-            <NumberFormatter prefix="$ " value={(totalPrice() - (totalPrice() / 115) * 21).toFixed(2)} />
+            <NumberFormatter prefix="$ " value={Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPrice() / 121) * 100)} />
           </Text>
         </Flex>
         <Flex direction="row" gap={30} align="center" justify="end">
@@ -44,7 +43,7 @@ export const OrderOne = () => {
             variant="gradient"
             gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
           >
-            <NumberFormatter suffix=" $" value={totalPrice()} decimalScale={2} />
+            <NumberFormatter prefix="$ " value={totalPrice()} decimalScale={2} />
           </Text>
         </Flex>
         <Flex align="center" justify="space-between">
@@ -67,7 +66,7 @@ export const OrderOne = () => {
             w={210}
             variant="gradient"
             gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
-            onClick={() => navigate("/order2")}
+            onClick={handleStepForward}
           >
             Continue
           </Button>

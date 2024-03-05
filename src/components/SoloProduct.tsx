@@ -1,10 +1,17 @@
-import { Card, Flex, Image, Title, Group, Text, ActionIcon, NumberInput, Button, Tooltip, Rating, Box } from "@mantine/core"
+import { Card, Flex, Image, Title, Group, Text, ActionIcon, NumberInput, Button, Tooltip, Rating, Box, CardProps } from "@mantine/core"
 import { IconMinus, IconPlus } from "@tabler/icons-react"
 import { ProductDto } from "lib/dto/types"
 
-export const SoloProduct = ({ id, title, image, price, description, rating, category }: ProductDto) => {
+interface SoloProductProps extends CardProps {
+  product: ProductDto;
+}
+
+export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
   return (
-    <Card p={70} id={id}>
+    <Card
+      p={70}
+      {...rest}
+    >
       <Flex justify="center" >
         <Flex direction="column">
           <Card shadow="xl" h={550} w={650} radius="xl">
@@ -12,7 +19,7 @@ export const SoloProduct = ({ id, title, image, price, description, rating, cate
               h="100%"
               alt="Random unsplash image"
               fit="contain"
-              src={image}
+              src={product.image}
             />
           </Card>
           <Group mt={20} justify="space-between">
@@ -21,7 +28,7 @@ export const SoloProduct = ({ id, title, image, price, description, rating, cate
               <Box
                 p={5}
                 key={index}
-                className="border-2 border-gray-300 rounded-xl shadow-md"
+                className="border border-gray-300 rounded-xl shadow-md"
                 w={150}
                 h={120}
               >
@@ -29,7 +36,7 @@ export const SoloProduct = ({ id, title, image, price, description, rating, cate
                   h="100%"
                   alt="Random unsplash image"
                   fit="contain"
-                  src={image}
+                  src={product.image}
                 />
               </Box>
             ))}
@@ -37,16 +44,16 @@ export const SoloProduct = ({ id, title, image, price, description, rating, cate
           </Group>
         </Flex>
         <Flex ml={130} w={450} direction="column" justify="center" gap={40}>
-          <Text mb={-30} fw={900} c="violet.5" tt="uppercase">{category}</Text>
-          <Title size={45} >{title}</Title>
-          <Tooltip label={`Rating ${rating.rate} out of 5`}>
-            <Rating value={rating.rate} fractions={4} readOnly size="xs" mt={-20} />
+          <Text mb={-30} fw={900} c="violet.5" tt="uppercase">{product.category}</Text>
+          <Title size={45} >{product.title}</Title>
+          <Tooltip label={`Rating ${product.rating.rate} out of 5`}>
+            <Rating value={product.rating.rate} fractions={4} readOnly size="xs" mt={-20} />
           </Tooltip>
-          <Text mt={-30} size="xs" c="dimmed">Based on {rating.count} reviews</Text>
-          <Text c="dimmed">{description}</Text>
+          <Text mt={-30} size="xs" c="dimmed">Based on {product.rating.count} reviews</Text>
+          <Text c="dimmed">{product.description}</Text>
 
           <Flex direction="column" gap={20} w="100%">
-            <Title order={1} c="black" fw={700}>$ {price}</Title>
+            <Title order={1} c="black" fw={700}>$ {product.price}</Title>
             <Flex direction="row" align="center" justify="space-between" gap={15} mt={20}>
               <Group bg="gray.1" className="rounded-md">
                 <ActionIcon
