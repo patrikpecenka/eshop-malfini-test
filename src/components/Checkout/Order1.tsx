@@ -3,6 +3,7 @@ import { CheckoutItem } from "components/Cart/CheckoutItem"
 import { useCart } from "store/shopStore"
 import { IconCaretLeftFilled } from "@tabler/icons-react"
 import { useNavigate } from "react-router-dom"
+import { EmptyCart } from "components/EmptyCart/EmptyCart"
 
 interface OrderOneProps {
   handleStepForward: () => void
@@ -12,27 +13,34 @@ export const OrderOne = ({ handleStepForward }: OrderOneProps) => {
   const { cart, totalPrice } = useCart()
   const navigate = useNavigate()
 
+  const noVatCalculation = () => {
+    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPrice() / 121) * 100)
+  }
+
   return (
     <Card
       className="border-t-4 border-indigo-500 "
       shadow="xl"
-      p={70}
+      p={90}
       h="100%"
-      m={20}
+      mt={20}
     >
       <Flex direction="column" gap={10}>
-        {cart.map((product) => (
-          <CheckoutItem
-            key={product.id}
-            checkoutProduct={product}
-          />
-        ))}
+
+        {cart.length === 0
+          ? <EmptyCart />
+          : cart.map((product) => (
+            <CheckoutItem
+              key={product.id}
+              checkoutProduct={product}
+            />
+          ))}
       </Flex>
       <Flex direction="column" mt={30} gap={10} w="100%" >
         <Flex direction="row" gap={30} justify="end" align="center">
           <Text size="sm" > Total excl. VAT:</Text>
           <Text>
-            <NumberFormatter prefix="$ " value={Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPrice() / 121) * 100)} />
+            <NumberFormatter prefix="$ " value={noVatCalculation()} />
           </Text>
         </Flex>
         <Flex direction="row" gap={30} align="center" justify="end">
@@ -63,6 +71,7 @@ export const OrderOne = ({ handleStepForward }: OrderOneProps) => {
           <Button
             radius="xl"
             size="lg"
+            disabled={cart.length === 0}
             w={210}
             variant="gradient"
             gradient={{ from: 'violet', to: 'indigo', deg: 25 }}

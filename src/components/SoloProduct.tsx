@@ -78,7 +78,7 @@ export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                 size="md"
                 flex={1}
                 variant="gradient"
-                gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
+
               >
                 Add to cart
               </Button>

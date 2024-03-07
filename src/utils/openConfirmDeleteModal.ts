@@ -2,12 +2,13 @@ import { modals } from "@mantine/modals";
 
 interface ConfirmDeleteModalProps {
   confirm: () => void;
+  title: string;
 }
 
-export const openConfirmDeleteModal = ({ confirm }: ConfirmDeleteModalProps) => {
+export const openConfirmDeleteModal = ({ confirm, title }: ConfirmDeleteModalProps) => {
   return modals.openConfirmModal({
     centered: true,
-    title: 'Are you sure you want to delete this item?',
+    title: title,
     size: "md",
     radius: "md",
     withCloseButton: false,

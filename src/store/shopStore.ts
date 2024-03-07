@@ -98,7 +98,7 @@ export const useOrderCart = create(
             [...state.userData,
               user
             ],
-        }))
+        })),
     }),
     {
       name: "orderCartData/easyshop-malfini"

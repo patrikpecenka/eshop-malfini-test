@@ -2,10 +2,9 @@ import { useQuery } from "@tanstack/react-query"
 import { SoloProduct } from "components/SoloProduct"
 import { ProductDto } from "lib/dto/types"
 import fetcher from "lib/fetcher"
-import { useNavigate, useParams } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 
 export const SoloProductPage = () => {
-  const navigate = useNavigate()
   const { id } = useParams()
 
   const { data, status } = useQuery({
@@ -15,11 +14,9 @@ export const SoloProductPage = () => {
   })
 
   if (status === 'pending') return <p>Loading...</p>
-  if (status === 'error') return navigate("/products")
+  if (status === 'error') return <Navigate to="/products" />
 
   return (
-    <>
-      <SoloProduct product={data} />
-    </>
+    <SoloProduct product={data} />
   )
 }

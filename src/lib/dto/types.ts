@@ -10,3 +10,13 @@ export interface ProductDto {
     count: number;
   };
 }
+
+export interface CountriesDto {
+  userCountryCode: string;
+  countries: [
+    {
+      value: string;
+      label: string;
+    }
+  ];
+}

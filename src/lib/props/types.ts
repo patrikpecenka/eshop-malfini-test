@@ -9,7 +9,8 @@ export interface OrderCart {
     lastName: string;
     address: string;
     city: string;
-    country: string;
+    stateProvince: string;
+    country: string | null;
     zipCode: string;
   }
   totalPrice: number;

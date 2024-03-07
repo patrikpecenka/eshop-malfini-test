@@ -11,7 +11,6 @@ export const AddCartButton = ({ onClick }: AddCartButtonProps) => {
       w="100%"
       mt={15}
       variant="gradient"
-      gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
       size="md"
       radius="xl"
       onClick={onClick}

@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Group, NumberFormatter, Paper, Radio, Text, Image, Box } from "@mantine/core"
+import { Button, Card, Flex, Group, NumberFormatter, Paper, Radio, Text, Image, Box, ScrollArea } from "@mantine/core"
 import { useCart } from "store/shopStore"
 import { IconCaretLeftFilled } from "@tabler/icons-react"
 import { SumCartItem } from "components/Cart/SummaryCartItem"
@@ -10,7 +10,7 @@ import GooglePay from "../../assets/google-pay-svgrepo-com.svg"
 import PayPal from "../../assets/paypal-3-svgrepo-com.svg"
 import Stripe from "../../assets/stripe-svgrepo-com.svg"
 import Visa from "../../assets/visa-svgrepo-com.svg"
-import { useState } from "react"
+import { withDefault, StringParam, useQueryParam } from "use-query-params"
 
 const paymentMethods = [
   {
@@ -70,24 +70,29 @@ interface OrderTwoProps {
 
 export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoProps) => {
   const { cart, totalPrice } = useCart()
-  const [value, setValue] = useState("")
+
+  const [query, setQuery] = useQueryParam(
+    "paymentMethod", withDefault(StringParam, ""),
+  )
+
+  const noVatCalculation = () => {
+    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPrice() / 121) * 100)
+  }
 
   return (
     <Card
       className="border-t-4 border-indigo-500 "
       shadow="xl"
-      p={70}
-      h="100%"
-      m={20}
+      px={90}
+      py={40}
+      mt={20}
     >
-      <Flex direction="column" gap={10}>
-      </Flex>
       {/*Main content container */}
-      <Flex direction="row" gap={40} align="end">
+      <Flex direction="row" gap={40} align="end" >
         {/*Left section with payment, delivery details */}
-        <Flex direction="column" gap={25} w="100%" flex="70%" >
+        <Flex direction="column" gap={25} w="100%" flex="70%">
           <Paper w="100%" shadow="sm" withBorder p="xs">
-            <Radio.Group onChange={setValue} >
+            <Radio.Group onChange={setQuery} value={query}>
               {paymentMethods.map((item) => (
                 <Flex
                   component="label"
@@ -101,13 +106,13 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
                   my={5}
                 >
                   <Group flex="12%" justify="space-evenly" >
-                    <Radio value={item.name} color="btn-violet"></Radio>
+                    <Radio value={item.name + "-" + item.fee} color="violet" ></Radio>
                     <Box w={48}>
                       <Image src={item.icon} alt={item.name} w={45} h="100%" fit="contain" />
                     </Box>
                   </Group>
-                  <Text flex="68%" c="btn-violet" ta="right" fw={500}>{item.fee}</Text>
-                  <Text flex="20%"></Text>
+                  <Text flex="75%" c="btn-violet" ta="right" fw={500}>{item.fee}</Text>
+                  <Text flex="0%"></Text>
                 </Flex>
               ))}
             </Radio.Group>
@@ -141,20 +146,28 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
         </Flex>
 
         {/*Right section with order summary */}
-        <Flex flex="40%" direction="column" gap={10}>
-          <Flex direction="column" gap={10} mb={10}>
-            {cart.map((product) => (
-              <SumCartItem
-                key={product.id}
-                cartProduct={product}
-              />
-            ))}
+        <Flex flex="40%" direction="column" gap={10} >
+          <Flex direction="column" gap={10} mb={10} h={510}>
+            <ScrollArea h="100%" offsetScrollbars scrollbarSize={6} mx={10}>
+              {cart.map((product) => (
+                <SumCartItem
+                  key={product.id}
+                  cartProduct={product}
+                />
+              ))}
+            </ScrollArea>
           </Flex>
           {
-            value === ""
+            query === ""
               ? ""
               : <Flex className="border-t-2 border-gray-300" pt={10}>
-                {value}
+                {query.includes("free")
+                  ? <Text size="sm" c="dimmed">No additional fee</Text>
+                  : <Flex direction="row" w="100%" justify="space-between" align="center">
+                    <Text size="sm" c="dimmed">Additional fee: </Text>
+                    <Text size="sm" fw={700}>{query.split("-")[1]}</Text>
+                  </Flex>
+                }
               </Flex>
           }
 
@@ -162,7 +175,7 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
             <Flex direction="row" gap={30} justify="space-between" align="center" >
               <Text size="sm" c="dimmed"> To be paid without VAT:</Text>
               <Text size="sm" c="dimmed">
-                <NumberFormatter prefix="$ " value={Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPrice() / 121) * 100)} />
+                <NumberFormatter prefix="$ " value={noVatCalculation()} />
               </Text>
             </Flex>
             <Flex direction="row" gap={30} align="center" justify="space-between">

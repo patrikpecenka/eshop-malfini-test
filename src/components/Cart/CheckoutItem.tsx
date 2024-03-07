@@ -18,7 +18,7 @@ export const CheckoutItem = ({ checkoutProduct, ...rest }: CheckoutItemProps) =>
   }
 
   const deleteConfirmModal = () => {
-    openConfirmDeleteModal({ confirm: () => deleteItem(checkoutProduct.id) })
+    openConfirmDeleteModal({ confirm: () => deleteItem(checkoutProduct.id), title: "Are you sure you want to delete this item?" })
   }
 
   const handleIncrease = () => {
@@ -37,6 +37,7 @@ export const CheckoutItem = ({ checkoutProduct, ...rest }: CheckoutItemProps) =>
       radius="lg"
       w="100%"
       mih={100}
+
     >
       <Flex h="100%" px={15} align="center" gap={10}>
         <Image

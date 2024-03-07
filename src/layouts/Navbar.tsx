@@ -4,6 +4,7 @@ import { IconShoppingCart } from '@tabler/icons-react';
 import { CartItem } from "components/Cart/CartItem";
 import { useCart } from "../store/shopStore"
 import { useNavigate } from "react-router-dom"
+import { EmptyCart } from "components/EmptyCart/EmptyCart";
 
 
 export const Navbar = () => {
@@ -109,12 +110,15 @@ export const Navbar = () => {
           </Title>
           {/* Shop item inside the cart  */}
           <Group mt="10" w="100%" gap={10} p={10} >
-            {cart.map((product) => (
-              <CartItem
-                key={product.id}
-                cartProduct={product}
-              />
-            ))}
+            {
+              cart.length === 0
+                ? <EmptyCart />
+                : cart.map((product) => (
+                  <CartItem
+                    key={product.id}
+                    cartProduct={product}
+                  />
+                ))}
           </Group>
         </Flex>
         <Group w="100%" align="center" justify="center">
@@ -125,7 +129,6 @@ export const Navbar = () => {
             w="100%"
             mt={15}
             variant="gradient"
-            gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
             size="md"
             radius="xl"
             onClick={handleCheckoutRedirect}

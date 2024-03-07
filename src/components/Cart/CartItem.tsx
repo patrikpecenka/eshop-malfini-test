@@ -27,7 +27,10 @@ export const CartItem = ({ cartProduct, ...rest }: CartItemProps) => {
   }
 
   const deleteConfirmModal = () => {
-    openConfirmDeleteModal({ confirm: () => deleteItem(cartProduct.id) })
+    openConfirmDeleteModal({
+      confirm: () => deleteItem(cartProduct.id),
+      title: "Are you sure you want to delete this item?"
+    })
   }
 
   const handleIncrease = () => {
@@ -84,7 +87,7 @@ export const CartItem = ({ cartProduct, ...rest }: CartItemProps) => {
             </ActionIcon>
           </Flex>
 
-          <Flex gap={10} w={100} align="center" justify="end">
+          <Flex gap={10} w={120} align="center" justify="end">
             <Title order={5} className="self-center" >
               $ {Intl.NumberFormat("en-US").format(cartProduct.totalPrice)}
             </Title>
