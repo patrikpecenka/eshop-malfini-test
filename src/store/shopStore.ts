@@ -8,9 +8,10 @@ interface CartStore {
   cart: CartProps[];
   addItem: (item: CartProps) => void;
   deleteItem: (id: string) => void;
+  increaseByInput: (id: string, value: number) => void;
   increaseAmount: (id: string) => void;
   decreaseAmount: (id: string) => void;
-  totalPrice: () => number;
+  totalPriceCalculation: () => number;
   clearCart: () => void;
   getSumCartItems: () => number;
 }
@@ -31,13 +32,16 @@ export const useCart = create(
               cartItem.id === item.id
                 ? {
                   ...cartItem,
-                  amount: cartItem.amount + 1,
+                  amount: cartItem.amount + item.amount,
                   price: item.price,
-                  totalPrice: item.price * (cartItem.amount + 1)
+                  totalPrice: (cartItem.amount + item.amount) * item.price
                 }
                 : cartItem
             )
-            : [...state.cart, item],
+            : [...state.cart, {
+              ...item,
+              totalPrice: item.amount * item.price
+            }],
         })),
           notifications.show({
             title: "Success",
@@ -54,6 +58,18 @@ export const useCart = create(
         set({
           cart: []
         }),
+      increaseByInput: (id: string, value: number) => set((state) => ({
+        cart: state.cart.map((item) =>
+          item.id === id
+            ? {
+              ...item,
+              amount: value,
+              totalPrice: value * item.price
+            }
+            : item
+        )
+      })),
+
       increaseAmount: (id: string) => set((state) => ({
         cart: state.cart.map((item) =>
           item.id === id
@@ -76,7 +92,7 @@ export const useCart = create(
             : item
         )
       })),
-      totalPrice: () =>
+      totalPriceCalculation: () =>
         get().cart.reduce((acc, item) => acc + item.totalPrice, 0),
 
       getSumCartItems: () =>

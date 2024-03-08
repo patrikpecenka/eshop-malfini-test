@@ -3,12 +3,16 @@ import { OrderOne } from "../components/Checkout/Order1"
 import { OrderTwo } from "../components/Checkout/Order2"
 import { OrderThree } from "../components/Checkout/Order3"
 import { NumberParam, useQueryParam, withDefault } from "use-query-params"
-import { useCart } from "store/shopStore"
+import { useCart, useOrderCart } from "store/shopStore"
 import { useEffect } from "react"
 import { IconLock } from "@tabler/icons-react"
 import { useNavigate } from "react-router-dom"
+import { PdfFile } from "services/PdfFile"
+import { PDFDownloadLink } from "@react-pdf/renderer"
+
 export const CheckoutPage = () => {
   const { cart } = useCart()
+  const { userData } = useOrderCart()
   const navigate = useNavigate()
 
   const [query, setQuery] = useQueryParam(
@@ -16,7 +20,7 @@ export const CheckoutPage = () => {
   );
 
   useEffect(() => {
-    cart.length === 0
+    cart.length === 0 && !3
       ? navigate("/checkout?checkoutStep=0")
       : null
   }, [cart.length])
@@ -42,7 +46,13 @@ export const CheckoutPage = () => {
         </Stepper.Step>
         <Stepper.Completed >
           <Text>Thank you</Text>
-          <Button onClick={() => navigate("/products")}>Back to products</Button>
+          <PDFDownloadLink document={<PdfFile />} fileName={`${userData.map((item) => item.id)[0]}.pdf`}>
+            {({ loading }) =>
+              loading
+                ? <Button> Loading document.... </Button>
+                : <Button>Download invoice</Button>
+            }
+          </PDFDownloadLink>
         </Stepper.Completed>
       </Stepper>
     </Card>

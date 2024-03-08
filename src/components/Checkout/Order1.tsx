@@ -10,11 +10,11 @@ interface OrderOneProps {
 }
 
 export const OrderOne = ({ handleStepForward }: OrderOneProps) => {
-  const { cart, totalPrice } = useCart()
+  const { cart, totalPriceCalculation: totalPriceCalculation } = useCart()
   const navigate = useNavigate()
 
   const noVatCalculation = () => {
-    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPrice() / 121) * 100)
+    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPriceCalculation() / 121) * 100)
   }
 
   return (
@@ -51,7 +51,7 @@ export const OrderOne = ({ handleStepForward }: OrderOneProps) => {
             variant="gradient"
             gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
           >
-            <NumberFormatter prefix="$ " value={totalPrice()} decimalScale={2} />
+            <NumberFormatter prefix="$ " value={totalPriceCalculation()} decimalScale={2} />
           </Text>
         </Flex>
         <Flex align="center" justify="space-between">

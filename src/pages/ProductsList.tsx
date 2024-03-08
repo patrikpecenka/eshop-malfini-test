@@ -37,7 +37,7 @@ export const AllProducts = () => {
           <Menu.Target>
             <Button
               variant="light"
-              gradient={{ from: 'btn-violet', to: 'btn-indigo', deg: 25 }}
+              gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
             >
               Sorted by: {query.activeSorting}
             </Button>
@@ -51,7 +51,7 @@ export const AllProducts = () => {
               orientation="vertical"
               variant="light"
               value={query.activeSorting}
-              color="btn-indigo"
+              color="indigo.3"
               onChange={(value) => setQuery({ activeSorting: value })}
               data={[
                 { label: 'asc sort', value: 'asc' },

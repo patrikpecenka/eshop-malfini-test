@@ -1,8 +1,9 @@
-import { Badge, Card, CardProps, Group, Image, NumberFormatter, Rating, Text, Title, Tooltip } from "@mantine/core"
+import { ActionIcon, Badge, Button, Card, CardProps, Flex, Group, Image, NumberFormatter, NumberInput, Rating, Text, Title, Tooltip } from "@mantine/core"
 import { ProductDto } from "../lib/dto/types"
-import { AddCartButton } from "./Buttons/AddCartButton"
 import { useCart } from "../store/shopStore"
 import { Link } from "react-router-dom"
+import { useState } from "react"
+import { IconMinus, IconPlus } from "@tabler/icons-react"
 
 
 interface ProductCardProps extends CardProps {
@@ -11,11 +12,38 @@ interface ProductCardProps extends CardProps {
 
 export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
   const addCartItems = useCart((state) => state.addItem);
+  const increaseAmount = useCart((state) => state.increaseAmount)
+  const decreaseAmount = useCart((state) => state.decreaseAmount)
+  const increaseByInput = useCart((state) => state.increaseByInput)
+  const deleteItem = useCart((state) => state.deleteItem)
+  const { cart } = useCart()
+
+  let itemAmount = cart.find((item) => item.id === product.id)?.amount || 0
+
+  const handleIncrease = () => {
+    increaseAmount(product.id)
+  }
+
+  const handleDelete = () => {
+    deleteItem(product.id)
+  }
+
+  const handleDecrease = () => {
+    decreaseAmount(product.id)
+  }
+
+  const [loading, setLoading] = useState<boolean>(false)
+  const [itemAddedCheck, setItemAddedCheck] = useState<boolean>(false)
 
   const handleClick = () => {
-    addCartItems({
-      ...product, totalPrice: product.price, amount: 1
-    })
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false)
+      setItemAddedCheck(true)
+      addCartItems({
+        ...product, totalPrice: product.price, amount: 1
+      })
+    }, 400)
   }
 
   return (
@@ -63,15 +91,62 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
         <Tooltip label={`Rating ${product.rating.rate} out of 5`}>
           <Rating value={product.rating.rate} fractions={3} readOnly size="xs" />
         </Tooltip>
-        <Badge variant="light" color="teal" size="lg">
+        <Badge variant="light" color="green.5" size="lg">
           <Title order={4}>
             <NumberFormatter prefix="$" value={product.price} />
           </Title>
         </Badge>
       </Group>
-      <AddCartButton
-        onClick={handleClick}
-      />
+      {itemAddedCheck && itemAmount > 0
+        ? (
+          <Group align="center" justify="center" w="100%" mt={15}>
+            <Flex className="rounded-full" bg="gray.1" direction="row" align="center" justify="space-evenly" gap={15} px={20}>
+              <ActionIcon
+                size="md"
+                variant="transparent"
+                color="violet.6"
+                onClick={itemAmount < 2 ? handleDelete : handleDecrease}
+
+              >
+                <IconMinus size="23" />
+              </ActionIcon>
+              <NumberInput
+                size="md"
+                fw={700}
+
+                w={55}
+                onChange={itemAmount < 2 ? handleDelete : (value) => increaseByInput(product.id, Number(value))}
+                value={itemAmount}
+                hideControls
+                variant="unstiled"
+              />
+              <ActionIcon
+                size="md"
+                variant="transparent"
+                color="violet.6"
+                onClick={handleIncrease}
+              >
+                <IconPlus
+                  size="23"
+                />
+              </ActionIcon>
+            </Flex>
+          </Group>
+        ) : (
+          <Button
+            className="hover:opacity-70 duration-200"
+            w="100%"
+            mt={15}
+            variant="gradient"
+            loading={loading}
+            size="md"
+            radius="xl"
+            onClick={handleClick}
+          >
+            Add To Cart
+          </Button >)
+      }
+
     </Card>
   )
 }

@@ -12,6 +12,7 @@ export const CheckoutItem = ({ checkoutProduct, ...rest }: CheckoutItemProps) =>
   const deleteItem = useCart((state) => state.deleteItem)
   const increaseAmount = useCart((state) => state.increaseAmount)
   const decreaseAmount = useCart((state) => state.decreaseAmount)
+  const increaseByInput = useCart((state) => state.increaseByInput)
 
   const handleDelete = () => {
     deleteItem(checkoutProduct.id)
@@ -67,7 +68,12 @@ export const CheckoutItem = ({ checkoutProduct, ...rest }: CheckoutItemProps) =>
               >
                 <IconMinus size="20" />
               </ActionIcon>
-              <NumberInput size="xs" w={40} value={checkoutProduct.amount} hideControls />
+              <NumberInput
+                size="xs"
+                w={40}
+                value={checkoutProduct.amount}
+                onChange={(value) => increaseByInput(checkoutProduct.id, Number(value))}
+                hideControls />
               <ActionIcon
                 variant="light"
                 color="gray"

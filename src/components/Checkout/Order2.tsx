@@ -69,14 +69,14 @@ interface OrderTwoProps {
 }
 
 export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoProps) => {
-  const { cart, totalPrice } = useCart()
+  const { cart, totalPriceCalculation: totalPriceCalculation } = useCart()
 
   const [query, setQuery] = useQueryParam(
     "paymentMethod", withDefault(StringParam, ""),
   )
 
   const noVatCalculation = () => {
-    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPrice() / 121) * 100)
+    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPriceCalculation() / 121) * 100)
   }
 
   return (
@@ -92,7 +92,7 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
         {/*Left section with payment, delivery details */}
         <Flex direction="column" gap={25} w="100%" flex="70%">
           <Paper w="100%" shadow="sm" withBorder p="xs">
-            <Radio.Group onChange={setQuery} value={query}>
+            <Radio.Group onChange={setQuery} value={query} >
               {paymentMethods.map((item) => (
                 <Flex
                   component="label"
@@ -137,7 +137,7 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
               w={210}
               variant="gradient"
               gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
-              disabled={cart.length === 0}
+              disabled={query === "" || cart.length === 0}
               onClick={handleStepForward}
             >
               Continue
@@ -186,7 +186,7 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
                 variant="gradient"
                 gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
               >
-                <NumberFormatter prefix="$ " value={totalPrice()} decimalScale={2} />
+                <NumberFormatter prefix="$ " value={totalPriceCalculation()} decimalScale={2} />
               </Text>
             </Flex>
           </Flex>

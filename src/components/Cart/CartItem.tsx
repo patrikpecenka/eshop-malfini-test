@@ -21,6 +21,7 @@ export const CartItem = ({ cartProduct, ...rest }: CartItemProps) => {
   const deleteItem = useCart((state) => state.deleteItem)
   const increaseAmount = useCart((state) => state.increaseAmount)
   const decreaseAmount = useCart((state) => state.decreaseAmount)
+  const increaseByInput = useCart((state) => state.increaseByInput)
 
   const handleDelete = () => {
     deleteItem(cartProduct.id)
@@ -75,7 +76,13 @@ export const CartItem = ({ cartProduct, ...rest }: CartItemProps) => {
             >
               <IconMinus size="20" />
             </ActionIcon>
-            <NumberInput size="xs" w={40} value={cartProduct.amount} hideControls />
+            <NumberInput
+              size="xs"
+              w={40}
+              value={cartProduct.amount}
+              onChange={(value) => increaseByInput(cartProduct.id, Number(value))}
+              hideControls
+            />
             <ActionIcon
               variant="light"
               color="gray"

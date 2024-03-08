@@ -14,7 +14,7 @@ interface OrderThreeProps {
 
 export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
   const createNewOrder = useOrderCart((state) => state.createUser)
-  const { cart, totalPrice, clearCart, getSumCartItems } = useCart()
+  const { cart, totalPriceCalculation: totalPriceCalculation, clearCart, getSumCartItems } = useCart()
 
   //USE STATES
   const [loading, setLoading] = useState(false)
@@ -25,19 +25,19 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
     "paymentMethod", withDefault(StringParam, ""),
   )
 
-  let discount = 5.89
+  let discount = 13.89
   //CALCULATIONS
   const finalTotalPrice = () => {
     const queryValue = query.includes("free")
       ? 0
       : parseFloat(query.split("-")[1].slice(0, -2))
-    return Intl.NumberFormat("en-US").format((totalPrice() + queryValue) - discount)
+    return Intl.NumberFormat("en-US").format((totalPriceCalculation() + queryValue) - discount)
   }
   const noVatCalculation = () => {
-    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPrice() / 121) * 100)
+    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPriceCalculation() / 121) * 100)
   }
   const vatCalculation = () => {
-    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(totalPrice() - (totalPrice() / 1.21))
+    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(totalPriceCalculation() - (totalPriceCalculation() / 1.21))
   }
   //END CALCULATIONS
 
@@ -72,13 +72,14 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
       stateProvince: isNotEmpty("Invalid state")
     }
   })
+
   const handleCreateNewOrder = () => {
     createNewOrder({
       id: crypto.randomUUID(),
       userDetails: {
         ...form.values
       },
-      totalPrice: totalPrice(),
+      totalPrice: totalPriceCalculation(),
       noVatPrice: 0,
       deliveryOption: "",
       deliveryPrice: 0,
@@ -153,6 +154,7 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
 
                 <Flex justify="space-between" gap={20}>
                   <Select
+                    autoComplete="new-off"
                     flex={1}
                     label="Country"
                     searchable
@@ -163,6 +165,7 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
                     {...form.getInputProps("country")}
                   />
                   <TextInput
+                    autoComplete="new-off"
                     flex={1}
                     label="State/Province"
                     placeholder=""

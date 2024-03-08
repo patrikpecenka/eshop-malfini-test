@@ -9,5 +9,6 @@
 
 ::-webkit-scrollbar-thumb {
   border-radius: 20px;
-  background: linear-gradient(180deg, #9354e0 0%, #7a84ba 100%);
+  /* background: linear-gradient(180deg, #9354e0 0%, #7a84ba 100%); */
+  background-color: rgba(131, 131, 131, 0.853);
 }

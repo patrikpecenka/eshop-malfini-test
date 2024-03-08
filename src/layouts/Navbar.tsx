@@ -9,12 +9,12 @@ import { EmptyCart } from "components/EmptyCart/EmptyCart";
 
 export const Navbar = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { totalPrice, clearCart } = useCart()
+  const { totalPriceCalculation: totalPriceCalculation, clearCart } = useCart()
   const { cart, getSumCartItems } = useCart()
   const navigate = useNavigate();
 
   const roundTotalPrice = () => {
-    return Intl.NumberFormat("en-US").format(totalPrice())
+    return Intl.NumberFormat("en-US").format(totalPriceCalculation())
   }
 
   const handleCheckoutRedirect = () => {
@@ -50,7 +50,7 @@ export const Navbar = () => {
           h="100%"
           variant={cart.length > 0 ? "dot" : "transparent"}
         >
-          <NumberFormatter prefix="$" value={roundTotalPrice()} decimalScale={2} />
+          <NumberFormatter prefix="$" value={Intl.NumberFormat("en-US").format(totalPriceCalculation())} />
         </Badge>
 
         <Indicator
