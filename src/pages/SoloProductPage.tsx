@@ -16,6 +16,8 @@ export const SoloProductPage = () => {
   if (status === 'pending') return <p>Loading...</p>
   if (status === 'error') return <Navigate to="/products" />
 
+  console.log(navigator.language)
+
   return (
     <SoloProduct product={data} />
   )

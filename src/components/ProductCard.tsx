@@ -1,9 +1,10 @@
-import { ActionIcon, Badge, Button, Card, CardProps, Flex, Group, Image, NumberFormatter, NumberInput, Rating, Text, Title, Tooltip } from "@mantine/core"
+import { ActionIcon, Badge, Button, Card, CardProps, Flex, Group, Image, NumberInput, Rating, Text, Title, Tooltip } from "@mantine/core"
 import { ProductDto } from "../lib/dto/types"
 import { useCart } from "../store/shopStore"
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { IconMinus, IconPlus } from "@tabler/icons-react"
+import { currencyFormater } from "utils/number/currencyFormater"
 
 
 interface ProductCardProps extends CardProps {
@@ -24,13 +25,18 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
     increaseAmount(product.id)
   }
 
-  const handleDelete = () => {
-    deleteItem(product.id)
-  }
-
   const handleDecrease = () => {
+    if (itemAmount < 1) {
+      deleteItem(product.id)
+    }
     decreaseAmount(product.id)
   }
+
+  useEffect(() => {
+    if (itemAmount < 1) {
+      deleteItem(product.id)
+    }
+  }, [itemAmount])
 
   const [loading, setLoading] = useState<boolean>(false)
   const [itemAddedCheck, setItemAddedCheck] = useState<boolean>(false)
@@ -93,7 +99,7 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
         </Tooltip>
         <Badge variant="light" color="green.5" size="lg">
           <Title order={4}>
-            <NumberFormatter prefix="$" value={product.price} />
+            {currencyFormater.format(product.price)}
           </Title>
         </Badge>
       </Group>
@@ -105,17 +111,15 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
                 size="md"
                 variant="transparent"
                 color="violet.6"
-                onClick={itemAmount < 2 ? handleDelete : handleDecrease}
-
+                onClick={handleDecrease}
               >
                 <IconMinus size="23" />
               </ActionIcon>
               <NumberInput
                 size="md"
                 fw={700}
-
                 w={55}
-                onChange={itemAmount < 2 ? handleDelete : (value) => increaseByInput(product.id, Number(value))}
+                onChange={(value) => increaseByInput(product.id, Number(value))}
                 value={itemAmount}
                 hideControls
                 variant="unstiled"
@@ -144,9 +148,9 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
             onClick={handleClick}
           >
             Add To Cart
-          </Button >)
+          </Button >
+        )
       }
-
     </Card>
   )
 }

@@ -5,14 +5,16 @@ import { ProductDto } from "lib/dto/types"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { ProductCard } from "components/ProductCard"
+import { useDebouncedValue } from '@mantine/hooks';
 import { StringParam, useQueryParams, withDefault } from "use-query-params"
 
-
-export const AllProducts = () => {
+export const ProductsList = () => {
   const [query, setQuery] = useQueryParams({
     activeSorting: withDefault(StringParam, ""),
     search: withDefault(StringParam, undefined),
   });
+
+  const [debounced] = useDebouncedValue(query, 300, { leading: true });
 
   const { data, status } = useQuery({
     queryKey: ['products', query.activeSorting],
@@ -22,9 +24,9 @@ export const AllProducts = () => {
   const filteredProducts = useMemo(
     () =>
       (data ?? []).filter((product) => (
-        product.title.toLowerCase().includes((query.search ?? "").toLowerCase())
+        product.title.toLowerCase().includes((debounced.search ?? "").toLowerCase())
       )),
-    [data, query.search]
+    [data, debounced.search]
   )
 
   if (status === 'pending') return <p>Loading...</p>
@@ -63,7 +65,7 @@ export const AllProducts = () => {
         <Input
           placeholder="Search..."
           value={query.search}
-          onChange={(e) => setQuery({ search: e.currentTarget.value.length > 0 ? e.currentTarget.value : undefined })}
+          onChange={(e) => setQuery({ search: e.currentTarget.value || undefined })}
           leftSection={<IconSearch size={20} />}
           rightSectionPointerEvents="all"
           rightSection={
@@ -80,13 +82,9 @@ export const AllProducts = () => {
         cols={{ base: 1, sm: 3, md: 4, lg: 6 }}
       >
         {
-          (query.search ?? "").length > 0
-            ? filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))
-            : data.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))
+          filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))
         }
       </SimpleGrid>
     </>

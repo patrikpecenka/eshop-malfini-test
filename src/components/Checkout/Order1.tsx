@@ -1,20 +1,21 @@
-import { Button, Card, Flex, NumberFormatter, Text } from "@mantine/core"
+import { Button, Card, Flex, Text, Title } from "@mantine/core"
 import { CheckoutItem } from "components/Cart/CheckoutItem"
 import { useCart } from "store/shopStore"
 import { IconCaretLeftFilled } from "@tabler/icons-react"
 import { useNavigate } from "react-router-dom"
 import { EmptyCart } from "components/EmptyCart/EmptyCart"
+import { currencyFormater } from "utils/number/currencyFormater"
 
 interface OrderOneProps {
   handleStepForward: () => void
 }
 
 export const OrderOne = ({ handleStepForward }: OrderOneProps) => {
-  const { cart, totalPriceCalculation: totalPriceCalculation } = useCart()
+  const { cart, totalPriceCalculation } = useCart()
   const navigate = useNavigate()
 
   const noVatCalculation = () => {
-    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPriceCalculation() / 121) * 100)
+    return currencyFormater.format((totalPriceCalculation() / 121) * 100)
   }
 
   return (
@@ -40,7 +41,7 @@ export const OrderOne = ({ handleStepForward }: OrderOneProps) => {
         <Flex direction="row" gap={30} justify="end" align="center">
           <Text size="sm" > Total excl. VAT:</Text>
           <Text>
-            <NumberFormatter prefix="$ " value={noVatCalculation()} />
+            {noVatCalculation()}
           </Text>
         </Flex>
         <Flex direction="row" gap={30} align="center" justify="end">
@@ -51,7 +52,9 @@ export const OrderOne = ({ handleStepForward }: OrderOneProps) => {
             variant="gradient"
             gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
           >
-            <NumberFormatter prefix="$ " value={totalPriceCalculation()} decimalScale={2} />
+            <Title fw={900} order={4}>
+              {currencyFormater.format(totalPriceCalculation())}
+            </Title>
           </Text>
         </Flex>
         <Flex align="center" justify="space-between">

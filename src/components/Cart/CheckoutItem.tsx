@@ -3,6 +3,7 @@ import { IconTrash, IconPlus, IconMinus } from "@tabler/icons-react"
 import { useCart } from "../../store/shopStore"
 import { openConfirmDeleteModal } from "../../utils/openConfirmDeleteModal"
 import { CartProps } from "./CartItem"
+import { currencyFormater } from "utils/number/currencyFormater"
 
 interface CheckoutItemProps extends CardProps {
   checkoutProduct: CartProps
@@ -87,7 +88,7 @@ export const CheckoutItem = ({ checkoutProduct, ...rest }: CheckoutItemProps) =>
 
             <Flex gap={10} w={100} align="center" justify="end">
               <Title order={5} className="self-center" >
-                $ {Intl.NumberFormat("en-US").format(checkoutProduct.totalPrice)}
+                {currencyFormater.format(checkoutProduct.totalPrice)}
               </Title>
               <ActionIcon variant="light" color="red" onClick={handleDelete}>
                 <IconTrash

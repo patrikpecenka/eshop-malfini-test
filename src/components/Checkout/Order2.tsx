@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Group, NumberFormatter, Paper, Radio, Text, Image, Box, ScrollArea } from "@mantine/core"
+import { Button, Card, Flex, Group, Paper, Radio, Text, Image, Box, ScrollArea, Title } from "@mantine/core"
 import { useCart } from "store/shopStore"
 import { IconCaretLeftFilled } from "@tabler/icons-react"
 import { SumCartItem } from "components/Cart/SummaryCartItem"
@@ -11,6 +11,7 @@ import PayPal from "../../assets/paypal-3-svgrepo-com.svg"
 import Stripe from "../../assets/stripe-svgrepo-com.svg"
 import Visa from "../../assets/visa-svgrepo-com.svg"
 import { withDefault, StringParam, useQueryParam } from "use-query-params"
+import { currencyFormater } from "utils/number/currencyFormater"
 
 const paymentMethods = [
   {
@@ -69,14 +70,14 @@ interface OrderTwoProps {
 }
 
 export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoProps) => {
-  const { cart, totalPriceCalculation: totalPriceCalculation } = useCart()
+  const { cart, totalPriceCalculation } = useCart()
 
   const [query, setQuery] = useQueryParam(
     "paymentMethod", withDefault(StringParam, ""),
   )
 
   const noVatCalculation = () => {
-    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPriceCalculation() / 121) * 100)
+    return currencyFormater.format((totalPriceCalculation() / 121) * 100)
   }
 
   return (
@@ -102,7 +103,15 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
                   w="100%"
                   align="center"
                   direction="row"
-                  className="hover:cursor-pointer has-[:checked]:bg-violet-100 has-[:checked]:border has-[:checked]:border-violet-300 rounded-md hover:bg-violet-50 bg-stone-100"
+                  className="hover:cursor-pointer 
+                    border
+                    border-transparent
+                    has-[:checked]:bg-violet-100 
+                    has-[:checked]:border 
+                    has-[:checked]:border-violet-300 
+                    rounded-md 
+                    hover:bg-violet-50 
+                    bg-stone-100"
                   my={5}
                 >
                   <Group flex="12%" justify="space-evenly" >
@@ -175,7 +184,7 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
             <Flex direction="row" gap={30} justify="space-between" align="center" >
               <Text size="sm" c="dimmed"> To be paid without VAT:</Text>
               <Text size="sm" c="dimmed">
-                <NumberFormatter prefix="$ " value={noVatCalculation()} />
+                {noVatCalculation()}
               </Text>
             </Flex>
             <Flex direction="row" gap={30} align="center" justify="space-between">
@@ -186,7 +195,9 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
                 variant="gradient"
                 gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
               >
-                <NumberFormatter prefix="$ " value={totalPriceCalculation()} decimalScale={2} />
+                <Title fw={900} order={4}>
+                  {currencyFormater.format(totalPriceCalculation())}
+                </Title>
               </Text>
             </Flex>
           </Flex>

@@ -11,12 +11,19 @@ export interface ProductDto {
   };
 }
 
+interface Country {
+  [x: string]: any;
+  name: string;
+  iso3: string;
+  iso2: string;
+  states: {
+    name: string;
+    state_code: string;
+  }[];
+}
+
 export interface CountriesDto {
-  userCountryCode: string;
-  countries: [
-    {
-      value: string;
-      label: string;
-    }
-  ];
+  error: boolean;
+  msg: string;
+  data: Country[];
 }

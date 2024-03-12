@@ -3,10 +3,11 @@ import { useForm, isEmail, isNotEmpty, hasLength } from "@mantine/form"
 import { useQuery } from "@tanstack/react-query"
 import { CountriesDto } from "lib/dto/types"
 import fetcher from "lib/fetcher"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { useCart, useOrderCart } from "store/shopStore"
-import { IconLock, IconLockOpen, IconCubeSend } from "@tabler/icons-react"
+import { IconCubeSend, IconLock, IconLockOpen } from "@tabler/icons-react"
 import { useQueryParam, withDefault, StringParam } from "use-query-params"
+import { currencyFormater } from "utils/number/currencyFormater"
 
 interface OrderThreeProps {
   handleStepCompleted: () => void
@@ -14,39 +15,14 @@ interface OrderThreeProps {
 
 export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
   const createNewOrder = useOrderCart((state) => state.createUser)
-  const { cart, totalPriceCalculation: totalPriceCalculation, clearCart, getSumCartItems } = useCart()
+  const { cart, totalPriceCalculation, clearCart, getSumCartItems } = useCart()
 
   //USE STATES
   const [loading, setLoading] = useState(false)
-  const [country] = useState<String | null>("")
-
   //QUERY PARAMS
   const [query] = useQueryParam(
     "paymentMethod", withDefault(StringParam, ""),
   )
-
-  let discount = 13.89
-  //CALCULATIONS
-  const finalTotalPrice = () => {
-    const queryValue = query.includes("free")
-      ? 0
-      : parseFloat(query.split("-")[1].slice(0, -2))
-    return Intl.NumberFormat("en-US").format((totalPriceCalculation() + queryValue) - discount)
-  }
-  const noVatCalculation = () => {
-    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format((totalPriceCalculation() / 121) * 100)
-  }
-  const vatCalculation = () => {
-    return Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(totalPriceCalculation() - (totalPriceCalculation() / 1.21))
-  }
-  //END CALCULATIONS
-
-  //DATA FETCHING FOR COUNTRY SELECTOR
-  const { data, status } = useQuery({
-    queryKey: ['countries'],
-    queryFn: () => fetcher<CountriesDto>("https://valid.layercode.workers.dev/list/countries?format=select&flags=true&value=code")
-  })
-
   //FORM VALIDATION
   const form = useForm({
     initialValues: {
@@ -55,8 +31,8 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
       firstName: "",
       lastName: "",
       city: "",
-      stateProvince: "",
-      country: null,
+      stateProvince: "" as string | null,
+      country: "" as string | null,
       zipCode: "",
       address: "",
     },
@@ -65,13 +41,47 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
       phoneNumber: isNotEmpty("Invalid phone number"),
       firstName: hasLength({ min: 2, max: 20 }, "Invalid first name"),
       lastName: hasLength({ min: 2, max: 40 }, "Invalid last name"),
-      zipCode: (value) => (/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(value) ? null : "Invalid zip code"),
+      zipCode: (value) => hasLength(5, "Invalid zip code")(value.toString()),
       address: isNotEmpty("Invalid address"),
       city: isNotEmpty("Invalid city"),
       country: isNotEmpty("Invalid country"),
       stateProvince: isNotEmpty("Invalid state")
-    }
+    },
+    onValuesChange(values, previous) {
+      if (values.country !== previous.country) {
+        form.setFieldValue("stateProvince", null)
+      }
+    },
   })
+
+  //DATA FETCHING FOR COUNTRY SELECTOR
+  const { data: countriesData, status: countriesStatus } = useQuery({
+    queryKey: ['countries'],
+    queryFn: () => fetcher<CountriesDto>("https://countriesnow.space/api/v0.1/countries/states")
+  })
+
+  const statesByCountry = useMemo(
+    () =>
+      (countriesData?.data ?? []).find((country) => country.iso3 === form.values.country),
+    [form.values.country, countriesData?.data]
+  )
+
+  let discount = 13.89
+
+  //CALCULATIONS
+  const finalTotalPrice = () => {
+    const queryValue = query.includes("free")
+      ? 0
+      : parseFloat(query.split("-")[1].slice(0, -2))
+    return currencyFormater.format((totalPriceCalculation() + queryValue) - discount)
+  }
+  const noVatCalculation = () => {
+    return currencyFormater.format((totalPriceCalculation() / 121) * 100)
+  }
+  const vatCalculation = () => {
+    return currencyFormater.format(totalPriceCalculation() - (totalPriceCalculation() / 1.21))
+  }
+  //END CALCULATIONS
 
   const handleCreateNewOrder = () => {
     createNewOrder({
@@ -79,7 +89,7 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
       userDetails: {
         ...form.values
       },
-      totalPrice: totalPriceCalculation(),
+      totalPrice: Number(finalTotalPrice()),
       noVatPrice: 0,
       deliveryOption: "",
       deliveryPrice: 0,
@@ -96,8 +106,10 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
     }, 2000);
   }
 
-  if (status === 'pending') return <p>Loading...</p>
-  if (status === 'error') return <p>Error</p>
+  if (countriesStatus === 'pending') return <p>Loading...</p>
+  if (countriesStatus === 'error') return <p>Error</p>
+
+  console.log(form.values.zipCode)
 
   return (
     <Card
@@ -158,17 +170,19 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
                     flex={1}
                     label="Country"
                     searchable
-                    value={country}
-                    data={data?.countries}
+                    data={countriesData?.data.map((country) => ({ value: country.iso3, label: country.name }))}
                     placeholder="Spain"
                     nothingFoundMessage="Nothing found"
                     {...form.getInputProps("country")}
                   />
-                  <TextInput
+                  <Select
                     autoComplete="new-off"
                     flex={1}
                     label="State/Province"
+                    searchable
+                    data={statesByCountry?.states.map((state) => ({ value: state.state_code, label: state.name }))}
                     placeholder=""
+                    nothingFoundMessage="Nothing found"
                     {...form.getInputProps("stateProvince")}
                   />
                   <NumberInput
@@ -215,7 +229,7 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
                       {getSumCartItems() > 1 ? `(${getSumCartItems()}) items` : `(${getSumCartItems()}) item`}:
                     </Text>
                     <Text>
-                      ${noVatCalculation()}
+                      {noVatCalculation()}
                     </Text>
                   </Flex>
                   <Flex justify="space-between">
@@ -229,7 +243,7 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
                   <Flex justify="space-between">
                     <Text>Tax: </Text>
                     <Text>
-                      ${vatCalculation()}
+                      {vatCalculation()}
                     </Text>
                   </Flex>
                   <Flex justify="space-between" mt={20}>
@@ -237,7 +251,7 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
                       Discount:
                     </Text>
                     <Text c="red" fw={700} size="xs">
-                      -${discount}
+                      {currencyFormater.format(discount)}
                     </Text>
                   </Flex>
                   <Flex justify="space-between" pt={10} mb={10} className="border-t-2 border-gray-300" >
@@ -245,7 +259,7 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
                       Total price:
                     </Title>
                     <Title order={3}>
-                      ${finalTotalPrice()}
+                      {finalTotalPrice()}
                     </Title>
                   </Flex>
                 </Flex>
@@ -255,9 +269,10 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
                   type="submit"
                   fullWidth
                   h={50}
-                  variant="gradient"
+                  variant={!form.isValid() ? "light" : "gradient"}
                   leftSection={!form.isValid() ? <IconLock /> : <IconLockOpen />}
-                  disabled={!form.isValid()}
+                // disabled={!form.isValid()}
+
                 >
                   Submit Order
                 </Button>

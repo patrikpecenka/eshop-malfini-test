@@ -15,15 +15,15 @@ export const CheckoutPage = () => {
   const { userData } = useOrderCart()
   const navigate = useNavigate()
 
-  const [query, setQuery] = useQueryParam(
+  const [checkoutStep, setCheckoutStep] = useQueryParam(
     "checkoutStep", withDefault(NumberParam, 0),
   );
 
   useEffect(() => {
-    cart.length === 0 && !3
+    cart.length === 0 && checkoutStep >= 1
       ? navigate("/checkout?checkoutStep=0")
       : null
-  }, [cart.length])
+  }, [cart.length, checkoutStep])
 
   return (
     <Card
@@ -31,18 +31,18 @@ export const CheckoutPage = () => {
       mx="10rem"
       mt={10}
     >
-      <Stepper active={query} variant="gradient" size="sm" onStepClick={setQuery} allowNextStepsSelect={cart.length === 0 ? false : true}>
+      <Stepper active={checkoutStep} variant="gradient" size="sm" onStepClick={setCheckoutStep} allowNextStepsSelect={cart.length === 0 ? false : true}>
         <Stepper.Step label="Cart" >
-          <OrderOne handleStepForward={() => setQuery(query + 1)} />
+          <OrderOne handleStepForward={() => setCheckoutStep(checkoutStep + 1)} />
         </Stepper.Step>
         <Stepper.Step label="Payment Delivery" disabled={cart.length === 0} icon={cart.length === 0 ? <IconLock /> : undefined}>
           <OrderTwo
-            handleStepBackwards={() => setQuery(query - 1)}
-            handleStepForward={() => setQuery(query + 1)}
+            handleStepBackwards={() => setCheckoutStep(checkoutStep - 1)}
+            handleStepForward={() => setCheckoutStep(checkoutStep + 1)}
           />
         </Stepper.Step>
         <Stepper.Step label="Address" icon={cart.length === 0 ? <IconLock /> : undefined}>
-          <OrderThree handleStepCompleted={() => setQuery(3)} />
+          <OrderThree handleStepCompleted={() => setCheckoutStep(3)} />
         </Stepper.Step>
         <Stepper.Completed >
           <Text>Thank you</Text>

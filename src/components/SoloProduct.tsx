@@ -41,8 +41,6 @@ export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
 
   return (
     <Box>
-
-
       <Card
         p={70}
         {...rest}
@@ -99,12 +97,20 @@ export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                   >
                     <IconMinus size="23" />
                   </ActionIcon>
-                  <NumberInput size="md" w={55} value={productAmount} onChange={(value) => setProductAmount(Number(value))} hideControls variant="unstiled" />
+                  <NumberInput
+                    size="md"
+                    w={55}
+                    value={productAmount}
+                    onChange={(value) => setProductAmount(Number(value))}
+                    hideControls
+                    variant="unstiled"
+                  />
                   <ActionIcon
                     size="xl"
                     variant="transparent"
                     color="violet.6"
                     onClick={increaseAmount}
+                    disabled={productAmount === 100}
                   >
                     <IconPlus
                       size="23"

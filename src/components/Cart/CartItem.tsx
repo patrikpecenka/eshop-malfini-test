@@ -2,6 +2,8 @@ import { ActionIcon, Box, Card, Flex, Image, NumberInput, Title } from "@mantine
 import { IconTrash, IconPlus, IconMinus } from "@tabler/icons-react"
 import { useCart } from "../../store/shopStore"
 import { openConfirmDeleteModal } from "../../utils/openConfirmDeleteModal"
+import { currencyFormater } from "utils/number/currencyFormater"
+import { useEffect } from "react"
 
 export interface CartProps {
   image: string;
@@ -15,7 +17,6 @@ export interface CartProps {
 interface CartItemProps {
   cartProduct: CartProps;
 }
-
 
 export const CartItem = ({ cartProduct, ...rest }: CartItemProps) => {
   const deleteItem = useCart((state) => state.deleteItem)
@@ -41,6 +42,12 @@ export const CartItem = ({ cartProduct, ...rest }: CartItemProps) => {
   const handleDecrease = () => {
     decreaseAmount(cartProduct.id)
   }
+
+  useEffect(() => {
+    if (cartProduct.amount < 1) {
+      deleteConfirmModal()
+    }
+  }, [cartProduct.amount])
 
   return (
     <Card
@@ -78,10 +85,12 @@ export const CartItem = ({ cartProduct, ...rest }: CartItemProps) => {
             </ActionIcon>
             <NumberInput
               size="xs"
-              w={40}
+              w={45}
               value={cartProduct.amount}
               onChange={(value) => increaseByInput(cartProduct.id, Number(value))}
               hideControls
+              min={1}
+              allowNegative={false}
             />
             <ActionIcon
               variant="light"
@@ -96,7 +105,7 @@ export const CartItem = ({ cartProduct, ...rest }: CartItemProps) => {
 
           <Flex gap={10} w={120} align="center" justify="end">
             <Title order={5} className="self-center" >
-              $ {Intl.NumberFormat("en-US").format(cartProduct.totalPrice)}
+              {currencyFormater.format(cartProduct.totalPrice)}
             </Title>
             <ActionIcon variant="light" color="red" onClick={handleDelete}>
               <IconTrash
