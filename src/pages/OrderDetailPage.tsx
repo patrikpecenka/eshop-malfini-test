@@ -1,4 +1,4 @@
-import { Box, Card, Divider, Table, Title, Text, Flex, Stack } from "@mantine/core";
+import { Box, Card, Divider, Table, Title, Text, Flex, Stack, Anchor } from "@mantine/core";
 import { useOrderCart } from "store/shopStore";
 import { StringParam, useQueryParam, withDefault } from "use-query-params";
 import { currencyFormater } from "utils/number/currencyFormater";
@@ -12,7 +12,15 @@ export const ProfilePage = () => {
 
   const rows = orderDetail?.cart.map((item) => (
     <Table.Tr key={item.title}>
-      <Table.Td>{item.title}</Table.Td>
+      <Table.Td>
+        <Anchor
+          size="sm"
+          c="black"
+          href={`/products/${item.id}`}
+        >
+          {item.title}
+        </Anchor>
+      </Table.Td>
       <Table.Td></Table.Td>
       <Table.Td>{currencyFormater.format(item.price)}</Table.Td>
       <Table.Td>{item.amount}</Table.Td>
