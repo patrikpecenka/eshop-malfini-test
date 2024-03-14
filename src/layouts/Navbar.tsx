@@ -1,20 +1,21 @@
-import { Badge, Drawer, Flex, Group, Indicator, Title, Button, NumberFormatter, Text } from "@mantine/core"
+import { Badge, Drawer, Flex, Group, Indicator, Title, Button, Text, Avatar } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks";
 import { IconShoppingCart } from '@tabler/icons-react';
 import { CartItem } from "components/Cart/CartItem";
 import { useCart } from "../store/shopStore"
 import { useNavigate } from "react-router-dom"
 import { EmptyCart } from "components/EmptyCart/EmptyCart";
+import { currencyFormater } from "utils/number/currencyFormater";
 
 
 export const Navbar = () => {
   const [opened, { open, close }] = useDisclosure(false);
-  const { totalPriceCalculation: totalPriceCalculation, clearCart } = useCart()
+  const { totalPriceCalculation, clearCart } = useCart()
   const { cart, getSumCartItems } = useCart()
   const navigate = useNavigate();
 
   const roundTotalPrice = () => {
-    return Intl.NumberFormat("en-US").format(totalPriceCalculation())
+    return currencyFormater.format(totalPriceCalculation())
   }
 
   const handleCheckoutRedirect = () => {
@@ -42,7 +43,16 @@ export const Navbar = () => {
           </Text>
         </Title>
       </Button>
-      <Flex align="center" gap={10} h={40} >
+
+      <Flex align="center" gap={25} h={40} >
+        <Avatar
+          className="outline outline-3 outline-offset-1 outline-green-500"
+          component="a"
+          href="/profile"
+          src="https://megaport.hu/media/king-include/uploads/2023/10/906363-female-avatar-profile-picture-013.jpg"
+          alt="Profile"
+        />
+
         <Badge
           color="red.5."
           bg="violet.0.1"
@@ -50,9 +60,8 @@ export const Navbar = () => {
           h="100%"
           variant={cart.length > 0 ? "dot" : "transparent"}
         >
-          <NumberFormatter prefix="$" value={Intl.NumberFormat("en-US").format(totalPriceCalculation())} />
+          <Text fw={700}>{roundTotalPrice()}</Text>
         </Badge>
-
         <Indicator
           h="100%"
           label={getSumCartItems()}
@@ -74,7 +83,7 @@ export const Navbar = () => {
             <IconShoppingCart />
           </Button>
         </Indicator >
-      </Flex>
+      </Flex >
 
       <Drawer
         size="lg"
@@ -101,7 +110,7 @@ export const Navbar = () => {
                 ml={10}
                 variant={cart.length > 0 ? "light" : "transparent"}
               >
-                <NumberFormatter prefix=" $" value={roundTotalPrice()} decimalScale={2} />
+                <Text fw={700}>{roundTotalPrice()}</Text>
               </Badge>
             </Title>
           </Flex>

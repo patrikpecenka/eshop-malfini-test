@@ -16,6 +16,7 @@ interface OrderThreeProps {
 export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
   const createNewOrder = useOrderCart((state) => state.createUser)
   const { cart, totalPriceCalculation, clearCart, getSumCartItems } = useCart()
+  const { userData } = useOrderCart()
 
   //USE STATES
   const [loading, setLoading] = useState(false)
@@ -45,7 +46,6 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
       address: isNotEmpty("Invalid address"),
       city: isNotEmpty("Invalid city"),
       country: isNotEmpty("Invalid country"),
-      stateProvince: isNotEmpty("Invalid state")
     },
     onValuesChange(values, previous) {
       if (values.country !== previous.country) {
@@ -84,32 +84,40 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
   //END CALCULATIONS
 
   const handleCreateNewOrder = () => {
-    createNewOrder({
-      id: crypto.randomUUID(),
-      userDetails: {
-        ...form.values
-      },
-      totalPrice: Number(finalTotalPrice()),
-      noVatPrice: 0,
-      deliveryOption: "",
-      deliveryPrice: 0,
-      cart: cart
-    })
     form.reset()
     form.clearFieldError("country")
 
     setLoading(true)
     setTimeout(() => {
-      setLoading(false)
-      handleStepCompleted()
-      clearCart()
+      createNewOrder({
+        id: crypto.randomUUID(),
+        orderId: userData.length === 0 ? 1000001 : userData[userData.length - 1].orderId + 1,
+        userDetails: {
+          ...form.values
+        },
+        paymentDetails: {
+          subtotalPrice: totalPriceCalculation(),
+          totalPrice: Number(finalTotalPrice()
+            .toString()
+            .replace(",", "")
+            .slice(1)),
+          noVatPrice: totalPriceCalculation() - (totalPriceCalculation() / 1.21),
+          vatPrice: Number(vatCalculation()),
+          discount: discount,
+          paymentMethod: query.split("-")[0],
+          paymentPrice: (query.includes("free") ? 0 : parseFloat(query.split("-")[1].slice(0, -2))),
+          dateOfOrder: new Date().toISOString(),
+        },
+        cart: cart
+      }),
+        setLoading(false),
+        handleStepCompleted(),
+        clearCart()
     }, 2000);
   }
 
   if (countriesStatus === 'pending') return <p>Loading...</p>
   if (countriesStatus === 'error') return <p>Error</p>
-
-  console.log(form.values.zipCode)
 
   return (
     <Card
@@ -269,10 +277,10 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
                   type="submit"
                   fullWidth
                   h={50}
-                  variant={!form.isValid() ? "light" : "gradient"}
+                  color={!form.isValid() ? "red" : ""}
+                  variant={!form.isValid() && loading === false ? "light" : !form.isValid() && loading ? "gradient" : "gradient"}
                   leftSection={!form.isValid() ? <IconLock /> : <IconLockOpen />}
                 // disabled={!form.isValid()}
-
                 >
                   Submit Order
                 </Button>

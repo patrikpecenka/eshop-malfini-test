@@ -14,6 +14,7 @@ interface CartStore {
   totalPriceCalculation: () => number;
   clearCart: () => void;
   getSumCartItems: () => number;
+  getItemAmount: (id: string) => number
 }
 
 interface UserStore {
@@ -69,6 +70,7 @@ export const useCart = create(
             : item
         )
       })),
+      getItemAmount: (id: string) => get().cart.find((item) => item.id === id)?.amount || 0,
 
       increaseAmount: (id: string) => set((state) => ({
         cart: state.cart.map((item) =>

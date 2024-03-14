@@ -8,7 +8,7 @@ import { ProductCard } from "components/ProductCard"
 import { useDebouncedValue } from '@mantine/hooks';
 import { StringParam, useQueryParams, withDefault } from "use-query-params"
 
-export const ProductsList = () => {
+export const ProductsListPage = () => {
   const [query, setQuery] = useQueryParams({
     activeSorting: withDefault(StringParam, ""),
     search: withDefault(StringParam, undefined),
@@ -83,7 +83,9 @@ export const ProductsList = () => {
       >
         {
           filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id}
+              product={product}
+            />
           ))
         }
       </SimpleGrid>

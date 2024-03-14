@@ -10,31 +10,32 @@ interface SoloProductProps extends CardProps {
 
 export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
   const addCartItems = useCart((state) => state.addItem);
+  // const getItemAmount = useCart((state) => state.getItemAmount);
 
-  const [productAmount, setProductAmount] = useState<number>(1);
+  const [productInputAmount, setProductInputAmount] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false)
 
   const increaseAmount = () => {
-    setProductAmount(prevState => prevState + 1)
+    setProductInputAmount(prevState => prevState + 1)
   }
 
   const decreaseAmount = () => {
-    productAmount === 1 ? setProductAmount(1) : setProductAmount(prevState => prevState - 1)
+    productInputAmount === 1 ? setProductInputAmount(1) : setProductInputAmount(prevState => prevState - 1)
   }
   const handleClick = () => {
-    if (productAmount < 2) {
+    if (productInputAmount > 100) {
       addCartItems({
-        ...product, totalPrice: product.price, amount: productAmount
+        ...product, totalPrice: product.price, amount: productInputAmount
       })
-      setProductAmount(1)
+      setProductInputAmount(1)
     } else {
       setLoading(true)
       setTimeout(() => {
         setLoading(false)
         addCartItems({
-          ...product, totalPrice: product.price, amount: productAmount
+          ...product, totalPrice: product.price, amount: productInputAmount
         })
-        setProductAmount(1)
+        setProductInputAmount(1)
       }, 200);
     }
   }
@@ -100,8 +101,9 @@ export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                   <NumberInput
                     size="md"
                     w={55}
-                    value={productAmount}
-                    onChange={(value) => setProductAmount(Number(value))}
+                    min={1}
+                    value={productInputAmount}
+                    onChange={(value) => setProductInputAmount(Number(value))}
                     hideControls
                     variant="unstiled"
                   />
@@ -110,7 +112,7 @@ export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                     variant="transparent"
                     color="violet.6"
                     onClick={increaseAmount}
-                    disabled={productAmount === 100}
+                    disabled={productInputAmount === 100}
                   >
                     <IconPlus
                       size="23"
@@ -122,12 +124,14 @@ export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                   loaderProps={{ type: "oval", color: "white" }}
                   size="md"
                   flex={1}
+                  // disabled={productInputAmount + getItemAmount(product.id) > 100}
                   variant="gradient"
                   onClick={handleClick}
                 >
                   Add to cart
                 </Button>
               </Flex>
+              {/* <Text c="red">{productInputAmount + getItemAmount(product.id) > 100 ? "You can buy max 100 items" : ""}</Text> */}
             </Flex>
 
           </Flex>

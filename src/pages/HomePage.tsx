@@ -2,7 +2,7 @@ import { Button, Flex, Title } from "@mantine/core"
 import { useNavigate } from "react-router-dom"
 
 
-export const Home = () => {
+export const HomePage = () => {
   const navigate = useNavigate();
 
   return (

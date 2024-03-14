@@ -2,9 +2,10 @@ import { ActionIcon, Badge, Button, Card, CardProps, Flex, Group, Image, NumberI
 import { ProductDto } from "../lib/dto/types"
 import { useCart } from "../store/shopStore"
 import { Link } from "react-router-dom"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { IconMinus, IconPlus } from "@tabler/icons-react"
 import { currencyFormater } from "utils/number/currencyFormater"
+
 
 
 interface ProductCardProps extends CardProps {
@@ -25,18 +26,20 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
     increaseAmount(product.id)
   }
 
+
   const handleDecrease = () => {
-    if (itemAmount < 1) {
+    if (itemAmount < 2) {
       deleteItem(product.id)
     }
     decreaseAmount(product.id)
   }
 
-  useEffect(() => {
-    if (itemAmount < 1) {
+  const handleOnChange = (value: number) => {
+    if (value === 0) {
       deleteItem(product.id)
     }
-  }, [itemAmount])
+    increaseByInput(product.id, value)
+  }
 
   const [loading, setLoading] = useState<boolean>(false)
   const [itemAddedCheck, setItemAddedCheck] = useState<boolean>(false)
@@ -60,7 +63,6 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
       padding="md"
       {...rest}
     >
-
       <Link
         to={`/products/${product.id}`}
       >
@@ -119,8 +121,9 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
                 size="md"
                 fw={700}
                 w={55}
-                onChange={(value) => increaseByInput(product.id, Number(value))}
+                onChange={(value) => handleOnChange(Number(value))}
                 value={itemAmount}
+                allowNegative={false}
                 hideControls
                 variant="unstiled"
               />
