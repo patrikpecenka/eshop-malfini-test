@@ -1,4 +1,4 @@
-import { Affix, Button, CloseButton, Flex, Input, Menu, SegmentedControl, SimpleGrid, Transition, rem } from "@mantine/core"
+import { Affix, Button, CloseButton, Flex, Input, Menu, SegmentedControl, SimpleGrid, Transition } from "@mantine/core"
 import { IconArrowUp, IconSearch } from "@tabler/icons-react"
 import fetcher from "lib/fetcher"
 import { ProductDto } from "lib/dto/types"

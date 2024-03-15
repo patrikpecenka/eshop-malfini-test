@@ -6,7 +6,7 @@ import fetcher from "lib/fetcher"
 import { useMemo, useState } from "react"
 import { useCart, useOrderCart } from "store/shopStore"
 import { IconCubeSend, IconLock, IconLockOpen } from "@tabler/icons-react"
-import { useQueryParam, withDefault, StringParam } from "use-query-params"
+import { withDefault, StringParam, useQueryParams } from "use-query-params"
 import { currencyFormater } from "utils/number/currencyFormater"
 
 interface OrderThreeProps {
@@ -21,9 +21,10 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
   //USE STATES
   const [loading, setLoading] = useState(false)
   //QUERY PARAMS
-  const [query] = useQueryParam(
-    "paymentMethod", withDefault(StringParam, ""),
-  )
+  const [query] = useQueryParams({
+    paymentMethod: withDefault(StringParam, ""),
+    deliveryMethod: withDefault(StringParam, ""),
+  })
   //FORM VALIDATION
   const form = useForm({
     initialValues: {
@@ -70,10 +71,16 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
 
   //CALCULATIONS
   const finalTotalPrice = () => {
-    const queryValue = query.includes("free")
+    const paymentValue = query.paymentMethod.includes("free")
       ? 0
-      : parseFloat(query.split("-")[1].slice(0, -2))
-    return currencyFormater.format((totalPriceCalculation() + queryValue) - discount)
+      : parseFloat(query.paymentMethod.split("-")[1].slice(0, -2))
+
+    const deliveryValue = query.deliveryMethod.includes("free")
+      ? 0
+      : parseFloat(query.deliveryMethod.split("-")[1].slice(0, -2))
+
+
+    return currencyFormater.format((totalPriceCalculation() + paymentValue + deliveryValue) - discount)
   }
   const noVatCalculation = () => {
     return currencyFormater.format((totalPriceCalculation() / 121) * 100)
@@ -86,7 +93,6 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
   const handleCreateNewOrder = () => {
     form.reset()
     form.clearFieldError("country")
-
     setLoading(true)
     setTimeout(() => {
       createNewOrder({
@@ -96,7 +102,7 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
           ...form.values
         },
         paymentDetails: {
-          subtotalPrice: totalPriceCalculation(),
+          subtotalPrice: (totalPriceCalculation() / 121) * 100,
           totalPrice: Number(finalTotalPrice()
             .toString()
             .replace(",", "")
@@ -104,8 +110,10 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
           noVatPrice: totalPriceCalculation() - (totalPriceCalculation() / 1.21),
           vatPrice: Number(vatCalculation()),
           discount: discount,
-          paymentMethod: query.split("-")[0],
-          paymentPrice: (query.includes("free") ? 0 : parseFloat(query.split("-")[1].slice(0, -2))),
+          paymentMethod: query.paymentMethod.split("-")[0],
+          paymentPrice: (query.paymentMethod.includes("free") ? 0 : parseFloat(query.paymentMethod.split("-")[1].slice(0, -2))),
+          deliveryMethod: query.deliveryMethod.split("-")[0],
+          deliveryPrice: (query.deliveryMethod.includes("free") ? 0 : parseFloat(query.paymentMethod.split("-")[1].slice(0, -2))),
           dateOfOrder: new Date().toISOString(),
         },
         cart: cart
@@ -224,7 +232,7 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
               <Flex direction="column" justify="space-between" >
                 <Flex direction="column" gap={5} >
                   {
-                    query.includes("free")
+                    query.paymentMethod.includes("free")
                       ? <Flex gap={5} c="violet.8" align="center">
                         <IconCubeSend size={22} />
                         <Text fw={700} size="sm">This Order Ships Free!</Text>
@@ -243,9 +251,17 @@ export const OrderThree = ({ handleStepCompleted }: OrderThreeProps) => {
                   <Flex justify="space-between">
                     <Text>Shipping: </Text>
                     {
-                      query.includes("free")
+                      query.paymentMethod.includes("free")
                         ? <Text fw={700} tt="uppercase">Free</Text>
-                        : <Text>${query.split("-")[1].slice(0, -2)}</Text>
+                        : <Text>${query.paymentMethod.split("-")[1].slice(0, -2)}</Text>
+                    }
+                  </Flex>
+                  <Flex justify="space-between">
+                    <Text>Delivery: </Text>
+                    {
+                      query.deliveryMethod.includes("free")
+                        ? <Text fw={700} tt="uppercase">Free</Text>
+                        : <Text>${query.deliveryMethod.split("-")[1].slice(0, -2)}</Text>
                     }
                   </Flex>
                   <Flex justify="space-between">

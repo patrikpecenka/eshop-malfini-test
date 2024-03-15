@@ -72,10 +72,16 @@ export const ProfilePage = () => {
                       </Table.Td>
                     </Table.Tr>
                     <Table.Tr>
-                      <Table.Th> Delivery method </Table.Th> <Table.Td></Table.Td>
+                      <Table.Th> Delivery method </Table.Th> <Table.Td>{orderDetail?.paymentDetails.deliveryMethod}</Table.Td>
                     </Table.Tr>
                     <Table.Tr>
-                      <Table.Th> Delivery price </Table.Th> <Table.Td></Table.Td>
+                      <Table.Th> Delivery price </Table.Th>
+                      <Table.Td>
+                        {orderDetail?.paymentDetails.paymentPrice === 0
+                          ? "Free"
+                          : currencyFormater.format(orderDetail?.paymentDetails.deliveryPrice ?? 0
+                          )}
+                      </Table.Td>
                     </Table.Tr>
                     <Table.Tr>
                       <Table.Th> Total Price </Table.Th> <Table.Td>{currencyFormater.format(orderDetail?.paymentDetails.totalPrice ?? 0)}</Table.Td>

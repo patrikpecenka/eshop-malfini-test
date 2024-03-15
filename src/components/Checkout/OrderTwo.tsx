@@ -10,7 +10,7 @@ import GooglePay from "../../assets/google-pay-svgrepo-com.svg"
 import PayPal from "../../assets/paypal-3-svgrepo-com.svg"
 import Stripe from "../../assets/stripe-svgrepo-com.svg"
 import Visa from "../../assets/visa-svgrepo-com.svg"
-import { withDefault, StringParam, useQueryParam } from "use-query-params"
+import { withDefault, StringParam, useQueryParams } from "use-query-params"
 import { currencyFormater } from "utils/number/currencyFormater"
 
 const paymentMethods = [
@@ -64,6 +64,33 @@ const paymentMethods = [
   }
 ]
 
+const deliveryMethods = [
+  {
+    id: "1",
+    name: "Standard",
+    icon: "",
+    fee: "1.99 $",
+  },
+  {
+    id: "2",
+    name: "Express",
+    icon: "",
+    fee: "3.99 $",
+  },
+  {
+    id: "3",
+    name: "Pickup",
+    icon: "",
+    fee: "free",
+  },
+  {
+    id: "4",
+    name: "DHL",
+    icon: "",
+    fee: "2.99 $",
+  }
+]
+
 interface OrderTwoProps {
   handleStepBackwards: () => void;
   handleStepForward: () => void;
@@ -72,9 +99,10 @@ interface OrderTwoProps {
 export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoProps) => {
   const { cart, totalPriceCalculation } = useCart()
 
-  const [query, setQuery] = useQueryParam(
-    "paymentMethod", withDefault(StringParam, ""),
-  )
+  const [query, setQuery] = useQueryParams({
+    paymentMethod: withDefault(StringParam, ""),
+    deliveryMethod: withDefault(StringParam, ""),
+  })
 
   const noVatCalculation = () => {
     return currencyFormater.format((totalPriceCalculation() / 121) * 100)
@@ -92,14 +120,17 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
       <Flex direction="row" gap={40} align="end" >
         {/*Left section with payment, delivery details */}
         <Flex direction="column" gap={25} w="100%" flex="70%">
+
           <Paper w="100%" shadow="sm" withBorder p="xs">
-            <Radio.Group onChange={setQuery} value={query} >
-              {paymentMethods.map((item) => (
+            <Title order={5} p={5}>Delivery Method</Title>
+            <Radio.Group onChange={(value) => setQuery({ deliveryMethod: value })} value={query.deliveryMethod} >
+              {deliveryMethods.map((item) => (
                 <Flex
                   component="label"
                   key={item.name}
                   id={item.id}
-                  p="xs"
+                  h={50}
+                  p={5}
                   w="100%"
                   align="center"
                   direction="row"
@@ -114,18 +145,58 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
                     bg-stone-100"
                   my={5}
                 >
-                  <Group flex="12%" justify="space-evenly" >
-                    <Radio value={item.name + "-" + item.fee} color="violet" ></Radio>
-                    <Box w={48}>
-                      <Image src={item.icon} alt={item.name} w={45} h="100%" fit="contain" />
+                  <Group flex="15%" justify="space-evenly" >
+                    <Radio value={item.name + "-" + item.fee} color="violet"></Radio>
+                    <Box w={40}>
+                      <Image src={item.icon} alt={item.name} w={40} fit="contain" />
                     </Box>
                   </Group>
-                  <Text flex="75%" c="btn-violet" ta="right" fw={500}>{item.fee}</Text>
-                  <Text flex="0%"></Text>
+                  <Text flex="15%" size="sm">{item.name}</Text>
+                  <Text flex="50%" c="btn-violet" ta="right" fw={500}>{item.fee}</Text>
+                  <Text flex="2%"></Text>
                 </Flex>
               ))}
             </Radio.Group>
           </Paper>
+
+          <Paper w="100%" shadow="sm" withBorder p="xs">
+            <Title order={5} p={5}>Payment Method</Title>
+            <Radio.Group onChange={(value) => setQuery({ paymentMethod: value })} value={query.paymentMethod} >
+              {paymentMethods.map((item) => (
+                <Flex
+                  component="label"
+                  key={item.name}
+                  id={item.id}
+                  h={50}
+                  p={5}
+                  w="100%"
+                  align="center"
+                  direction="row"
+                  className="hover:cursor-pointer 
+                    border
+                    border-transparent
+                    has-[:checked]:bg-violet-100 
+                    has-[:checked]:border 
+                    has-[:checked]:border-violet-300 
+                    rounded-md 
+                    hover:bg-violet-50 
+                    bg-stone-100"
+                  my={5}
+                >
+                  <Group flex="15%" justify="space-evenly" >
+                    <Radio value={item.name + "-" + item.fee} color="violet"></Radio>
+                    <Group w={40}>
+                      <Image src={item.icon} alt={item.name} w={40} fit="contain" />
+                    </Group>
+                  </Group>
+                  <Text flex="15%" size="sm">{item.name}</Text>
+                  <Text flex="50%" c="btn-violet" ta="right" fw={500}>{item.fee}</Text>
+                  <Text flex="2%"></Text>
+                </Flex>
+              ))}
+            </Radio.Group>
+          </Paper>
+
           <Flex align="center" justify="space-between">
             <Button
               radius="xl"
@@ -146,7 +217,7 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
               w={210}
               variant="gradient"
               gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
-              disabled={query === "" || cart.length === 0}
+              disabled={(query.deliveryMethod && query.paymentMethod) === "" || cart.length === 0}
               onClick={handleStepForward}
             >
               Continue
@@ -156,7 +227,7 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
 
         {/*Right section with order summary */}
         <Flex flex="40%" direction="column" gap={10} >
-          <Flex direction="column" gap={10} mb={10} h={510}>
+          <Flex direction="column" gap={10} mb={10} h={690}>
             <ScrollArea h="100%" offsetScrollbars scrollbarSize={6} mx={10}>
               {cart.map((product) => (
                 <SumCartItem
@@ -167,14 +238,28 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
             </ScrollArea>
           </Flex>
           {
-            query === ""
+            query.paymentMethod === ""
               ? ""
               : <Flex className="border-t-2 border-gray-300" pt={10}>
-                {query.includes("free")
+                {query.paymentMethod.includes("free")
                   ? <Text size="sm" c="dimmed">No additional fee</Text>
                   : <Flex direction="row" w="100%" justify="space-between" align="center">
-                    <Text size="sm" c="dimmed">Additional fee: </Text>
-                    <Text size="sm" fw={700}>{query.split("-")[1]}</Text>
+                    <Text size="sm" c="dimmed">Additional fee for payment: </Text>
+                    <Text size="sm" fw={700}>{query.paymentMethod.split("-")[1]}</Text>
+                  </Flex>
+                }
+              </Flex>
+          }
+
+          {
+            query.deliveryMethod === ""
+              ? ""
+              : <Flex>
+                {query.deliveryMethod.includes("free")
+                  ? <Text size="sm" c="dimmed">Free delivery</Text>
+                  : <Flex direction="row" w="100%" justify="space-between" align="center">
+                    <Text size="sm" c="dimmed">Delivery fee: </Text>
+                    <Text size="sm" fw={700}>{query.deliveryMethod.split("-")[1]}</Text>
                   </Flex>
                 }
               </Flex>

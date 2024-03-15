@@ -23,6 +23,8 @@ export interface OrderCart {
     dateOfOrder: string;
     paymentMethod: string;
     paymentPrice: number;
+    deliveryMethod: string;
+    deliveryPrice: number;
   }
   cart: CartProps[]
 }
