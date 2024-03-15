@@ -1,11 +1,11 @@
-import { Button, CloseButton, Flex, Input, Menu, SegmentedControl, SimpleGrid } from "@mantine/core"
-import { IconSearch } from "@tabler/icons-react"
+import { Affix, Button, CloseButton, Flex, Input, Menu, SegmentedControl, SimpleGrid, Transition, rem } from "@mantine/core"
+import { IconArrowUp, IconSearch } from "@tabler/icons-react"
 import fetcher from "lib/fetcher"
 import { ProductDto } from "lib/dto/types"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { ProductCard } from "components/ProductCard"
-import { useDebouncedValue } from '@mantine/hooks';
+import { useDebouncedValue, useWindowScroll } from '@mantine/hooks';
 import { StringParam, useQueryParams, withDefault } from "use-query-params"
 
 export const ProductsListPage = () => {
@@ -14,6 +14,7 @@ export const ProductsListPage = () => {
     search: withDefault(StringParam, undefined),
   });
 
+  const [scroll, scrollTo] = useWindowScroll();
   const [debounced] = useDebouncedValue(query, 300, { leading: true });
 
   const { data, status } = useQuery({
@@ -34,6 +35,23 @@ export const ProductsListPage = () => {
 
   return (
     <>
+      <Affix position={{ bottom: 20, right: 20 }}>
+        <Transition transition="slide-up" mounted={scroll.y > 0}>
+          {(style) => (
+            <Button
+              leftSection={<IconArrowUp size={15} />}
+              style={style}
+              variant="filled"
+              color="indigo.6"
+              radius="xl"
+              onClick={() => scrollTo({ y: 0 })}
+            >
+              Back to top
+            </Button>
+          )}
+        </Transition>
+      </Affix>
+
       <Flex justify="start" px={20} pt={20} gap={20}>
         <Menu shadow="md" width={200}>
           <Menu.Target>

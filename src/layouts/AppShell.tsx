@@ -2,7 +2,6 @@ import { AppShell, Flex } from '@mantine/core';
 import { Navbar } from 'layouts/Navbar';
 import { Outlet, useLocation } from 'react-router-dom';
 import { SidePanel } from './SidePanel';
-import { Footer } from './Footer';
 import { useState, useEffect } from 'react';
 
 
@@ -24,6 +23,9 @@ const TempLayout = () => {
       aside={{
         width: !visible ? 0 : 400,
         breakpoint: "none",
+      }}
+      footer={{
+        height: 80,
       }}
     >
       <AppShell.Header >
@@ -52,7 +54,6 @@ const TempLayout = () => {
         mx={10}
       >
         <Outlet />
-        <Footer />
       </AppShell.Main>
     </AppShell>
   )

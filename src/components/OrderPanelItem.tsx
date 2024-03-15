@@ -24,7 +24,7 @@ export const OrderItem = ({ OrderItem, ...rest }: OrderItemProps) => {
         Order ID: {OrderItem.orderId}
       </Title>
       <Text c="dimmed" size="xs">
-        {dateFormater(OrderItem.paymentDetails.dateOfOrder)}
+        {dateFormater(OrderItem.paymentDetails.dateOfOrder ?? "")}
       </Text>
       <Divider my="sm" />
       <Flex justify="space-between" align="center">
