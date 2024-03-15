@@ -24,9 +24,6 @@ const TempLayout = () => {
         width: !visible ? 0 : 400,
         breakpoint: "none",
       }}
-      footer={{
-        height: 80,
-      }}
     >
       <AppShell.Header >
         <Flex

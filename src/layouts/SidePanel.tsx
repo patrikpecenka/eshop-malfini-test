@@ -1,6 +1,6 @@
-import { CloseButton, Flex, Input } from "@mantine/core"
+import { CloseButton, Flex, Input, ScrollArea } from "@mantine/core"
 import { IconSearch } from "@tabler/icons-react";
-import { OrderItem } from "components/OrderPanelItem"
+import { OrderPanelItem } from "components/OrderPanelItem"
 import { useMemo } from "react";
 import { useOrderCart } from "store/shopStore"
 import { StringParam, useQueryParams, withDefault } from "use-query-params";
@@ -22,8 +22,9 @@ export const SidePanel = () => {
   )
 
   return (
-    <Flex direction="column" h="100%" m={20} gap={10}>
+    <Flex direction="column" h="100%" m={20} gap={10} align="center" >
       <Input
+        w="95%"
         placeholder="Search..."
         value={query.order}
         onChange={(e) => setQuery({ order: e.currentTarget.value })}
@@ -35,14 +36,15 @@ export const SidePanel = () => {
           />
         }
       />
-
-      {filteredOrder.map((order) => (
-        <OrderItem
-          key={order.id}
-          OrderItem={order}
-          onClick={() => setQuery({ order: (order.orderId).toString() })}
-        />
-      ))}
+      <ScrollArea w="100%" scrollbarSize={2}>
+        {filteredOrder.map((order) => (
+          <OrderPanelItem
+            key={order.id}
+            OrderItem={order}
+            onClick={() => setQuery({ order: (order.orderId).toString() })}
+          />
+        ))}
+      </ScrollArea>
     </Flex>
   )
 }
