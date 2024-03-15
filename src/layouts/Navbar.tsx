@@ -1,6 +1,6 @@
-import { Badge, Drawer, Flex, Group, Indicator, Title, Button, Text, Avatar } from "@mantine/core"
-import { useDisclosure } from "@mantine/hooks";
-import { IconShoppingCart } from '@tabler/icons-react';
+import { Badge, Drawer, Flex, Group, Indicator, Title, Button, Text, Avatar, Stack, Menu, ActionIcon, Tooltip } from "@mantine/core"
+import { useDisclosure, useHover } from "@mantine/hooks";
+import { IconShoppingCartFilled, IconTool, IconReceipt, IconHeartFilled } from '@tabler/icons-react';
 import { CartItem } from "components/Cart/CartItem";
 import { useCart } from "../store/shopStore"
 import { useNavigate } from "react-router-dom"
@@ -9,10 +9,13 @@ import { currencyFormater } from "utils/number/currencyFormater";
 
 
 export const Navbar = () => {
-  const [opened, { open, close }] = useDisclosure(false);
   const { totalPriceCalculation, clearCart } = useCart()
   const { cart, getSumCartItems } = useCart()
   const navigate = useNavigate();
+
+  const [opened, { open, close }] = useDisclosure(false);
+  const { hovered, ref } = useHover();
+
 
   const roundTotalPrice = () => {
     return currencyFormater.format(totalPriceCalculation())
@@ -31,7 +34,7 @@ export const Navbar = () => {
         onClick={() => navigate("/")}
         c="black"
       >
-        <Title order={1}>
+        <Title order={1} w="100%">
           Easy
           <Text
             span
@@ -44,45 +47,104 @@ export const Navbar = () => {
         </Title>
       </Button>
 
-      <Flex align="center" gap={25} h={40} >
-        <Avatar
-          className="outline outline-3 outline-offset-1 outline-green-500"
-          component="a"
-          href="/profile"
-          src="https://megaport.hu/media/king-include/uploads/2023/10/906363-female-avatar-profile-picture-013.jpg"
-          alt="Profile"
-        />
-
-        <Badge
-          color="red.5."
-          bg="violet.0.1"
-          size="xl"
-          h="100%"
-          variant={cart.length > 0 ? "dot" : "transparent"}
+      <Flex align="center" gap={10} h={40} >
+        <Menu offset={1} shadow="sm" >
+          <Menu.Target>
+            <Button
+              ref={ref}
+              component="div"
+              size="sm"
+              radius="xl"
+              variant={hovered ? "light" : "transparent"}
+              color="violet"
+              leftSection={
+                <Avatar
+                  size="sm"
+                  src="https://megaport.hu/media/king-include/uploads/2023/10/906363-female-avatar-profile-picture-013.jpg"
+                  alt="Profile"
+                />
+              }
+            >
+              <Stack >
+                <Text fw={700}> My Profile </Text>
+              </Stack>
+            </Button>
+          </Menu.Target>
+          <Menu.Dropdown w={200} >
+            <Menu.Item
+              leftSection={<IconTool size={18} color="grey" />}
+            >
+              Settings
+            </Menu.Item>
+            <Menu.Item
+              component="a"
+              href="/profile"
+              leftSection={<IconReceipt size={18} color="grey" />}
+            >
+              Orders
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+        <Tooltip
+          label="Orders and Goods"
+          transitionProps={{ duration: 200 }}
+          withArrow
         >
-          <Text fw={700}>{roundTotalPrice()}</Text>
-        </Badge>
-        <Indicator
-          h="100%"
-          label={getSumCartItems()}
-          inline
-          size={22}
-          offset={7}
-          position="top-start"
-          disabled={cart.length === 0}
-          color="red.6"
-          withBorder
-        >
-          <Button
-            radius="xl"
-            size="md"
-            variant="outline"
-            color="violet.5"
-            onClick={open}
+          <ActionIcon
+            component="a"
+            href="/profile"
+            variant="subtle"
+            color="violet"
           >
-            <IconShoppingCart />
-          </Button>
-        </Indicator >
+            <IconReceipt size="100%" />
+          </ActionIcon>
+        </Tooltip>
+
+        <Tooltip
+          label="Favorites"
+          transitionProps={{ duration: 200 }}
+          withArrow
+        >
+          <ActionIcon
+            variant="subtle"
+            color="violet"
+          >
+            <IconHeartFilled size="100%" />
+          </ActionIcon>
+        </Tooltip>
+
+
+        <Tooltip
+          label="Go to cart"
+          transitionProps={{ duration: 200 }}
+          withArrow
+        >
+          <Indicator
+            label={getSumCartItems()}
+            size={22}
+            offset={7}
+            position="top-end"
+            disabled={cart.length === 0}
+            color="red.6"
+            withBorder
+          >
+            <Button
+              radius="xl"
+              size="sm"
+              variant="light"
+              color="violet.5"
+              onClick={open}
+              leftSection={
+                <IconShoppingCartFilled size={25} />
+              }
+            >
+
+              <Text fw={700} size="sm" >
+                {roundTotalPrice()}
+              </Text>
+            </Button>
+          </Indicator >
+        </Tooltip>
       </Flex >
 
       <Drawer
