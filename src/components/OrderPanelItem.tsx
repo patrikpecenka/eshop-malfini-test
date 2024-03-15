@@ -48,6 +48,5 @@ export const OrderPanelItem = ({ OrderItem, ...rest }: OrderItemProps) => {
         </Text>
       </Flex>
     </Card >
-
   )
 }

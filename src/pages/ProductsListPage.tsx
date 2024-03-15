@@ -7,7 +7,6 @@ import { useMemo } from "react"
 import { ProductCard } from "components/ProductCard"
 import { useDebouncedValue, useWindowScroll } from '@mantine/hooks';
 import { StringParam, useQueryParams, withDefault } from "use-query-params"
-
 export const ProductsListPage = () => {
   const [query, setQuery] = useQueryParams({
     activeSorting: withDefault(StringParam, ""),

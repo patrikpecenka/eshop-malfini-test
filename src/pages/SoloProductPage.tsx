@@ -3,6 +3,7 @@ import { SoloProduct } from "components/SoloProduct"
 import { ProductDto } from "lib/dto/types"
 import fetcher from "lib/fetcher"
 import { Navigate, useParams } from "react-router-dom"
+import { motion } from "framer-motion";
 
 export const SoloProductPage = () => {
   const { id } = useParams()
@@ -19,6 +20,14 @@ export const SoloProductPage = () => {
   console.log(navigator.language)
 
   return (
-    <SoloProduct product={data} />
+    <motion.div
+      key="solo-page"
+      initial={{ x: "20%", opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: "-20%", opacity: 0, transition: { duration: 0.2 } }}
+      transition={{ delay: 0, duration: 0.2 }}
+    >
+      <SoloProduct product={data} />
+    </motion.div>
   )
 }

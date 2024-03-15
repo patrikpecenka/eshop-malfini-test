@@ -1,14 +1,35 @@
-import { Box, Card, Divider, Table, Title, Text, Flex, Stack, Anchor } from "@mantine/core";
-import { useOrderCart } from "store/shopStore";
+import { Box, Card, Divider, Table, Title, Text, Flex, Stack, Anchor, Button, Group } from "@mantine/core";
+import { useCart, useOrderCart } from "store/shopStore";
 import { StringParam, useQueryParam, withDefault } from "use-query-params";
 import { currencyFormater } from "utils/number/currencyFormater";
 import { dateFormater } from "utils/number/dateFormater";
+import { IconDownload, IconCopy } from "@tabler/icons-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
 
 export const ProfilePage = () => {
   const { userData } = useOrderCart();
+  const addCartItems = useCart((state) => state.addItem);
+  const navigate = useNavigate();
+
   const [query] = useQueryParam('order', withDefault(StringParam, ''));
 
   const orderDetail = userData.find((order) => (order.orderId).toString() === query);
+  const [loading, setLoading] = useState(false);
+
+  const handleBuyAgain = () => {
+    const foundOrder = userData.find((order) => order.orderId.toString() === query)
+    if (foundOrder) {
+      setLoading(true)
+      setTimeout(() => {
+        foundOrder.cart.forEach((item) => addCartItems(item))
+        setLoading(false)
+        navigate('/checkout')
+      }, 2000)
+    }
+  }
 
   const rows = orderDetail?.cart.map((item) => (
     <Table.Tr key={item.title}>
@@ -29,13 +50,39 @@ export const ProfilePage = () => {
   ));
 
   return (
-    <>
+    <motion.div
+      key="order-detail-page"
+      initial={{ x: "20%", opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: "-20%", opacity: 0, transition: { duration: 0.2 } }}
+      transition={{ delay: 0, duration: 0.2 }}
+    >
       {query !== orderDetail?.orderId.toString()
         ? "Pick an order"
         : (<Box px={50}>
-          <Title order={1} my={30}>
-            Order {orderDetail?.orderId}
-          </Title>
+          <Flex justify="space-between" align="center">
+            <Title order={1} my={30}>
+              Order {orderDetail?.orderId}
+            </Title>
+            <Group gap={10}>
+              <Button
+                variant="light"
+                color="indigo"
+                leftSection={<IconCopy size={20} />}
+                loading={loading}
+                onClick={handleBuyAgain}
+              >
+                Buy Again
+              </Button>
+              <Button
+                className="hover:opacity-70 duration-200"
+                variant="gradient"
+                leftSection={<IconDownload size={20} />}
+              >
+                Download Invoice
+              </Button>
+            </Group>
+          </Flex>
           <Card
             shadow="sm"
             withBorder
@@ -194,6 +241,6 @@ export const ProfilePage = () => {
           </Card>
         </Box >
         )}
-    </>
+    </motion.div>
   )
 }

@@ -31,7 +31,7 @@ export const Navbar = () => {
       <Button
         variant="transparent"
         h="100%"
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/products")}
         c="black"
       >
         <Title order={1} w="100%">

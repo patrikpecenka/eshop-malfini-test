@@ -12,6 +12,7 @@ import Stripe from "../../assets/stripe-svgrepo-com.svg"
 import Visa from "../../assets/visa-svgrepo-com.svg"
 import { withDefault, StringParam, useQueryParams } from "use-query-params"
 import { currencyFormater } from "utils/number/currencyFormater"
+import { motion } from "framer-motion";
 
 const paymentMethods = [
   {
@@ -109,32 +110,39 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
   }
 
   return (
-    <Card
-      className="border-t-4 border-indigo-500 "
-      shadow="xl"
-      px={90}
-      py={40}
-      mt={20}
+    <motion.div
+      key="checkout-2"
+      initial={{ x: "20%", opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: "-20%", opacity: 0, transition: { duration: 0.2 } }}
+      transition={{ delay: 0, duration: 0.2 }}
     >
-      {/*Main content container */}
-      <Flex direction="row" gap={40} align="end" >
-        {/*Left section with payment, delivery details */}
-        <Flex direction="column" gap={25} w="100%" flex="70%">
+      <Card
+        className="border-t-4 border-indigo-500 "
+        shadow="xl"
+        px={90}
+        py={40}
+        mt={20}
+      >
+        {/*Main content container */}
+        <Flex direction="row" gap={40} align="end" >
+          {/*Left section with payment, delivery details */}
+          <Flex direction="column" gap={25} w="100%" flex="70%">
 
-          <Paper w="100%" shadow="sm" withBorder p="xs">
-            <Title order={5} p={5}>Delivery Method</Title>
-            <Radio.Group onChange={(value) => setQuery({ deliveryMethod: value })} value={query.deliveryMethod} >
-              {deliveryMethods.map((item) => (
-                <Flex
-                  component="label"
-                  key={item.name}
-                  id={item.id}
-                  h={50}
-                  p={5}
-                  w="100%"
-                  align="center"
-                  direction="row"
-                  className="hover:cursor-pointer 
+            <Paper w="100%" shadow="sm" withBorder p="xs">
+              <Title order={5} p={5}>Delivery Method</Title>
+              <Radio.Group onChange={(value) => setQuery({ deliveryMethod: value })} value={query.deliveryMethod} >
+                {deliveryMethods.map((item) => (
+                  <Flex
+                    component="label"
+                    key={item.name}
+                    id={item.id}
+                    h={50}
+                    p={5}
+                    w="100%"
+                    align="center"
+                    direction="row"
+                    className="hover:cursor-pointer 
                     border
                     border-transparent
                     has-[:checked]:bg-violet-100 
@@ -143,151 +151,152 @@ export const OrderTwo = ({ handleStepBackwards, handleStepForward }: OrderTwoPro
                     rounded-md 
                     hover:bg-violet-50 
                     bg-stone-100"
-                  my={5}
-                >
-                  <Group flex="15%" justify="space-evenly" >
-                    <Radio value={item.name + "-" + item.fee} color="violet"></Radio>
-                    <Box w={40}>
-                      <Image src={item.icon} alt={item.name} w={40} fit="contain" />
-                    </Box>
-                  </Group>
-                  <Text flex="15%" size="sm">{item.name}</Text>
-                  <Text flex="50%" c="btn-violet" ta="right" fw={500}>{item.fee}</Text>
-                  <Text flex="2%"></Text>
-                </Flex>
-              ))}
-            </Radio.Group>
-          </Paper>
-
-          <Paper w="100%" shadow="sm" withBorder p="xs">
-            <Title order={5} p={5}>Payment Method</Title>
-            <Radio.Group onChange={(value) => setQuery({ paymentMethod: value })} value={query.paymentMethod} >
-              {paymentMethods.map((item) => (
-                <Flex
-                  component="label"
-                  key={item.name}
-                  id={item.id}
-                  h={50}
-                  p={5}
-                  w="100%"
-                  align="center"
-                  direction="row"
-                  className="hover:cursor-pointer 
-                    border
-                    border-transparent
-                    has-[:checked]:bg-violet-100 
-                    has-[:checked]:border 
-                    has-[:checked]:border-violet-300 
-                    rounded-md 
-                    hover:bg-violet-50 
-                    bg-stone-100"
-                  my={5}
-                >
-                  <Group flex="15%" justify="space-evenly" >
-                    <Radio value={item.name + "-" + item.fee} color="violet"></Radio>
-                    <Group w={40}>
-                      <Image src={item.icon} alt={item.name} w={40} fit="contain" />
+                    my={5}
+                  >
+                    <Group flex="15%" justify="space-evenly" >
+                      <Radio value={item.name + "-" + item.fee} color="violet"></Radio>
+                      <Box w={40}>
+                        <Image src={item.icon} alt={item.name} w={40} fit="contain" />
+                      </Box>
                     </Group>
-                  </Group>
-                  <Text flex="15%" size="sm">{item.name}</Text>
-                  <Text flex="50%" c="btn-violet" ta="right" fw={500}>{item.fee}</Text>
-                  <Text flex="2%"></Text>
-                </Flex>
-              ))}
-            </Radio.Group>
-          </Paper>
-
-          <Flex align="center" justify="space-between">
-            <Button
-              radius="xl"
-              size="lg"
-              maw={230}
-              variant="outline"
-              gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
-              onClick={handleStepBackwards}
-            >
-              <div>
-                <IconCaretLeftFilled size={15} />
-              </div>
-              Back
-            </Button>
-            <Button
-              radius="xl"
-              size="lg"
-              w={210}
-              variant="gradient"
-              gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
-              disabled={(query.deliveryMethod && query.paymentMethod) === "" || cart.length === 0}
-              onClick={handleStepForward}
-            >
-              Continue
-            </Button>
-          </Flex>
-        </Flex>
-
-        {/*Right section with order summary */}
-        <Flex flex="40%" direction="column" gap={10} >
-          <Flex direction="column" gap={10} mb={10} h={690}>
-            <ScrollArea h="100%" offsetScrollbars scrollbarSize={6} mx={10}>
-              {cart.map((product) => (
-                <SumCartItem
-                  key={product.id}
-                  cartProduct={product}
-                />
-              ))}
-            </ScrollArea>
-          </Flex>
-          {
-            query.paymentMethod === ""
-              ? ""
-              : <Flex className="border-t-2 border-gray-300" pt={10}>
-                {query.paymentMethod.includes("free")
-                  ? <Text size="sm" c="dimmed">No additional fee</Text>
-                  : <Flex direction="row" w="100%" justify="space-between" align="center">
-                    <Text size="sm" c="dimmed">Additional fee for payment: </Text>
-                    <Text size="sm" fw={700}>{query.paymentMethod.split("-")[1]}</Text>
+                    <Text flex="15%" size="sm">{item.name}</Text>
+                    <Text flex="50%" c="btn-violet" ta="right" fw={500}>{item.fee}</Text>
+                    <Text flex="2%"></Text>
                   </Flex>
-                }
-              </Flex>
-          }
+                ))}
+              </Radio.Group>
+            </Paper>
 
-          {
-            query.deliveryMethod === ""
-              ? ""
-              : <Flex>
-                {query.deliveryMethod.includes("free")
-                  ? <Text size="sm" c="dimmed">Free delivery</Text>
-                  : <Flex direction="row" w="100%" justify="space-between" align="center">
-                    <Text size="sm" c="dimmed">Delivery fee: </Text>
-                    <Text size="sm" fw={700}>{query.deliveryMethod.split("-")[1]}</Text>
+            <Paper w="100%" shadow="sm" withBorder p="xs">
+              <Title order={5} p={5}>Payment Method</Title>
+              <Radio.Group onChange={(value) => setQuery({ paymentMethod: value })} value={query.paymentMethod} >
+                {paymentMethods.map((item) => (
+                  <Flex
+                    component="label"
+                    key={item.name}
+                    id={item.id}
+                    h={50}
+                    p={5}
+                    w="100%"
+                    align="center"
+                    direction="row"
+                    className="hover:cursor-pointer 
+                    border
+                    border-transparent
+                    has-[:checked]:bg-violet-100 
+                    has-[:checked]:border 
+                    has-[:checked]:border-violet-300 
+                    rounded-md 
+                    hover:bg-violet-50 
+                    bg-stone-100"
+                    my={5}
+                  >
+                    <Group flex="15%" justify="space-evenly" >
+                      <Radio value={item.name + "-" + item.fee} color="violet"></Radio>
+                      <Group w={40}>
+                        <Image src={item.icon} alt={item.name} w={40} fit="contain" />
+                      </Group>
+                    </Group>
+                    <Text flex="15%" size="sm">{item.name}</Text>
+                    <Text flex="50%" c="btn-violet" ta="right" fw={500}>{item.fee}</Text>
+                    <Text flex="2%"></Text>
                   </Flex>
-                }
-              </Flex>
-          }
+                ))}
+              </Radio.Group>
+            </Paper>
 
-          <Flex direction="column" className="border-t-2 border-gray-300" justify="center" h={90}>
-            <Flex direction="row" gap={30} justify="space-between" align="center" >
-              <Text size="sm" c="dimmed"> To be paid without VAT:</Text>
-              <Text size="sm" c="dimmed">
-                {noVatCalculation()}
-              </Text>
-            </Flex>
-            <Flex direction="row" gap={30} align="center" justify="space-between">
-              <Text fw={700}> To be paid with VAT:</Text>
-              <Text
-                size="xl"
-                fw={800}
+            <Flex align="center" justify="space-between">
+              <Button
+                radius="xl"
+                size="lg"
+                maw={230}
+                variant="outline"
+                gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
+                onClick={handleStepBackwards}
+              >
+                <div>
+                  <IconCaretLeftFilled size={15} />
+                </div>
+                Back
+              </Button>
+              <Button
+                radius="xl"
+                size="lg"
+                w={210}
                 variant="gradient"
                 gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
+                disabled={(query.deliveryMethod && query.paymentMethod) === "" || cart.length === 0}
+                onClick={handleStepForward}
               >
-                <Title fw={900} order={4}>
-                  {currencyFormater.format(totalPriceCalculation())}
-                </Title>
-              </Text>
+                Continue
+              </Button>
+            </Flex>
+          </Flex>
+
+          {/*Right section with order summary */}
+          <Flex flex="40%" direction="column" gap={10} >
+            <Flex direction="column" gap={10} mb={10} h={690}>
+              <ScrollArea h="100%" offsetScrollbars scrollbarSize={6} mx={10}>
+                {cart.map((product) => (
+                  <SumCartItem
+                    key={product.id}
+                    cartProduct={product}
+                  />
+                ))}
+              </ScrollArea>
+            </Flex>
+            {
+              query.paymentMethod === ""
+                ? ""
+                : <Flex className="border-t-2 border-gray-300" pt={10}>
+                  {query.paymentMethod.includes("free")
+                    ? <Text size="sm" c="dimmed">No additional fee</Text>
+                    : <Flex direction="row" w="100%" justify="space-between" align="center">
+                      <Text size="sm" c="dimmed">Additional fee for payment: </Text>
+                      <Text size="sm" fw={700}>{query.paymentMethod.split("-")[1]}</Text>
+                    </Flex>
+                  }
+                </Flex>
+            }
+
+            {
+              query.deliveryMethod === ""
+                ? ""
+                : <Flex>
+                  {query.deliveryMethod.includes("free")
+                    ? <Text size="sm" c="dimmed">Free delivery</Text>
+                    : <Flex direction="row" w="100%" justify="space-between" align="center">
+                      <Text size="sm" c="dimmed">Delivery fee: </Text>
+                      <Text size="sm" fw={700}>{query.deliveryMethod.split("-")[1]}</Text>
+                    </Flex>
+                  }
+                </Flex>
+            }
+
+            <Flex direction="column" className="border-t-2 border-gray-300" justify="center" h={90}>
+              <Flex direction="row" gap={30} justify="space-between" align="center" >
+                <Text size="sm" c="dimmed"> To be paid without VAT:</Text>
+                <Text size="sm" c="dimmed">
+                  {noVatCalculation()}
+                </Text>
+              </Flex>
+              <Flex direction="row" gap={30} align="center" justify="space-between">
+                <Text fw={700}> To be paid with VAT:</Text>
+                <Text
+                  size="xl"
+                  fw={800}
+                  variant="gradient"
+                  gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
+                >
+                  <Title fw={900} order={4}>
+                    {currencyFormater.format(totalPriceCalculation())}
+                  </Title>
+                </Text>
+              </Flex>
             </Flex>
           </Flex>
         </Flex>
-      </Flex>
-    </Card >
+      </Card >
+    </motion.div>
   )
 }
