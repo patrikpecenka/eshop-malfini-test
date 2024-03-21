@@ -28,6 +28,7 @@ export const CheckoutPage = () => {
       h="100%"
       mx="10rem"
       mt={10}
+      p="xl"
     >
       <Stepper active={checkoutStep} color="indigo" size="sm" onStepClick={setCheckoutStep} allowNextStepsSelect={cart.length === 0 ? false : true}>
         <Stepper.Step label="Cart" >
