@@ -1,4 +1,4 @@
-export const currencyFormater = Intl.NumberFormat(
+export const currencyFormatter = Intl.NumberFormat(
   navigator.language,
   {
     style: "currency",

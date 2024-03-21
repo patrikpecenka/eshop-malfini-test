@@ -4,19 +4,18 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { SidePanel } from './SidePanel';
 import { useState, useEffect } from 'react';
 
-
-const TempLayout = () => {
-  const location = useLocation()
-  const [visible, setVisible] = useState(false)
+export const AppShellLayout = () => {
+  const location = useLocation();
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (location.pathname === "/profile") {
-      setVisible(true)
+      setVisible(true);
     } else {
-      setVisible(false)
+      setVisible(false);
     }
-    return
-  })
+    return;
+  });
   return (
     <AppShell
       header={{ height: 80 }}
@@ -33,10 +32,6 @@ const TempLayout = () => {
           mx={40}
         >
           <Navbar />
-          {/* <Burger
-            hiddenFrom="sm"
-            size="md"
-          /> */}
         </Flex>
       </AppShell.Header>
 
@@ -53,7 +48,5 @@ const TempLayout = () => {
         <Outlet />
       </AppShell.Main>
     </AppShell>
-  )
-}
-
-export default TempLayout;
+  );
+};

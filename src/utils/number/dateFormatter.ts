@@ -1,6 +1,6 @@
-export const dateFormater = (data: string) => {
+export const dateFormatter = (data: string) => {
   const date = new Date(data);
-  return date.toLocaleString(navigator.language, {
+  return date.toLocaleString(undefined, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
