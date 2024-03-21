@@ -1,13 +1,14 @@
-import { Flex, Image, Text, Card, NumberFormatter, FlexProps, Box } from "@mantine/core"
-import { CartProps } from "./CartItem"
-import { Link } from "react-router-dom"
+import { Flex, Image, Text, Card, FlexProps, Box } from "@mantine/core";
+import { CartItem } from "./CartItem";
+import { Link } from "react-router-dom";
+import { currencyFormatter } from "utils/number/currencyFormatter";
 
 
-interface SumCartItemsProps extends FlexProps {
-  cartProduct: CartProps
+interface SummaryCartItemProps extends FlexProps {
+  cartProduct: CartItem;
 }
 
-export const SumCartItem = ({ cartProduct, ...rest }: SumCartItemsProps) => {
+export const SummaryCartItem = ({ cartProduct, ...rest }: SummaryCartItemProps) => {
 
   return (
     <Flex gap={15} align="center" {...rest} my={8} mx={10}>
@@ -26,8 +27,8 @@ export const SumCartItem = ({ cartProduct, ...rest }: SumCartItemsProps) => {
         </Link>
       </Box>
       <Text size="sm" className="text-right">
-        <NumberFormatter prefix="$" value={Intl.NumberFormat("en-US").format(cartProduct.totalPrice)} decimalScale={2} />
+        {currencyFormatter.format(cartProduct.totalPrice)}
       </Text>
     </Flex>
-  )
-}
+  );
+};
