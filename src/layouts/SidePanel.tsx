@@ -1,42 +1,49 @@
-import { CloseButton, Flex, Input, ScrollArea } from "@mantine/core"
+import { CloseButton, Flex, NumberInput, ScrollArea } from "@mantine/core";
+import { useDebouncedValue } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
-import { OrderPanelItem } from "components/OrderPanelItem"
+import { OrderPanelItem } from "components/OrderPanelItem";
 import { useMemo } from "react";
-import { useOrderCart } from "store/shopStore"
+import { useOrderStore } from "store/order.store";
 import { StringParam, useQueryParams, withDefault } from "use-query-params";
 
 
 export const SidePanel = () => {
-  const { userData } = useOrderCart()
+  const { OrderDetailData } = useOrderStore();
+
   const [query, setQuery] = useQueryParams({
     order: withDefault(StringParam, "")
-  })
+  });
+
+  const [debounced] = useDebouncedValue(query, 300, { leading: true });
 
   const filteredOrder = useMemo(
     () =>
     (
-      (userData ?? []).filter((order) => (
-        order.orderId && order.orderId.toString().includes(query.order))
+      (OrderDetailData ?? []).filter((order) => (
+        order.orderId && order.orderId.toString().includes(debounced.order))
       )),
-    [userData, query.order]
-  )
+    [OrderDetailData, debounced.order]
+  );
+
 
   return (
     <Flex direction="column" h="100%" m={20} gap={10} align="center" >
-      <Input
+      <NumberInput
         w="95%"
         placeholder="Search..."
         value={query.order}
-        onChange={(e) => setQuery({ order: e.currentTarget.value })}
+        onChange={(e) => setQuery({ order: e === "" ? undefined : JSON.stringify(e) })}
         leftSection={<IconSearch size={20} />}
         rightSectionPointerEvents="all"
         rightSection={
           <CloseButton
+            variant="transparent"
             onClick={() => setQuery({ order: undefined })}
+            style={{ display: query.order ? undefined : "none" }}
           />
         }
       />
-      <ScrollArea w="100%" scrollbarSize={2}>
+      <ScrollArea w="100%" scrollbarSize={2} scrollbars="y" >
         {filteredOrder.map((order) => (
           <OrderPanelItem
             key={order.id}
@@ -46,5 +53,5 @@ export const SidePanel = () => {
         ))}
       </ScrollArea>
     </Flex>
-  )
-}
+  );
+};
