@@ -6,6 +6,7 @@ import { useState } from "react";
 import { IconMinus, IconPlus, IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { currencyFormatter } from "utils/number/currencyFormatter";
 import { useHover } from "@mantine/hooks";
+import { useFavoriteStore } from "store/favorite.store";
 
 interface ProductCardProps extends CardProps {
   product: ProductDto;
@@ -15,6 +16,7 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
   const addCartItems = useCartStore((state) => state.createItem);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
   const deleteItem = useCartStore((state) => state.deleteItem);
+  const createFavorite = useFavoriteStore((state) => state.createFavorite);
   const { cart } = useCartStore();
 
   const { hovered, ref } = useHover();
@@ -64,7 +66,12 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
           <Text fw={500} size="sm">{product.rating.rate}</Text>
           <Text size="xs" c="dimmed">{product.rating.count}x</Text>
         </Group>
-        <ActionIcon component="div" variant="transparent" ref={ref}>
+        <ActionIcon
+          component="div"
+          variant="transparent"
+          onClick={() => createFavorite({ ...product, amount: 1, totalPrice: product.price })}
+          ref={ref}
+        >
           {
             hovered
               ? <IconHeartFilled className="text-red-600" />
