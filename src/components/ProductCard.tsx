@@ -3,8 +3,9 @@ import { ProductDto } from "../lib/dto/types";
 import { useCartStore } from "../store/cart.store";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { IconMinus, IconPlus } from "@tabler/icons-react";
+import { IconMinus, IconPlus, IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { currencyFormatter } from "utils/number/currencyFormatter";
+import { useHover } from "@mantine/hooks";
 
 interface ProductCardProps extends CardProps {
   product: ProductDto;
@@ -15,6 +16,8 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
   const deleteItem = useCartStore((state) => state.deleteItem);
   const { cart } = useCartStore();
+
+  const { hovered, ref } = useHover();
 
   let itemAmount = cart.find((item) => item.id === product.id)?.amount || 0;
   const computedColorScheme = useComputedColorScheme();
@@ -41,9 +44,7 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
       padding="md"
       {...rest}
     >
-      <Link
-        to={`/products/${product.id}`}
-      >
+      <Link to={`/products/${product.id}`}>
         <Card.Section className="self-center select-none" p="lg">
           <Image
             className="hover:scale-110 duration-200 "
@@ -53,10 +54,27 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
             fit="contain"
           />
         </Card.Section>
-        <Group
-          h={100}
-          gap={1}
-        >
+      </Link>
+
+      <Group py={10} justify="space-between">
+        <Group gap={5}>
+          <Tooltip label={`Rating ${product.rating.rate} out of 5`}>
+            <Rating value={product.rating.rate} fractions={3} readOnly size="xs" />
+          </Tooltip>
+          <Text fw={500} size="sm">{product.rating.rate}</Text>
+          <Text size="xs" c="dimmed">{product.rating.count}x</Text>
+        </Group>
+        <ActionIcon component="div" variant="transparent" ref={ref}>
+          {
+            hovered
+              ? <IconHeartFilled className="text-red-600" />
+              : <IconHeart color="gray" />
+          }
+        </ActionIcon>
+      </Group>
+
+      <Link to={`/products/${product.id}`} >
+        <Group h={100} gap={1}>
           <Title
             order={4}
             lineClamp={1}
@@ -64,7 +82,14 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
           >
             {product.title}
           </Title>
-          <Text lineClamp={3} size="xs" mt={10}>{product.description}</Text>
+          <Text
+            lineClamp={3}
+            size="xs"
+            mt={10}
+            className="hover:text-violet-600 "
+          >
+            {product.description}
+          </Text>
         </Group>
       </Link>
 
@@ -74,14 +99,12 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
         w="100%"
         h={50}
       >
-        <Tooltip label={`Rating ${product.rating.rate} out of 5`}>
-          <Rating value={product.rating.rate} fractions={3} readOnly size="xs" />
-        </Tooltip>
-        <Badge variant="light" color="green.5" size="lg">
+        <Badge variant="light" color="green.6" size="lg">
           <Title order={4}>
             {currencyFormatter.format(product.price)}
           </Title>
         </Badge>
+        <Text fw={700} c="dimmed" size="sm">In stock &gt; 5pcs</Text>
       </Group>
       {
         itemAddedCheck && itemAmount > 0
