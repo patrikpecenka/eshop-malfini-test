@@ -1,44 +1,38 @@
-import { Card, Flex, Image, Title, Group, Text, ActionIcon, NumberInput, Button, Tooltip, Rating, Box, CardProps } from "@mantine/core"
-import { IconMinus, IconPlus } from "@tabler/icons-react"
-import { ProductDto } from "lib/dto/types"
+import { Card, Flex, Image, Title, Group, Text, ActionIcon, NumberInput, Button, Tooltip, Rating, Box, CardProps, useComputedColorScheme } from "@mantine/core";
+import { IconMinus, IconPlus } from "@tabler/icons-react";
+import { ProductDto } from "lib/dto/types";
 import { useState } from "react";
-import { useCart } from "store/shopStore"
+import { useCartStore } from "store/cart.store";
 
 interface SoloProductProps extends CardProps {
   product: ProductDto;
 }
 
 export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
-  const addCartItems = useCart((state) => state.addItem);
-  // const getItemAmount = useCart((state) => state.getItemAmount);
+  const addCartItems = useCartStore((state) => state.createItem);
 
   const [productInputAmount, setProductInputAmount] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
 
+  const computedColorScheme = useComputedColorScheme();
   const increaseAmount = () => {
-    setProductInputAmount(prevState => prevState + 1)
-  }
+    setProductInputAmount(prevState => prevState + 1);
+  };
 
   const decreaseAmount = () => {
-    productInputAmount === 1 ? setProductInputAmount(1) : setProductInputAmount(prevState => prevState - 1)
-  }
+    productInputAmount === 1 ? setProductInputAmount(1) : setProductInputAmount(prevState => prevState - 1);
+  };
+
   const handleClick = () => {
-    if (productInputAmount > 100) {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
       addCartItems({
         ...product, totalPrice: product.price, amount: productInputAmount
-      })
-      setProductInputAmount(1)
-    } else {
-      setLoading(true)
-      setTimeout(() => {
-        setLoading(false)
-        addCartItems({
-          ...product, totalPrice: product.price, amount: productInputAmount
-        })
-        setProductInputAmount(1)
-      }, 200);
-    }
-  }
+      });
+      setProductInputAmount(1);
+    }, 200);
+  };
 
   return (
     <Box>
@@ -87,9 +81,9 @@ export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
             <Text c="dimmed">{product.description}</Text>
 
             <Flex direction="column" gap={20} w="100%">
-              <Title order={1} c="black" fw={700}>$ {product.price}</Title>
+              <Title order={1} fw={700}>$ {product.price}</Title>
               <Flex direction="row" align="center" justify="space-between" gap={15} mt={20}>
-                <Group bg="gray.1" className="rounded-md">
+                <Group bg={computedColorScheme === "light" ? "gray.1" : "gray.8"} className="rounded-md">
                   <ActionIcon
                     size="xl"
                     variant="transparent"
@@ -124,7 +118,6 @@ export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                   loaderProps={{ type: "oval", color: "white" }}
                   size="md"
                   flex={1}
-                  // disabled={productInputAmount + getItemAmount(product.id) > 100}
                   variant="gradient"
                   onClick={handleClick}
                 >
@@ -141,5 +134,5 @@ export const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
       </Flex>
     </Box >
 
-  )
-}
+  );
+};
