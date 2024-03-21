@@ -37,7 +37,7 @@ export const FavoritePage = () => {
               strategy={verticalListSortingStrategy}
             >
               {favoriteItems.map((item) => (
-                <FavoriteItem favoriteItem={item} />
+                <FavoriteItem favoriteItem={item} key={item.title} />
               ))}
             </SortableContext>
           </DndContext>

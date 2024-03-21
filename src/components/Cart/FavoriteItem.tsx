@@ -10,12 +10,14 @@ export const FavoriteItem = ({ favoriteItem }: any) => {
     listeners,
     setNodeRef,
     transform,
+    transition
   } = useSortable({
     id: favoriteItem.id,
   });
 
   const style = {
     transform: CSS.Transform.toString(transform),
+    transition
   };
 
   return (
