@@ -1,12 +1,13 @@
-import { Affix, Button, CloseButton, Flex, Input, Menu, SegmentedControl, SimpleGrid, Transition } from "@mantine/core"
-import { IconArrowUp, IconSearch } from "@tabler/icons-react"
-import fetcher from "lib/fetcher"
-import { ProductDto } from "lib/dto/types"
-import { useQuery } from "@tanstack/react-query"
-import { useMemo } from "react"
-import { ProductCard } from "components/ProductCard"
+import { Affix, Button, CloseButton, Flex, Input, Loader, Menu, SegmentedControl, SimpleGrid, Transition } from "@mantine/core";
+import { IconArrowUp, IconSearch } from "@tabler/icons-react";
+import fetcher from "lib/fetcher";
+import { ProductDto } from "lib/dto/types";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { ProductCard } from "components/ProductCard";
 import { useDebouncedValue, useWindowScroll } from '@mantine/hooks';
-import { StringParam, useQueryParams, withDefault } from "use-query-params"
+import { StringParam, useQueryParams, withDefault } from "use-query-params";
+
 export const ProductsListPage = () => {
   const [query, setQuery] = useQueryParams({
     activeSorting: withDefault(StringParam, ""),
@@ -19,7 +20,7 @@ export const ProductsListPage = () => {
   const { data, status } = useQuery({
     queryKey: ['products', query.activeSorting],
     queryFn: () => fetcher<ProductDto[]>(`https://fakestoreapi.com/products?sort=${query.activeSorting}`),
-  })
+  });
 
   const filteredProducts = useMemo(
     () =>
@@ -27,10 +28,10 @@ export const ProductsListPage = () => {
         product.title.toLowerCase().includes((debounced.search ?? "").toLowerCase())
       )),
     [data, debounced.search]
-  )
+  );
 
-  if (status === 'pending') return <p>Loading...</p>
-  if (status === 'error') return <p>Error</p>
+  if (status === 'pending') return <div> Loading...<Loader color="blue" size={25} /></div>;
+  if (status === 'error') return <p>Error</p>;
 
   return (
     <>
@@ -40,8 +41,7 @@ export const ProductsListPage = () => {
             <Button
               leftSection={<IconArrowUp size={15} />}
               style={style}
-              variant="filled"
-              color="indigo.6"
+              variant="gradient"
               radius="xl"
               onClick={() => scrollTo({ y: 0 })}
             >
@@ -50,7 +50,6 @@ export const ProductsListPage = () => {
           )}
         </Transition>
       </Affix>
-
       <Flex justify="start" px={20} pt={20} gap={20}>
         <Menu shadow="md" width={200}>
           <Menu.Target>
@@ -93,19 +92,21 @@ export const ProductsListPage = () => {
           }
         />
       </Flex>
+
       <SimpleGrid
         w="100%"
         p={20}
         cols={{ base: 1, sm: 3, md: 4, lg: 6 }}
       >
-        {
-          filteredProducts.map((product) => (
-            <ProductCard key={product.id}
-              product={product}
-            />
-          ))
+        {filteredProducts.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+          />
+        ))
         }
       </SimpleGrid>
+
     </>
-  )
-}
+  );
+};
