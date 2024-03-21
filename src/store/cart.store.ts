@@ -18,30 +18,30 @@ export const useCartStore = create(
   persist<CartStore>(
     (set, get) => ({
       cart: [],
-      createItem: (item) => {
+      createItem: (newItem) => {
         set((state) => {
-          const foundItem = state.cart.find((cartItem) => cartItem.id === item.id);
+          const foundItem = state.cart.find((foundItem) => foundItem.id === newItem.id);
 
           if (foundItem) {
             return {
-              cart: state.cart.map((cartItem) => {
-                if (cartItem.id === item.id) {
+              cart: state.cart.map((existingItem) => {
+                if (existingItem.id === newItem.id) {
                   return {
-                    ...cartItem,
-                    amount: cartItem.amount + item.amount,
-                    price: item.price,
-                    totalPrice: (cartItem.amount + item.amount) * item.price
+                    ...existingItem,
+                    amount: existingItem.amount + newItem.amount,
+                    price: newItem.price,
+                    totalPrice: (existingItem.amount + newItem.amount) * newItem.price
                   };
                 } else {
-                  return cartItem;
+                  return existingItem;
                 }
               })
             };
           } else {
             return {
               cart: [...state.cart, {
-                ...item,
-                totalPrice: item.amount * item.price
+                ...newItem,
+                totalPrice: newItem.amount * newItem.price
               }]
             };
           }
@@ -64,7 +64,6 @@ export const useCartStore = create(
             : item
         )
       })),
-
       deleteItem: (id) =>
         set((state) => ({
           cart: state.cart.filter((item) => item.id !== id),
@@ -75,6 +74,7 @@ export const useCartStore = create(
         }),
 
       getItemAmount: (id) => get().cart.find((item) => item.id === id)?.amount || 0,
+
       totalPriceCalculation: () =>
         get().cart.reduce((acc, item) => acc + item.totalPrice, 0),
 

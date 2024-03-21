@@ -1,5 +1,5 @@
 import { Button, Card, Flex, Text } from "@mantine/core";
-import { CartItemTest } from "components/Cart/CartItem";
+import { CartItem } from "components/Cart/CartItem";
 import { useCartStore } from "store/cart.store";
 import { IconCaretLeftFilled } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
@@ -30,7 +30,7 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
         {cart.length === 0
           ? <EmptyCart />
           : cart.map((product) => (
-            <CartItemTest
+            <CartItem
               key={product.id}
               cartProduct={product}
               disableAnchor={false}

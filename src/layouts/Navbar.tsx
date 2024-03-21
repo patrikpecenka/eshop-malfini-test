@@ -6,7 +6,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure, useHover } from "@mantine/hooks";
 import { IconShoppingCartFilled, IconTool, IconReceipt, IconHeartFilled, IconMoon, IconSun } from '@tabler/icons-react';
-import { CartItemTest } from "components/Cart/CartItem";
+import { CartItem } from "components/Cart/CartItem";
 import { useCartStore } from "../store/cart.store";
 import { Link, useNavigate } from "react-router-dom";
 import { EmptyCart } from "components/EmptyCart/EmptyCart";
@@ -129,6 +129,8 @@ export const Navbar = () => {
           withArrow
         >
           <ActionIcon
+            component={Link}
+            to="/favorite"
             variant="subtle"
             color="violet"
           >
@@ -207,7 +209,7 @@ export const Navbar = () => {
               cart.length === 0
                 ? <EmptyCart />
                 : cart.map((product) => (
-                  <CartItemTest
+                  <CartItem
                     key={product.id}
                     disableAnchor={true}
                     cartProduct={product}

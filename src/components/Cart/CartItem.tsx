@@ -24,7 +24,7 @@ interface CartItemProps {
 
 
 
-export const CartItemTest = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, cartProduct, ...rest }: CartItemProps) => {
+export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, cartProduct, ...rest }: CartItemProps) => {
   const deleteItem = useCartStore((state) => state.deleteItem);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
 
