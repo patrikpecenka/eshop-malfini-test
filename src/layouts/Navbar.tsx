@@ -1,51 +1,55 @@
-import { Badge, Drawer, Flex, Group, Indicator, Title, Button, Text, Avatar, Stack, Menu, ActionIcon, Tooltip } from "@mantine/core"
+import {
+  Badge,
+  Drawer,
+  Flex,
+  Group, Indicator, Image, Title, Button, Text, Avatar, Stack, Menu, ActionIcon, Tooltip, useComputedColorScheme, useMantineColorScheme, UnstyledButton
+} from "@mantine/core";
 import { useDisclosure, useHover } from "@mantine/hooks";
-import { IconShoppingCartFilled, IconTool, IconReceipt, IconHeartFilled } from '@tabler/icons-react';
-import { CartItem } from "components/Cart/CartItem";
-import { useCart } from "../store/shopStore"
-import { useNavigate } from "react-router-dom"
+import { IconShoppingCartFilled, IconTool, IconReceipt, IconHeartFilled, IconMoon, IconSun } from '@tabler/icons-react';
+import { CartItemTest } from "components/Cart/CartItem";
+import { useCartStore } from "../store/cart.store";
+import { Link, useNavigate } from "react-router-dom";
 import { EmptyCart } from "components/EmptyCart/EmptyCart";
-import { currencyFormater } from "utils/number/currencyFormater";
-
+import { currencyFormatter } from "utils/number/currencyFormatter";
 
 export const Navbar = () => {
-  const { totalPriceCalculation, clearCart } = useCart()
-  const { cart, getSumCartItems } = useCart()
+  const { totalPriceCalculation, clearCart } = useCartStore();
+  const { cart, getSumCartItems } = useCartStore();
   const navigate = useNavigate();
 
   const [opened, { open, close }] = useDisclosure(false);
   const { hovered, ref } = useHover();
 
+  const { setColorScheme } = useMantineColorScheme();
+  const computedColorScheme = useComputedColorScheme('light', { getInitialValueInEffect: true });
+
+  const handleThemeColor = () => {
+    setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark');
+  };
 
   const roundTotalPrice = () => {
-    return currencyFormater.format(totalPriceCalculation())
-  }
+    return currencyFormatter.format(totalPriceCalculation());
+  };
 
   const handleCheckoutRedirect = () => {
-    close()
-    navigate("/checkout")
-  }
+    close();
+    navigate("/checkout");
+  };
 
   return (
     <>
-      <Button
+      <UnstyledButton
+        component={Link}
         variant="transparent"
+        color="none"
         h="100%"
-        onClick={() => navigate("/products")}
-        c="black"
+        to="/products"
       >
-        <Title order={1} w="100%">
-          Easy
-          <Text
-            span
-            inherit
-            variant="gradient"
-            gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
-          >
-            Shop
-          </Text>
-        </Title>
-      </Button>
+        <Image
+          src="/easy-shop.svg"
+          h="100%"
+        />
+      </UnstyledButton>
 
       <Flex align="center" gap={10} h={40} >
         <Menu offset={1} shadow="sm" >
@@ -77,8 +81,8 @@ export const Navbar = () => {
               Settings
             </Menu.Item>
             <Menu.Item
-              component="a"
-              href="/profile"
+              component={Link}
+              to="/profile"
               leftSection={<IconReceipt size={18} color="grey" />}
             >
               Orders
@@ -86,13 +90,32 @@ export const Navbar = () => {
           </Menu.Dropdown>
         </Menu>
         <Tooltip
+          label="Switch dark/light scheme"
+          transitionProps={{ duration: 200 }}
+          withArrow
+        >
+          <ActionIcon
+            onClick={() => handleThemeColor()}
+            variant="subtle"
+            color="violet"
+            aria-label="Toggle color scheme"
+          >
+            <IconSun
+              className={computedColorScheme === 'light' ? 'hidden' : ''}
+            />
+            <IconMoon
+              className={computedColorScheme === 'dark' ? 'hidden' : ''}
+            />
+          </ActionIcon>
+        </Tooltip>
+        <Tooltip
           label="Orders and Goods"
           transitionProps={{ duration: 200 }}
           withArrow
         >
           <ActionIcon
-            component="a"
-            href="/profile"
+            component={Link}
+            to="/profile"
             variant="subtle"
             color="violet"
           >
@@ -112,7 +135,6 @@ export const Navbar = () => {
             <IconHeartFilled size="100%" />
           </ActionIcon>
         </Tooltip>
-
 
         <Tooltip
           label="Go to cart"
@@ -162,7 +184,7 @@ export const Navbar = () => {
             <Button onClick={clearCart} variant="light" color="red" disabled={cart.length === 0}>
               Clear cart
             </Button>
-            <Title order={4} className="place-self-start" c="black" fw={600}>
+            <Title order={4} className="place-self-start" fw={600}>
               Total price:
               <Badge
                 color="black"
@@ -185,9 +207,13 @@ export const Navbar = () => {
               cart.length === 0
                 ? <EmptyCart />
                 : cart.map((product) => (
-                  <CartItem
+                  <CartItemTest
                     key={product.id}
+                    disableAnchor={true}
                     cartProduct={product}
+                    lineClamp={1}
+                    textBoxWidth={160}
+                    cardHeight={60}
                   />
                 ))}
           </Group>
@@ -209,5 +235,6 @@ export const Navbar = () => {
         </Group>
       </Drawer >
     </>
-  )
+  );
 }
+
