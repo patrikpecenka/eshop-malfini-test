@@ -1,6 +1,6 @@
-import { CartProps } from "components/Cart/CartItem";
+import { CartItem } from "components/Cart/CartItem";
 
-export interface OrderCart {
+export interface OrderDetails {
   id: string;
   orderId: number;
   userDetails: {
@@ -22,9 +22,9 @@ export interface OrderCart {
     discount: number;
     dateOfOrder: string;
     paymentMethod: string;
-    paymentPrice: number;
+    paymentId: string;
     deliveryMethod: string;
-    deliveryPrice: number;
-  }
-  cart: CartProps[]
+    deliveryId: string;
+  };
+  cart: CartItem[];
 }
