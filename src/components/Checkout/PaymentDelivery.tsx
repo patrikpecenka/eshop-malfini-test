@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Group, Paper, Radio, Text, Image, Box, ScrollArea, Title } from "@mantine/core";
+import { Button, Card, Flex, Group, Paper, Radio, Text, Image, Box, ScrollArea, Title, useComputedColorScheme } from "@mantine/core";
 import { useCartStore } from "store/cart.store";
 import { IconCaretLeftFilled } from "@tabler/icons-react";
 import { SummaryCartItem } from "components/Cart/SummaryCartItem";
@@ -102,11 +102,18 @@ interface PaymentDeliveryProps {
 export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: PaymentDeliveryProps) => {
   const { cart, totalPriceCalculation } = useCartStore();
 
-
   const [query, setQuery] = useQueryParams({
     paymentMethod: withDefault(StringParam, ""),
     deliveryMethod: withDefault(StringParam, ""),
   });
+
+  const lightThemeSelectors = `hover:cursor-pointer hover:bg-violet-100 border border-transparent has-[:checked]:bg-violet-200 
+    has-[:checked]:border has-[:checked]:border-violet-300 hover:bg-violet-50 bg-stone-100 rounded-md`;
+
+  const darkThemeSelectors = `hover:cursor-pointer hover:bg-neutral-600 border border-transparent has-[:checked]:bg-violet-500/[.5] 
+    has-[:checked]:border has-[:checked]:border-violet-500 hover:bg-violet-50 bg-neutral-700 rounded-md`;
+
+  const computedColorScheme = useComputedColorScheme();
 
   const getAdditionalFeeValue = (
     paymentMethods.find((p) => p.name === query.paymentMethod)?.fee === 0
@@ -147,21 +154,13 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
                   h={50}
                   p={5}
                   w="100%"
-                  style={{ backgroundColor: "var(--mantine-color-default-hover)" }}
                   align="center"
                   direction="row"
-                  className="hover:cursor-pointer
-                    hover:background-violet-100
-                    border
-                    border-transparent
-                    has-[:checked]:bg-violet-100
-                    has-[:checked]:border
-                    has-[:checked]:border-violet-300
-                    rounded-md"
+                  className={computedColorScheme === 'light' ? lightThemeSelectors : darkThemeSelectors}
                   my={5}
                 >
                   <Group flex="15%" justify="space-evenly" >
-                    <Radio value={item.name} color="violet"></Radio>
+                    <Radio value={item.name} color={computedColorScheme === "light" ? "violet" : "gray.8"}></Radio>
                     <Box w={40}>
                       <Image src={item.icon} alt={item.name} w={40} fit="contain" />
                     </Box>
@@ -191,19 +190,11 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
                   w="100%"
                   align="center"
                   direction="row"
-                  className="hover:cursor-pointer 
-                    border
-                    border-transparent
-                    has-[:checked]:bg-violet-100 
-                    has-[:checked]:border 
-                    has-[:checked]:border-violet-300 
-                    rounded-md 
-                    hover:bg-violet-50 
-                    bg-stone-100"
+                  className={computedColorScheme === 'light' ? lightThemeSelectors : darkThemeSelectors}
                   my={5}
                 >
                   <Group flex="15%" justify="space-evenly" >
-                    <Radio value={item.name} color="violet"></Radio>
+                    <Radio value={item.name} color={computedColorScheme === "light" ? "violet" : "gray.8"}></Radio>
                     <Group w={40}>
                       <Image src={item.icon} alt={item.name} w={40} fit="contain" />
                     </Group>
