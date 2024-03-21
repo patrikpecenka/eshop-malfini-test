@@ -1,4 +1,5 @@
 module.exports = ({ env }) => ({
   plugins:
-    [require('tailwindcss')(), require('autoprefixer')()]
+    [require('tailwindcss')(), require('autoprefixer')()],
+
 })
