@@ -1,7 +1,7 @@
-import { Button } from "@mantine/core"
+import { Button, ButtonProps } from "@mantine/core";
 
-interface AddCartButtonProps {
-  onClick: () => void
+interface AddCartButtonProps extends ButtonProps {
+  onClick: () => void;
 }
 export const AddCartButton = ({ onClick }: AddCartButtonProps) => {
 
@@ -17,5 +17,5 @@ export const AddCartButton = ({ onClick }: AddCartButtonProps) => {
     >
       Add To Cart
     </Button >
-  )
-}
+  );
+};
