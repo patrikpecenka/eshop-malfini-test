@@ -12,7 +12,7 @@ interface ProductCardProps extends CardProps {
   product: ProductDto;
 }
 
-export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
+const ProductCard = ({ product, ...rest }: ProductCardProps) => {
   const addCartItems = useCartStore((state) => state.createItem);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
   const deleteItem = useCartStore((state) => state.deleteItem);
@@ -166,3 +166,5 @@ export const ProductCard = ({ product, ...rest }: ProductCardProps) => {
     </Card>
   );
 };
+
+export default ProductCard;

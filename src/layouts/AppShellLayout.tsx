@@ -17,36 +17,38 @@ export const AppShellLayout = () => {
     return;
   });
   return (
-    <AppShell
-      header={{ height: 80 }}
-      aside={{
-        width: !visible ? 0 : 400,
-        breakpoint: "none",
-      }}
-    >
-      <AppShell.Header >
-        <Flex
-          justify="space-between"
-          align="center"
-          h="100%"
-          mx={40}
+    <>
+      <AppShell
+        header={{ height: 80 }}
+        aside={{
+          width: !visible ? 0 : 400,
+          breakpoint: "none",
+        }}
+      >
+        <AppShell.Header >
+          <Flex
+            justify="space-between"
+            align="center"
+            h="100%"
+            mx={40}
+          >
+            <Navbar />
+          </Flex>
+        </AppShell.Header>
+
+        <AppShell.Aside
+          display={visible ? "block" : "none"}
+          hidden={visible ? true : false}
         >
-          <Navbar />
-        </Flex>
-      </AppShell.Header>
+          <SidePanel />
+        </AppShell.Aside>
 
-      <AppShell.Aside
-        display={visible ? "block" : "none"}
-        hidden={visible ? true : false}
-      >
-        <SidePanel />
-      </AppShell.Aside>
-
-      <AppShell.Main
-        mx={10}
-      >
-        <Outlet />
-      </AppShell.Main>
-    </AppShell>
+        <AppShell.Main
+          mx={10}
+        >
+          <Outlet />
+        </AppShell.Main>
+      </AppShell>
+    </>
   );
 };

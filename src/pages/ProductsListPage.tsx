@@ -1,12 +1,15 @@
-import { Affix, Button, CloseButton, Flex, Input, Loader, Menu, SegmentedControl, SimpleGrid, Transition } from "@mantine/core";
+import { Affix, Button, CloseButton, Flex, Input, Menu, SegmentedControl, SimpleGrid, Transition } from "@mantine/core";
 import { IconArrowUp, IconSearch } from "@tabler/icons-react";
 import fetcher from "lib/fetcher";
 import { ProductDto } from "lib/dto/types";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { ProductCard } from "components/ProductCard";
+import { Suspense, lazy, useMemo } from "react";
 import { useDebouncedValue, useWindowScroll } from '@mantine/hooks';
 import { StringParam, useQueryParams, withDefault } from "use-query-params";
+import { SkeletonCard } from "components/SkeletonCard";
+
+const ProductCard = lazy(() => import("../components/ProductCard"));
+
 
 export const ProductsListPage = () => {
   const [query, setQuery] = useQueryParams({
@@ -30,9 +33,7 @@ export const ProductsListPage = () => {
     [data, debounced.search]
   );
 
-  if (status === 'pending') return <div> Loading...<Loader color="blue" size={25} /></div>;
   if (status === 'error') return <p>Error</p>;
-
   return (
     <>
       <Affix position={{ bottom: 20, right: 20 }}>
@@ -98,15 +99,20 @@ export const ProductsListPage = () => {
         p={20}
         cols={{ base: 1, sm: 3, md: 4, lg: 6 }}
       >
+
         {filteredProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-          />
-        ))
-        }
+          <Suspense fallback={<SkeletonCard />}>
+            <ProductCard
+              key={product.id}
+              product={product}
+
+            />
+          </Suspense>
+        ))}
+
       </SimpleGrid>
+
 
     </>
   );
-};
+};;
