@@ -79,6 +79,7 @@ export const ProfilePage = () => {
             <Button
               className="hover:opacity-70 duration-200"
               variant="gradient"
+              disabled={!query}
               leftSection={<IconDownload size={20} />}
               onClick={handlePrint}
             >
