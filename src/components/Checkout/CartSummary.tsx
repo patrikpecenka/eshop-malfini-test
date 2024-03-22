@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Text } from "@mantine/core";
+import { Button, Flex, Paper, Text } from "@mantine/core";
 import { CartItem } from "components/Cart/CartItem";
 import { useCartStore } from "store/cart.store";
 import { IconCaretLeftFilled } from "@tabler/icons-react";
@@ -19,7 +19,7 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
   };
 
   return (
-    <Card
+    <Paper
       className="border-t-4 border-indigo-500 "
       shadow="xl"
       p={90}
@@ -84,7 +84,7 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
           </Button>
         </Flex>
       </Flex>
-    </Card >
+    </Paper >
 
   );
 };

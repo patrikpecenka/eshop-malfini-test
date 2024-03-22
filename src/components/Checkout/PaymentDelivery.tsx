@@ -1,4 +1,4 @@
-import { Button, Card, Flex, Group, Paper, Radio, Text, Image, Box, ScrollArea, Title, useComputedColorScheme } from "@mantine/core";
+import { Button, Flex, Group, Paper, Radio, Text, Image, Box, ScrollArea, Title, useComputedColorScheme } from "@mantine/core";
 import { useCartStore } from "store/cart.store";
 import { IconCaretLeftFilled } from "@tabler/icons-react";
 import { SummaryCartItem } from "components/Cart/SummaryCartItem";
@@ -110,7 +110,7 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
   const lightThemeSelectors = `hover:cursor-pointer hover:bg-violet-100 border border-transparent has-[:checked]:bg-violet-200 
     has-[:checked]:border has-[:checked]:border-violet-300 hover:bg-violet-50 bg-stone-100 rounded-md`;
 
-  const darkThemeSelectors = `hover:cursor-pointer hover:bg-neutral-600 border border-transparent has-[:checked]:bg-violet-500/[.5] 
+  const darkThemeSelectors = `hover:cursor-pointer hover:bg-neutral-600/[1] border border-transparent has-[:checked]:bg-violet-500/[.5] 
     has-[:checked]:border has-[:checked]:border-violet-500 hover:bg-violet-50 bg-neutral-700 rounded-md`;
 
   const computedColorScheme = useComputedColorScheme();
@@ -132,7 +132,7 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
   };
 
   return (
-    <Card
+    <Paper
       className="border-t-4 border-indigo-500 "
       shadow="xl"
       px={90}
@@ -291,7 +291,7 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
           </Flex>
         </Flex>
       </Flex >
-    </Card >
+    </Paper >
 
   );
 };

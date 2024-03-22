@@ -1,4 +1,4 @@
-import { Button, Card, Flex, NumberInput, Paper, Select, TextInput, Title, Text } from "@mantine/core";
+import { Button, Flex, NumberInput, Paper, Select, TextInput, Title, Text } from "@mantine/core";
 import { useForm, isEmail, isNotEmpty, hasLength } from "@mantine/form";
 import { useQuery } from "@tanstack/react-query";
 import { CountriesDto } from "lib/dto/types";
@@ -125,8 +125,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
   if (countriesStatus === 'error') return <p>Error</p>;
 
   return (
-
-    <Card
+    <Paper
       className="justify-center border-t-4 border-indigo-500"
       shadow="xl"
       p="xl"
@@ -310,6 +309,6 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
           </Flex>
         </Flex>
       </form>
-    </Card >
+    </Paper >
   );
 };

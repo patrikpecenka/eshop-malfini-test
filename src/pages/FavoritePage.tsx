@@ -1,4 +1,4 @@
-import { Card } from "@mantine/core";
+import { Paper } from "@mantine/core";
 import { useFavoriteStore } from "store/favorite.store";
 import { DndContext, DragOverEvent, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -17,13 +17,13 @@ export const FavoritePage = () => {
 
   return (
     <>
-      <Card
+      <Paper
         h="100%"
         mx="10rem"
         mt={10}
         p="xl"
       >
-        <Card
+        <Paper
           className="border-t-4 border-indigo-500 "
           shadow="xl"
           p={90}
@@ -40,8 +40,8 @@ export const FavoritePage = () => {
               ))}
             </SortableContext>
           </DndContext>
-        </Card>
-      </Card>
+        </Paper>
+      </Paper>
     </>
   );
 };

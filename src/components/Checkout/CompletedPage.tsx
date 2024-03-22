@@ -1,10 +1,10 @@
-import { Button, Card, Flex, Group, Title, Text } from "@mantine/core";
+import { Button, Flex, Group, Title, Text, Paper } from "@mantine/core";
 import { Link } from "react-router-dom";
 
 export const CompletedPage = () => {
   return (
     <>
-      <Card
+      <Paper
         shadow="sm"
         h={600}
       >
@@ -32,7 +32,7 @@ export const CompletedPage = () => {
             </Button>
           </Group>
         </Flex>
-      </Card>
+      </Paper>
     </>
   );
 };

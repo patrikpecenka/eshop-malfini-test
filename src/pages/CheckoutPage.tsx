@@ -1,4 +1,4 @@
-import { Card, Stepper } from "@mantine/core";
+import { Paper, Stepper } from "@mantine/core";
 import { CartSummary } from "../components/Checkout/CartSummary";
 import { PaymentDelivery } from "../components/Checkout/PaymentDelivery";
 import { Address } from "../components/Checkout/Address";
@@ -24,7 +24,7 @@ export const CheckoutPage = () => {
   }, [cart.length, checkoutStep]);
 
   return (
-    <Card
+    <Paper
       h="100%"
       mx="10rem"
       mt={10}
@@ -53,10 +53,9 @@ export const CheckoutPage = () => {
         </Stepper.Step>
         <Stepper.Completed >
           <CompletedPage />
-
         </Stepper.Completed>
       </Stepper>
-    </Card>
+    </Paper>
 
   );
 };
