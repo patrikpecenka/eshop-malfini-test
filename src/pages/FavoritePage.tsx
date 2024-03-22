@@ -13,7 +13,6 @@ export const FavoritePage = () => {
     const oldIndex = favoriteItems.findIndex(item => item.id === active.id);
     const newIndex = favoriteItems.findIndex(item => item.id === over?.id);
     updateItems(oldIndex, newIndex);
-
   };
 
   return (

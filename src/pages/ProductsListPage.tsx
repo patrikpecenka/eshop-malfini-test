@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Suspense, lazy, useMemo } from "react";
 import { useDebouncedValue, useWindowScroll } from '@mantine/hooks';
 import { StringParam, useQueryParams, withDefault } from "use-query-params";
-import { SkeletonCard } from "components/SkeletonCard";
+import { ProductCardSkeleton } from "components/Skeletons/ProductCardSkeleton";
 
 const ProductCard = lazy(() => import("../components/ProductCard"));
 
@@ -101,7 +101,7 @@ export const ProductsListPage = () => {
       >
 
         {filteredProducts.map((product) => (
-          <Suspense fallback={<SkeletonCard />}>
+          <Suspense fallback={<ProductCardSkeleton />}>
             <ProductCard
               key={product.id}
               product={product}

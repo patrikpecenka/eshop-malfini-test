@@ -1,6 +1,6 @@
 import { AppShellLayout } from "layouts/AppShellLayout";
 import { ProductsListPage } from "pages/ProductsListPage";
-import { SoloProductPage } from "pages/ProductDetailPage";
+import { ProductDetailPage } from "pages/ProductDetailPage";
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
 import { CheckoutPage } from "pages/CheckoutPage";
 import { ProfilePage } from "pages/OrderDetailPage";
@@ -12,7 +12,7 @@ const App = () => {
     <Routes location={location} key={location.pathname}>
       <Route element={<AppShellLayout />}>
         <Route path="/products" element={<ProductsListPage />} />
-        <Route path="/products/:id/" element={<SoloProductPage />} />
+        <Route path="/products/:id/" element={<ProductDetailPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/favorite" element={<FavoritePage />} />
 

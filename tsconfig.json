@@ -36,7 +36,8 @@
   },
   "include": [
     "src",
-    "postcss.config.cjs"
+    "postcss.config.cjs",
+    "scripts/analyze.js"
   ],
   "exclude": [
     "node_modules",

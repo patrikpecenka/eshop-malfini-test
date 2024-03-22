@@ -1,6 +1,6 @@
 import { Card, Group, Skeleton } from "@mantine/core";
 
-export const SkeletonCard = () => {
+export const ProductCardSkeleton = () => {
   return (
     <>
       <Card

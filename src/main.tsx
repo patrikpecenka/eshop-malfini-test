@@ -11,6 +11,7 @@ import { MantineProvider, createTheme } from '@mantine/core';
 import { BrowserRouter } from 'react-router-dom';
 import { Notifications } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { LoadingPage } from "pages/LoadingPage";
 
 const App = lazy(() => import('./App'));
 
@@ -30,7 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <MantineProvider theme={theme}>
         <ModalsProvider >
           <BrowserRouter >
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<LoadingPage />}>
               <QueryParamProvider adapter={ReactRouter6Adapter}>
                 <Notifications position="bottom-right" />
                 <App />
