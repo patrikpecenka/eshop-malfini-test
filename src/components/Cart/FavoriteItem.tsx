@@ -8,6 +8,7 @@ import { openConfirmDeleteModal } from "utils/openConfirmDeleteModal";
 
 export interface FavoriteItem {
   image: string;
+  category: string;
   title: string;
   price: number;
   totalPrice: number;
