@@ -1,5 +1,5 @@
 import { Card, Group, Rating, Skeleton } from "@mantine/core";
-import { IconHeartFilled } from "@tabler/icons-react";
+import { IconHeart } from "@tabler/icons-react";
 
 export const ProductCardSkeleton = () => {
   return (
@@ -14,7 +14,7 @@ export const ProductCardSkeleton = () => {
 
         <Group justify="space-between" mt={10}>
           <Rating value={0} fractions={1} size="xs" readOnly />
-          <IconHeartFilled size={25} className="text-gray-200" />
+          <IconHeart size={25} color="gray" />
         </Group>
 
         <Skeleton width="100%" height={25} mt={15} radius="lg" />
