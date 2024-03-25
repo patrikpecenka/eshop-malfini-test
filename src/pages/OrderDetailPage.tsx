@@ -197,8 +197,8 @@ export const ProfilePage = () => {
         <Card
           shadow="sm"
           withBorder
+          mb={20}
         >
-
           {/* Order Items Table */}
           <Title order={3}>
             Order Items

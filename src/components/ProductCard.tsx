@@ -61,7 +61,7 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
       <Group py={10} justify="space-between">
         <Group gap={5}>
           <Tooltip label={`Rating ${product.rating.rate} out of 5`}>
-            <Rating value={product.rating.rate} fractions={3} readOnly size="xs" />
+            <Rating value={product.rating.rate} fractions={3} size="xs" readOnly />
           </Tooltip>
           <Text fw={500} size="sm">{product.rating.rate}</Text>
           <Text size="xs" c="dimmed">{product.rating.count}x</Text>

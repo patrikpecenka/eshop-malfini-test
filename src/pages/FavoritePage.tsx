@@ -4,15 +4,16 @@ import { DndContext, DragOverEvent, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { FavoriteItem } from "components/Cart/FavoriteItem";
 
+
 export const FavoritePage = () => {
-  const { favoriteItems, updateItems } = useFavoriteStore();
+  const { favoriteItems, updateFavoriteItems } = useFavoriteStore();
 
   const onDragEnd = (event: DragOverEvent) => {
     const { active, over } = event;
 
     const oldIndex = favoriteItems.findIndex(item => item.id === active.id);
     const newIndex = favoriteItems.findIndex(item => item.id === over?.id);
-    updateItems(oldIndex, newIndex);
+    updateFavoriteItems(oldIndex, newIndex);
   };
 
   return (
@@ -36,7 +37,7 @@ export const FavoritePage = () => {
               strategy={verticalListSortingStrategy}
             >
               {favoriteItems.map((item) => (
-                <FavoriteItem favoriteItem={item} key={item.title} />
+                <FavoriteItem id={item.id} favoriteItem={item} key={item.title} />
               ))}
             </SortableContext>
           </DndContext>
