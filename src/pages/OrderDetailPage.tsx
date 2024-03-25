@@ -31,7 +31,7 @@ export const ProfilePage = () => {
         foundOrder.cart.forEach((item) => addCartItems(item));
         setLoading(false);
         navigate('/checkout');
-      }, 2000);
+      }, 1200);
     }
     return;
   };

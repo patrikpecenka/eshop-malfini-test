@@ -24,18 +24,14 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
   let itemAmount = cart.find((item) => item.id === product.id)?.amount || 0;
   const computedColorScheme = useComputedColorScheme();
 
-  const [loading, setLoading] = useState<boolean>(false);
   const [itemAddedCheck, setItemAddedCheck] = useState<boolean>(false);
 
   const handleClick = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setItemAddedCheck(true);
-      addCartItems({
-        ...product, totalPrice: product.price, amount: 1
-      });
-    }, 400);
+
+    setItemAddedCheck(true);
+    addCartItems({
+      ...product, totalPrice: product.price, amount: 1
+    });
   };
 
   return (
@@ -154,7 +150,6 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
               w="100%"
               mt={15}
               variant="gradient"
-              loading={loading}
               size="md"
               radius="xl"
               onClick={handleClick}

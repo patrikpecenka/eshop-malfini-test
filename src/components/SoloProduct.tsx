@@ -12,7 +12,6 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
   const addCartItems = useCartStore((state) => state.createItem);
 
   const [productInputAmount, setProductInputAmount] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const computedColorScheme = useComputedColorScheme();
   const increaseAmount = () => {
@@ -24,14 +23,10 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
   };
 
   const handleClick = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      addCartItems({
-        ...product, totalPrice: product.price, amount: productInputAmount
-      });
-      setProductInputAmount(1);
-    }, 200);
+    addCartItems({
+      ...product, totalPrice: product.price, amount: productInputAmount
+    });
+    setProductInputAmount(1);
   };
 
   return (
@@ -115,7 +110,6 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                     </ActionIcon>
                   </Group>
                   <Button
-                    loading={loading}
                     loaderProps={{ type: "oval", color: "white" }}
                     size="md"
                     flex={1}
