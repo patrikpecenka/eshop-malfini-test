@@ -1,19 +1,12 @@
+import { FavoriteItem } from "components/Cart/FavoriteItem";
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
-
-interface FavoriteItem {
-  image: string;
-  title: string;
-  price: number;
-  totalPrice: number;
-  amount: number;
-  id: string;
-}
 
 interface FavoriteStore {
   favoriteItems: FavoriteItem[];
   createFavorite: (favoriteItem: FavoriteItem) => void;
   updateFavoriteItems: (newIndex: number, oldIndex: number) => void;
+  removeFavoriteItem: (id: string) => void;
 }
 
 export const useFavoriteStore = create(
@@ -32,6 +25,10 @@ export const useFavoriteStore = create(
             };
           }
         }),
+      removeFavoriteItem: (id) =>
+        set((state) => ({
+          favoriteItems: state.favoriteItems.filter((item) => item.id !== id),
+        })),
       updateFavoriteItems: (oldIndex, newIndex) => {
         set((state) => {
           const items = [...state.favoriteItems];
@@ -42,6 +39,7 @@ export const useFavoriteStore = create(
         });
       },
     }),
+
     {
       name: "favoriteData/easyshop-malfini"
     }

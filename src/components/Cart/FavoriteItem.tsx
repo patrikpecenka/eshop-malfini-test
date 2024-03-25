@@ -1,11 +1,26 @@
 import { useSortable } from "@dnd-kit/sortable";
-import { Card, Flex, Title, Image, Group } from "@mantine/core";
+import { Card, Flex, Title, Image, Group, Tooltip, ActionIcon } from "@mantine/core";
 import { CSS } from '@dnd-kit/utilities';
-import { IconGripVertical } from "@tabler/icons-react";
+import { IconGripVertical, IconHeartOff } from "@tabler/icons-react";
+import { useFavoriteStore } from "store/favorite.store";
+import { UseDraggableArguments } from "@dnd-kit/core";
+import { openConfirmDeleteModal } from "utils/openConfirmDeleteModal";
 
+export interface FavoriteItem {
+  image: string;
+  title: string;
+  price: number;
+  totalPrice: number;
+  amount: number;
+  id: string;
+}
 
-export const FavoriteItem = ({ favoriteItem }: any) => {
+interface FavoriteItemProps extends UseDraggableArguments {
+  favoriteItem: FavoriteItem;
+}
 
+export const FavoriteItem = ({ favoriteItem }: FavoriteItemProps) => {
+  const removeFavoriteItem = useFavoriteStore((state) => state.removeFavoriteItem);
   const {
     attributes,
     listeners,
@@ -21,21 +36,37 @@ export const FavoriteItem = ({ favoriteItem }: any) => {
     transition
   };
 
+  const handleDelete = () => {
+
+    openConfirmDeleteModal({
+      onConfirm: () => removeFavoriteItem(favoriteItem.id),
+      title: "Are you sure you want to remove favorite item?"
+    });
+  };
+
   return (
     <Card
       ref={setNodeRef}
       {...attributes}
-      {...listeners}
       style={style}
       withBorder
+      className="hover:cursor-auto"
       p={10}
       m={10}
       shadow="lg"
       radius="lg"
     >
-      <Flex align="center">
+      <Flex align="center" justify="space-between" mx="sm">
         <Group>
-          <IconGripVertical size={20} color="#A9A9A9" />
+          <ActionIcon
+            variant="transparent"
+            {...listeners}
+          >
+            <IconGripVertical
+              size={20}
+              color="#A9A9A9"
+            />
+          </ActionIcon>
           <Image
             src={favoriteItem.image}
             fit="contain"
@@ -43,9 +74,21 @@ export const FavoriteItem = ({ favoriteItem }: any) => {
             w={60}
             p={5}
           />
+          <Title order={5} ml={10}>{favoriteItem.title}</Title>
         </Group>
-        <Title order={5} ml={10}>{favoriteItem.title}</Title>
+        <Tooltip label="Remove from favorite">
+          <ActionIcon
+            variant="transparent"
+            onClick={handleDelete}
+          >
+            <IconHeartOff
+              className="hover:scale-110 duration-200"
+              color="gray"
+              size={25}
+            />
+          </ActionIcon>
+        </Tooltip>
       </Flex>
-    </Card>
+    </Card >
   );
 };
