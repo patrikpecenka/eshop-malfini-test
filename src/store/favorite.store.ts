@@ -13,7 +13,7 @@ interface FavoriteItem {
 interface FavoriteStore {
   favoriteItems: FavoriteItem[];
   createFavorite: (favoriteItem: FavoriteItem) => void;
-  updateItems: (newIndex: number, oldIndex: number) => void;
+  updateFavoriteItems: (newIndex: number, oldIndex: number) => void;
 }
 
 export const useFavoriteStore = create(
@@ -32,12 +32,12 @@ export const useFavoriteStore = create(
             };
           }
         }),
-      updateItems: (oldIndex, newIndex) => {
+      updateFavoriteItems: (oldIndex, newIndex) => {
         set((state) => {
-          const items = [...state.favoriteItems]; // Create a copy of the array
+          const items = [...state.favoriteItems];
           const itemToMove = items[oldIndex];
-          items.splice(oldIndex, 1); // Remove the item from the original array
-          items.splice(newIndex, 0, itemToMove); // Insert the item at the new index
+          items.splice(oldIndex, 1);
+          items.splice(newIndex, 0, itemToMove);
           return { favoriteItems: items };
         });
       },

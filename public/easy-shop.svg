@@ -1,1 +1,100 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 8.467 8.467" xmlns:v="https://vecta.io/nano"><defs><linearGradient id="A" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#7255f3"/><stop offset="1" stop-color="#5269f4"/></linearGradient><linearGradient xlink:href="#A" id="B" x1=".053" y1="5.979" x2="4.644" y2="5.979"/><linearGradient xlink:href="#A" id="C" x1=".024" y1="3.763" x2="8.734" y2="3.763"/></defs><text xml:space="preserve" x="-0.279" y="4.796" transform="scale(.96675027 1.0343933)" font-weight="bold" font-size="4.528" font-family="Humanst521 BT" fill="url(#C)" stroke="#000" paint-order="stroke fill markers"><tspan x="-0.279" y="4.796" stroke="none">Easy</tspan></text><text xml:space="preserve" x="-0.034" y="6.532" transform="scale(.96675027 1.0343933)" font-weight="bold" font-size="2.358" font-family="Humanst521 BT" fill="url(#B)" stroke="#000" paint-order="stroke markers fill"><tspan x="-0.034" y="6.532" stroke="none">Shop</tspan></text></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="31.819778"
+   height="20.971733"
+   viewBox="0 0 8.4193145 5.5489895"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="easy-shop.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="25.96875"
+     inkscape:cx="15.922984"
+     inkscape:cy="9.3381468"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3" />
+  <defs
+     id="defs2">
+    <linearGradient
+       id="A"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#7255f3"
+         id="stop1" />
+      <stop
+         offset="1"
+         stop-color="#5269f4"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#A"
+       id="B"
+       x1="0.052999999"
+       y1="5.9790001"
+       x2="4.6440001"
+       y2="5.9790001"
+       gradientTransform="translate(-0.02389842,-1.7028985)" />
+    <linearGradient
+       xlink:href="#A"
+       id="C"
+       x1="0.024"
+       y1="3.763"
+       x2="8.7340002"
+       y2="3.763"
+       gradientTransform="translate(-0.02389842,-1.7028985)" />
+  </defs>
+  <text
+     xml:space="preserve"
+     x="-0.30289844"
+     y="3.0931015"
+     transform="scale(0.96675027,1.0343933)"
+     font-weight="bold"
+     font-size="4.528px"
+     font-family="'Humanst521 BT'"
+     fill="url(#C)"
+     stroke="#000000"
+     paint-order="stroke fill markers"
+     id="text2"
+     style="fill:url(#C)"><tspan
+       x="-0.30289844"
+       y="3.0931015"
+       stroke="none"
+       id="tspan2"
+       style="fill:url(#C)">Easy</tspan></text>
+  <text
+     xml:space="preserve"
+     x="-0.057898417"
+     y="4.8291016"
+     transform="scale(0.96675027,1.0343933)"
+     font-weight="bold"
+     font-size="2.358px"
+     font-family="'Humanst521 BT'"
+     fill="url(#B)"
+     stroke="#000000"
+     paint-order="stroke markers fill"
+     id="text3"
+     style="fill:url(#B)"><tspan
+       x="-0.057898417"
+       y="4.8291016"
+       stroke="none"
+       id="tspan3"
+       style="fill:url(#B)">Shop</tspan></text>
+</svg>

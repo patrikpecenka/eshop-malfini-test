@@ -44,6 +44,7 @@ export const Navbar = () => {
         color="none"
         h="100%"
         to="/products"
+        py="xs"
       >
         <Image
           src="/easy-shop.svg"

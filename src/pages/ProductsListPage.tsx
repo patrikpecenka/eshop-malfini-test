@@ -99,7 +99,6 @@ export const ProductsListPage = () => {
         p={20}
         cols={{ base: 1, sm: 3, md: 4, lg: 6 }}
       >
-
         {filteredProducts.map((product) => (
           <Suspense fallback={<ProductCardSkeleton />}>
             <ProductCard
@@ -111,8 +110,6 @@ export const ProductsListPage = () => {
         ))}
 
       </SimpleGrid>
-
-
     </>
   );
-};;
+};
