@@ -116,20 +116,26 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
   const computedColorScheme = useComputedColorScheme();
 
   const getAdditionalFeeValue = (
-    paymentMethods.find((p) => p.name === query.paymentMethod)?.fee === 0
+    paymentMethods.find((p) => p.name === query.paymentMethod)?.fee === undefined
+      || deliveryMethods.find((p) => p.name === query.deliveryMethod)?.fee === 0
       ? "Free"
       : currencyFormatter.format(paymentMethods.find((p) => p.name === query.paymentMethod)?.fee as number)
   );
 
   const getDeliveryFeeValue = (
-    deliveryMethods.find((p) => p.name === query.deliveryMethod)?.fee === 0
+    deliveryMethods.find((p) => p.name === query.deliveryMethod)?.fee === undefined
+      || deliveryMethods.find((p) => p.name === query.deliveryMethod)?.fee === 0
       ? "Free"
       : currencyFormatter.format(deliveryMethods.find((p) => p.name === query.deliveryMethod)?.fee as number)
   );
 
+
+
   const noVatCalculation = () => {
     return currencyFormatter.format((totalPriceCalculation() / 121) * 100);
   };
+
+  console.log(getAdditionalFeeValue);
 
   return (
     <Paper
@@ -213,11 +219,8 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
           </Paper>
           <Flex align="center" justify="space-between">
             <Button
-              radius="xl"
-              size="lg"
               maw={230}
-              variant="outline"
-              gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
+              variant="subtle"
               onClick={handleStepBackwards}
             >
               <div>
@@ -226,11 +229,7 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
               Back
             </Button>
             <Button
-              radius="xl"
-              size="lg"
               w={210}
-              variant="gradient"
-              gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
               disabled={(query.deliveryMethod && query.paymentMethod) === "" || cart.length === 0}
               onClick={handleStepForward}
             >

@@ -1,10 +1,9 @@
-import { useSortable } from "@dnd-kit/sortable";
-import { Card, Flex, Title, Image, Group, Tooltip, ActionIcon } from "@mantine/core";
-import { CSS } from '@dnd-kit/utilities';
-import { IconGripVertical, IconHeartOff } from "@tabler/icons-react";
+import { Card, Flex, Title, Image, Group, Tooltip, ActionIcon, Button, Text } from "@mantine/core";
+import { IconHeartOff } from "@tabler/icons-react";
 import { useFavoriteStore } from "store/favorite.store";
 import { UseDraggableArguments } from "@dnd-kit/core";
-import { openConfirmDeleteModal } from "utils/openConfirmDeleteModal";
+import { notifications, showNotification } from "@mantine/notifications";
+
 
 export interface FavoriteItem {
   image: string;
@@ -21,53 +20,46 @@ interface FavoriteItemProps extends UseDraggableArguments {
 }
 
 export const FavoriteItem = ({ favoriteItem }: FavoriteItemProps) => {
-  const removeFavoriteItem = useFavoriteStore((state) => state.removeFavoriteItem);
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition
-  } = useSortable({
-    id: favoriteItem.id,
-  });
+  const deleteAndSaveToHistory = useFavoriteStore((state) => state.deleteAndSaveToHistory);
+  const restoreFromHistory = useFavoriteStore((state) => state.restoreFromHistory);
+  const permanentlyDelete = useFavoriteStore((state) => state.permanentlyDelete);
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition
+
+  const handleRestore = () => {
+    restoreFromHistory(favoriteItem.id);
+    notifications.hide("undo-delete-notification" + favoriteItem.id);
+    console.log("undo-delete-notification" + favoriteItem.id);
   };
 
   const handleDelete = () => {
-
-    openConfirmDeleteModal({
-      onConfirm: () => removeFavoriteItem(favoriteItem.id),
-      title: "Are you sure you want to remove favorite item?"
+    showNotification({
+      id: "undo-delete-notification" + favoriteItem.id,
+      title: "Are you sure you want to delete this item?",
+      color: "yellow",
+      message: (
+        <Flex align="center" justify="space-between">
+          <Text>Item will be deleted in 10 seconds</Text>
+          <Flex direction="row">
+            <Button variant="subtle" onClick={() => handleRestore()}>
+              Undo
+            </Button>
+          </Flex>
+        </Flex>
+      ),
+      onOpen: () => deleteAndSaveToHistory(favoriteItem.id),
+      onClose: () => permanentlyDelete(favoriteItem.id),
+      autoClose: 10000,
     });
   };
 
   return (
     <Card
-      ref={setNodeRef}
-      {...attributes}
-      style={style}
-      withBorder
       className="hover:cursor-auto"
       p={10}
-      m={10}
-      shadow="lg"
-      radius="lg"
+      m={5}
     >
       <Flex align="center" justify="space-between" mx="sm">
         <Group>
-          <ActionIcon
-            variant="transparent"
-            {...listeners}
-          >
-            <IconGripVertical
-              size={20}
-              color="#A9A9A9"
-            />
-          </ActionIcon>
           <Image
             src={favoriteItem.image}
             fit="contain"
