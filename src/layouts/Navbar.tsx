@@ -47,6 +47,7 @@ export const Navbar = () => {
         py="xs"
       >
         <Image
+          alt="EasyShop Logo"
           src="/easy-shop.svg"
           h="100%"
         />
@@ -59,7 +60,6 @@ export const Navbar = () => {
               ref={ref}
               component="div"
               size="sm"
-              radius="xl"
               variant={hovered ? "light" : "transparent"}
               color="violet"
               leftSection={
@@ -98,7 +98,6 @@ export const Navbar = () => {
           <ActionIcon
             onClick={() => handleThemeColor()}
             variant="subtle"
-            color="violet"
             aria-label="Toggle color scheme"
           >
             <IconSun
@@ -118,7 +117,6 @@ export const Navbar = () => {
             component={Link}
             to="/profile"
             variant="subtle"
-            color="violet"
           >
             <IconReceipt size="100%" />
           </ActionIcon>
@@ -133,7 +131,6 @@ export const Navbar = () => {
             component={Link}
             to="/favorite"
             variant="subtle"
-            color="violet"
           >
             <IconHeartFilled size="100%" />
           </ActionIcon>
@@ -154,10 +151,8 @@ export const Navbar = () => {
             withBorder
           >
             <Button
-              radius="xl"
               size="sm"
               variant="light"
-              color="violet.5"
               onClick={open}
               leftSection={
                 <IconShoppingCartFilled size={25} />
@@ -184,14 +179,20 @@ export const Navbar = () => {
       >
         <Flex justify="center" align="center" direction="column">
           <Flex justify="space-between" w="100%" px={15}>
-            <Button onClick={clearCart} variant="light" color="red" disabled={cart.length === 0}>
+            <Button
+              onClick={clearCart}
+              variant="light"
+              color="red"
+              disabled={cart.length === 0}
+              size="sm"
+            >
               Clear cart
             </Button>
             <Title order={4} className="place-self-start" fw={600}>
               Total price:
               <Badge
                 color="black"
-                bg="violet.0.1"
+                bg="violet.0"
                 size="xl"
                 h="100%"
                 ml={10}
@@ -228,9 +229,6 @@ export const Navbar = () => {
             mx={15}
             w="100%"
             mt={15}
-            variant="gradient"
-            size="md"
-            radius="xl"
             onClick={handleCheckoutRedirect}
           >
             Checkout

@@ -15,10 +15,7 @@ export const OrderPanelItem = ({ OrderItem, ...rest }: OrderItemProps) => {
     <Card
       m={10}
       className="hover:scale-105 duration-100 cursor-pointer"
-      withBorder
-      shadow="sm"
       w="95%"
-
       {...rest}
     >
       <Title order={6}>

@@ -38,7 +38,7 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
         >
           <Flex justify="center" >
             <Flex direction="column">
-              <Card shadow="xl" h={550} w={650} radius="xl">
+              <Card h={550} w={650}>
                 <Image
                   h="100%"
                   alt="Random unsplash image"
@@ -111,9 +111,7 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                   </Group>
                   <Button
                     loaderProps={{ type: "oval", color: "white" }}
-                    size="md"
                     flex={1}
-                    variant="gradient"
                     onClick={handleClick}
                   >
                     Add to cart

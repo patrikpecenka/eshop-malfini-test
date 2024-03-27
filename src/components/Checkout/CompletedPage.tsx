@@ -26,7 +26,6 @@ export const CompletedPage = () => {
             <Button
               component={Link}
               to={"/products"}
-              variant="gradient"
             >
               Done
             </Button>

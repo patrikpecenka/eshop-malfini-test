@@ -131,10 +131,11 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
       p="xl"
       h="70dvh"
       mt={20}
+
     >
       <form onSubmit={form.onSubmit(handleCreateNewOrder)}>
-        <Flex w="100%" align="center" justify="center" direction="row">
-          <Flex gap="xl" w="70%" justify="center" >
+        <Flex w="100%" align="center" justify="center" direction="row" >
+          <Flex gap="xl" w="75%" justify="center">
             <Paper
               flex={2}
               withBorder

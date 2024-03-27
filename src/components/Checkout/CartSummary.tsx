@@ -35,7 +35,7 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
               cartProduct={product}
               disableAnchor={false}
               textBoxWidth={500}
-              cardHeight={90}
+              cardHeight={80}
             />
           ))}
       </Flex>
@@ -59,12 +59,9 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
         </Flex>
         <Flex align="center" justify="space-between">
           <Button
-            radius="xl"
-            size="lg"
             maw={230}
-            variant="outline"
-            gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
             onClick={() => navigate("/products")}
+            variant="subtle"
           >
             <div>
               <IconCaretLeftFilled size={15} />
@@ -72,12 +69,8 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
             Continue shopping
           </Button>
           <Button
-            radius="xl"
-            size="lg"
             disabled={cart.length === 0}
             w={210}
-            variant="gradient"
-            gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
             onClick={handleStepForward}
           >
             Continue

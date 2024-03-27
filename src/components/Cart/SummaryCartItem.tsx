@@ -12,7 +12,7 @@ export const SummaryCartItem = ({ cartProduct, ...rest }: SummaryCartItemProps) 
 
   return (
     <Flex gap={15} align="center" {...rest} my={8} mx={10}>
-      <Card shadow="sm" withBorder w={80} h={80} >
+      <Card w={80} h={80} >
         <Image
           src={cartProduct.image}
           fit="contain"

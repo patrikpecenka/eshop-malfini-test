@@ -36,9 +36,6 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
 
   return (
     <Card
-      withBorder
-      radius="md"
-      shadow="sm"
       padding="md"
       {...rest}
     >
@@ -149,9 +146,6 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
               className="hover:opacity-70 duration-200"
               w="100%"
               mt={15}
-              variant="gradient"
-              size="md"
-              radius="xl"
               onClick={handleClick}
             >
               Add To Cart

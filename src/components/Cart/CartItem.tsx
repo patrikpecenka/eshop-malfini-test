@@ -4,6 +4,7 @@ import { useCartStore } from "../../store/cart.store";
 import { openConfirmDeleteModal } from "../../utils/openConfirmDeleteModal";
 import { currencyFormatter } from "utils/number/currencyFormatter";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export interface CartItem {
   image: string;
@@ -48,10 +49,7 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
   return (
     <Card
       {...rest}
-      shadow="xs"
       padding="xs"
-      withBorder
-      radius="lg"
       w="100%"
       mih={cardHeight}
     >
@@ -68,17 +66,16 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
           <Box maw={textBoxWidth}>
             {
               disableAnchor === false
-                ? <Anchor href={`/products/${cartProduct.id}`} >
+                ? <Anchor component={Link} to={`/products/${cartProduct.id}`} >
                   <Title order={5} lineClamp={lineClamp}>{cartProduct.title}</Title>
                 </Anchor>
                 : <Title order={5} lineClamp={lineClamp}> {cartProduct.title}</Title>
             }
           </Box>
-          <Group gap={30}>
+          <Group gap={30} wrap="nowrap">
             <Flex direction="row" align="center" justify="space-evenly" gap={5}>
               <ActionIcon
                 variant="light"
-                color="gray"
                 onClick={() => cartProduct.amount < 2 ? deleteConfirmModal() : updateItemQuantity(cartProduct.id, (prev) => prev - 1)}
               >
                 <IconMinus size="20" />
@@ -94,7 +91,6 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
               />
               <ActionIcon
                 variant="light"
-                color="gray"
                 onClick={() => updateItemQuantity(cartProduct.id, (prev) => prev + 1)}
               >
                 <IconPlus
@@ -103,7 +99,7 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
               </ActionIcon>
             </Flex>
 
-            <Flex gap={10} w={120} align="center" justify="end">
+            <Flex gap={10} miw={120} align="center" justify="end">
               <Title order={5} className="self-center" >
                 {currencyFormatter.format(cartProduct.totalPrice)}
               </Title>

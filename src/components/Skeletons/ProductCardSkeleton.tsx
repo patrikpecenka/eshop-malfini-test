@@ -5,9 +5,6 @@ export const ProductCardSkeleton = () => {
   return (
     <>
       <Card
-        withBorder
-        radius="md"
-        shadow="sm"
         padding="md"
       >
         <Skeleton width="100%" height={160} radius="lg" />

@@ -6,7 +6,7 @@ import { currencyFormatter } from "utils/number/currencyFormatter";
 import { dateFormatter } from "utils/number/dateFormatter";
 import { IconDownload, IconCopy } from "@tabler/icons-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useDebouncedValue } from "@mantine/hooks";
@@ -45,8 +45,9 @@ export const ProfilePage = () => {
     <Table.Tr key={item.title}>
       <Table.Td>
         <Anchor
+          component={Link}
           size="sm"
-          href={`/products/${item.id}`}
+          to={`/products/${item.id}`}
         >
           {item.title}
         </Anchor>
@@ -78,7 +79,6 @@ export const ProfilePage = () => {
             </Button>
             <Button
               className="hover:opacity-70 duration-200"
-              variant="gradient"
               disabled={!query}
               leftSection={<IconDownload size={20} />}
               onClick={handlePrint}
@@ -88,8 +88,6 @@ export const ProfilePage = () => {
           </Group>
         </Flex>
         <Card
-          shadow="sm"
-          withBorder
           mb={20}
         >
           <Flex justify="space-between" direction="column">
@@ -195,8 +193,6 @@ export const ProfilePage = () => {
 
         </Card>
         <Card
-          shadow="sm"
-          withBorder
           mb={20}
         >
           {/* Order Items Table */}

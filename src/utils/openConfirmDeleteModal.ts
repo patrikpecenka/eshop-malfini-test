@@ -6,6 +6,8 @@ interface ConfirmDeleteModalProps {
 }
 
 export const openConfirmDeleteModal = ({ onConfirm: confirm, title }: ConfirmDeleteModalProps) => {
+
+
   return modals.openConfirmModal({
     centered: true,
     title: title,
@@ -27,5 +29,5 @@ export const openConfirmDeleteModal = ({ onConfirm: confirm, title }: ConfirmDel
       cancel: 'Cancel'
     },
     onConfirm: () => confirm(),
-  })
-}
+  });
+};
