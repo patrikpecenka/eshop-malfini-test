@@ -17,7 +17,7 @@ export const ProductsListPage = () => {
   });
 
   const [scroll, scrollTo] = useWindowScroll();
-  const [toggleValue, toggle] = useToggle(['asc', 'desc']);
+  const [toggledValue, toggle] = useToggle(['desc', 'asc']);
   const [debounced] = useDebouncedValue(query, 300, { leading: true });
 
   const { data, status } = useQuery({
@@ -26,8 +26,8 @@ export const ProductsListPage = () => {
   });
 
   const toggleSorting = () => {
+    setQuery({ activeSorting: toggledValue });
     toggle();
-    setQuery({ activeSorting: toggleValue });
   };
 
   const filteredProducts = useMemo(
@@ -37,6 +37,8 @@ export const ProductsListPage = () => {
       )),
     [data, debounced.search]
   );
+
+  console.log(data);
 
   if (status === 'error') return <p>Error</p>;
   return (
@@ -54,9 +56,9 @@ export const ProductsListPage = () => {
           )}
         </Transition>
       </Affix>
-      <Flex justify="start" px={20} pt={20} gap={20}>
+      <Flex justify="start" px={20} pt={20}>
         <Button
-          value={toggleValue}
+          value={toggledValue}
           variant="default"
           radius="sm"
           size="sm"
@@ -64,7 +66,7 @@ export const ProductsListPage = () => {
           w={150}
         >
           {
-            toggleValue === 'asc'
+            toggledValue === 'desc'
               ? <Flex gap={5} align="center"><IconSortAscending size={18} /> Ascending</Flex>
               : <Flex gap={5} align="center"><IconSortDescending size={18} />Descending</Flex>
           }
