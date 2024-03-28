@@ -53,7 +53,7 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
       w="100%"
       mih={cardHeight}
     >
-      <Flex h="100%" px={15} align="center" gap={10} >
+      <Flex h="100%" px={15} align="center"  >
         <Image
           src={cartProduct.image}
           fit="contain"
@@ -73,7 +73,7 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
             }
           </Box>
           <Group gap={30} wrap="nowrap">
-            <Flex direction="row" align="center" justify="space-evenly" gap={5}>
+            <Flex direction="row" align="center" justify="space-evenly" >
               <ActionIcon
                 variant="light"
                 onClick={() => cartProduct.amount < 2 ? deleteConfirmModal() : updateItemQuantity(cartProduct.id, (prev) => prev - 1)}
@@ -99,7 +99,7 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
               </ActionIcon>
             </Flex>
 
-            <Flex gap={10} miw={120} align="center" justify="end">
+            <Flex miw={120} align="center" justify="end">
               <Title order={5} className="self-center" >
                 {currencyFormatter.format(cartProduct.totalPrice)}
               </Title>

@@ -150,7 +150,7 @@ export const ProfilePage = () => {
                 </Table.Tbody>
               </Table>
               <Table withRowBorders={false} m={10}>
-                <Flex justify="space-between" h="100%" align="center" direction="column" gap={10}>
+                <Flex justify="space-between" h="100%" align="center" direction="column">
                   <Flex w="70%" justify="space-around">
                     <Title order={6}>
                       Shipping Address

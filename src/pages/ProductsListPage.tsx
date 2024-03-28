@@ -38,8 +38,6 @@ export const ProductsListPage = () => {
     [data, debounced.search]
   );
 
-  console.log(data);
-
   if (status === 'error') return <p>Error</p>;
   return (
     <>

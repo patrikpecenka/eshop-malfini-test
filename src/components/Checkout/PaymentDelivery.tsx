@@ -110,7 +110,7 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
   const lightThemeSelectors = `hover:cursor-pointer hover:bg-violet-100 border border-transparent has-[:checked]:bg-violet-200 
     has-[:checked]:border has-[:checked]:border-violet-300 hover:bg-violet-50 bg-stone-100 rounded-md`;
 
-  const darkThemeSelectors = `hover:cursor-pointer hover:bg-neutral-600/[1] border border-transparent has-[:checked]:bg-violet-500/[.5] 
+  const darkThemeSelectors = `hover:cursor-pointer hover:bg-neutral-600/[.9] border border-transparent has-[:checked]:bg-violet-500/[.5] 
     has-[:checked]:border has-[:checked]:border-violet-500 hover:bg-violet-50 bg-neutral-700 rounded-md`;
 
   const computedColorScheme = useComputedColorScheme();
@@ -139,16 +139,16 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
 
   return (
     <Paper
-      className="border-t-4 border-indigo-500 "
+      className="border-t-4 border-violet-500"
       shadow="xl"
       px={90}
       py={40}
       mt={20}
     >
       {/*Main content container */}
-      <Flex direction="row" gap={40} align="end" >
+      <Flex direction="row" align="end" >
         {/*Left section with payment, delivery details */}
-        <Flex direction="column" gap={25} w="100%" flex="70%">
+        <Flex direction="column" w="100%" flex="70%">
           <Paper w="100%" shadow="sm" withBorder p="xs">
             <Title order={5} p={5}>Delivery Method</Title>
             <Radio.Group onChange={(value) => setQuery({ deliveryMethod: value })} value={query.deliveryMethod} >
@@ -238,8 +238,8 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
           </Flex>
         </Flex>
         {/*Right section with order summary */}
-        <Flex flex="40%" direction="column" gap={10} >
-          <Flex direction="column" gap={10} mb={10} h={690}>
+        <Flex flex="40%" direction="column" >
+          <Flex direction="column" mb={10} h={690}>
             <ScrollArea h="100%" offsetScrollbars scrollbarSize={5} px={15}>
               {cart.map((product) => (
                 <SummaryCartItem
@@ -270,13 +270,13 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
           }
 
           <Flex direction="column" className="border-t-2 border-gray-300" justify="center" h={90}>
-            <Flex direction="row" gap={30} justify="space-between" align="center" >
+            <Flex direction="row" justify="space-between" align="center" >
               <Text size="sm" c="dimmed"> To be paid without VAT:</Text>
               <Text size="sm" c="dimmed">
                 {noVatCalculation()}
               </Text>
             </Flex>
-            <Flex direction="row" gap={30} align="center" justify="space-between">
+            <Flex direction="row" align="center" justify="space-between">
               <Text fw={700}> To be paid with VAT:</Text>
               <Text
                 size="lg"

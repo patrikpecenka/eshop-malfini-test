@@ -13,18 +13,20 @@ interface ProductCardProps extends CardProps {
 }
 
 const ProductCard = ({ product, ...rest }: ProductCardProps) => {
+  const { cart } = useCartStore();
+  const { favoriteItems } = useFavoriteStore();
   const addCartItems = useCartStore((state) => state.createItem);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
   const deleteItem = useCartStore((state) => state.deleteItem);
-  const createFavorite = useFavoriteStore((state) => state.createFavorite);
-  const { cart } = useCartStore();
+  const createFavorite = useFavoriteStore((state) => state.createOrUpdateFavorite);
 
   const { hovered, ref } = useHover();
+  const [itemAddedCheck, setItemAddedCheck] = useState<boolean>(false);
 
   let itemAmount = cart.find((item) => item.id === product.id)?.amount || 0;
   const computedColorScheme = useComputedColorScheme();
+  const productInFavorites = favoriteItems.find((item) => item.id === product.id);
 
-  const [itemAddedCheck, setItemAddedCheck] = useState<boolean>(false);
 
   const handleClick = () => {
 
@@ -59,18 +61,24 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
           <Text fw={500} size="sm">{product.rating.rate}</Text>
           <Text size="xs" c="dimmed">{product.rating.count}x</Text>
         </Group>
-        <ActionIcon
-          component="div"
-          variant="transparent"
-          onClick={() => createFavorite({ ...product, amount: 1, totalPrice: product.price })}
-          ref={ref}
-        >
-          {
-            hovered
-              ? <IconHeartFilled className="text-red-600" />
-              : <IconHeart color="gray" />
-          }
-        </ActionIcon>
+        <Tooltip label={productInFavorites ? "Remove from favorites" : "Add to favorites"}>
+
+          <ActionIcon
+            component="div"
+            variant="transparent"
+            onClick={() => createFavorite({ ...product, amount: 1, totalPrice: product.price })}
+            ref={ref}
+          >
+            {
+              productInFavorites
+                ? <IconHeartFilled className="text-red-600" />
+                : <IconHeart color="gray" />
+                  && hovered
+                  ? <IconHeart className="text-red-600 hover:scale-110 duration-200" />
+                  : <IconHeart color="gray" />
+            }
+          </ActionIcon>
+        </Tooltip>
       </Group>
 
       <Link to={`/products/${product.id}`} >
@@ -78,7 +86,7 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
           <Title
             order={4}
             lineClamp={1}
-            className="hover:text-violet-600"
+            className="hover:text-violet-700"
           >
             {product.title}
           </Title>
@@ -86,7 +94,7 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
             lineClamp={3}
             size="xs"
             mt={10}
-            className="hover:text-violet-600 "
+            className="hover:text-violet-700 "
           >
             {product.description}
           </Text>
@@ -110,11 +118,10 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
         itemAddedCheck && itemAmount > 0
           ? (
             <Group align="center" justify="center" w="100%" mt={15}>
-              <Flex className="rounded-full" bg={computedColorScheme === "light" ? "gray.1" : "gray.8"} direction="row" align="center" justify="space-evenly" gap={15} px={20}>
+              <Flex className="rounded-full" bg={computedColorScheme === "light" ? "gray.1" : "gray.8"} direction="row" align="center" justify="space-evenly" px={20}>
                 <ActionIcon
                   size="md"
                   variant="transparent"
-                  color="violet.6"
                   onClick={() => itemAmount < 2 ? deleteItem(product.id) : updateItemQuantity(product.id, (prev) => prev - 1)}
                 >
                   <IconMinus size="23" />
@@ -132,7 +139,6 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
                 <ActionIcon
                   size="md"
                   variant="transparent"
-                  color="violet.6"
                   onClick={() => updateItemQuantity(product.id, (prev) => prev + 1)}
                 >
                   <IconPlus

@@ -21,7 +21,7 @@ export const openConfirmDeleteModal = ({ onConfirm: confirm, title }: ConfirmDel
     cancelProps: {
       color: "gray",
       variant: "outline",
-      radius: "md",
+      radius: "xl",
       opacity: 0.8
     },
     labels: {

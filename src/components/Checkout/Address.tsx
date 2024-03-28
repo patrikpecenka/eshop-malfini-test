@@ -126,7 +126,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
 
   return (
     <Paper
-      className="justify-center border-t-4 border-indigo-500"
+      className="justify-center border-t-4 border-violet-500"
       shadow="xl"
       p="xl"
       h="70dvh"
@@ -146,8 +146,8 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
               <Title order={3} mb={20}>
                 Billing address
               </Title >
-              <Flex direction="column" gap={20}>
-                <Flex gap={20}>
+              <Flex direction="column">
+                <Flex>
                   <TextInput
                     disabled={loading}
                     flex={1}
@@ -164,7 +164,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
                   />
 
                 </Flex >
-                <Flex justify="space-between" gap={20}>
+                <Flex justify="space-between" >
                   <TextInput
                     disabled={loading}
                     flex={1}
@@ -181,7 +181,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
                   />
                 </Flex>
 
-                <Flex justify="space-between" gap={20}>
+                <Flex justify="space-between" >
                   <Select
                     disabled={loading}
                     autoComplete="new-off"
@@ -216,7 +216,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
                   />
                 </Flex>
 
-                <Flex justify="space-between" gap={20}>
+                <Flex justify="space-between">
                   <TextInput
                     disabled={loading}
                     flex={1}
@@ -237,10 +237,10 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
 
             <Paper flex={1} withBorder shadow="md" radius="md" p={15} h="100%">
               <Flex direction="column" justify="space-between" >
-                <Flex direction="column" gap={5} >
+                <Flex direction="column" >
                   {
                     (deliveryValues?.fee ?? 0) + (paymentValues?.fee ?? 0) === 0
-                      ? <Flex gap={5} c="violet.8" align="center">
+                      ? <Flex c="violet.8" align="center">
                         <IconCubeSend size={22} />
                         <Text fw={700} size="sm">This Order Ships Free!</Text>
                       </Flex>

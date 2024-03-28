@@ -1,5 +1,4 @@
-import { Card, Flex, Title, Text, Divider, Tooltip, CardProps } from "@mantine/core";
-import { IconCheck } from "@tabler/icons-react";
+import { Card, Flex, Title, Text, Divider, CardProps } from "@mantine/core";
 import { OrderDetails } from "lib/props/types";
 import { dateFormatter } from "utils/number/dateFormatter";
 import { currencyFormatter } from "utils/number/currencyFormatter";
@@ -27,7 +26,6 @@ export const OrderPanelItem = ({ OrderItem, ...rest }: OrderItemProps) => {
       <Divider my="sm" />
       <Flex justify="space-between" align="center">
         <Flex direction="column">
-
           <Title order={6}>
             {OrderItem.cart.reduce((acc, item) => acc + item.amount, 0)} Items
           </Title>
@@ -38,11 +36,6 @@ export const OrderPanelItem = ({ OrderItem, ...rest }: OrderItemProps) => {
             {currencyFormatter.format(OrderItem.paymentDetails.totalPrice)}
           </Text>
         </Flex>
-        <Text >
-          <Tooltip label="Paid and Shipped">
-            <IconCheck color="#00a313" />
-          </Tooltip>
-        </Text>
       </Flex>
     </Card >
   );

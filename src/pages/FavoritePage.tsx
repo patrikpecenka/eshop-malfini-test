@@ -1,6 +1,6 @@
 import { Paper, Tabs, Title } from "@mantine/core";
 import { useFavoriteStore } from "store/favorite.store";
-import { FavoriteItem } from "components/Cart/FavoriteItem";
+import { FavoriteItem } from "components/Favorites/FavoriteItem";
 import { useEffect, useState } from "react";
 import { IconDiamond, IconDeviceLaptop, IconShirt } from "@tabler/icons-react";
 

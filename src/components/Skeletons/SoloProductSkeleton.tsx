@@ -20,14 +20,14 @@ export const SoloProductSkeleton = () => {
 
               </Group>
             </Flex>
-            <Flex ml={130} w={450} direction="column" justify="center" gap={40}>
+            <Flex ml={130} w={450} direction="column" justify="center" >
               <Skeleton w={200} h={20} radius="lg" />
               <Skeleton width="100%" h={30} radius="lg" />
               <Skeleton mt={-20} w={100} h={20} radius="lg" />
               <Skeleton mt={-30} h={15} c="dimmed" w={180} radius="lg" />
               <Skeleton w="100%" h={110} radius="lg" />
 
-              <Flex direction="column" gap={20} w="100%">
+              <Flex direction="column" w="100%">
                 <Skeleton w={160} h={40} radius="lg" />
 
                 <Group justify="space-between" w="100%">

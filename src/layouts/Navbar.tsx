@@ -53,7 +53,7 @@ export const Navbar = () => {
         />
       </UnstyledButton>
 
-      <Flex align="center" gap={10} h={40} >
+      <Flex align="center" h={40} >
         <Menu offset={1} shadow="sm" >
           <Menu.Target>
             <Button

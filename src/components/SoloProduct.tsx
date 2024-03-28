@@ -37,7 +37,7 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
           {...rest}
         >
           <Flex justify="center" >
-            <Flex direction="column">
+            <Flex direction="column" >
               <Card h={550} w={650}>
                 <Image
                   h="100%"
@@ -64,10 +64,9 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                     />
                   </Box>
                 ))}
-
               </Group>
             </Flex>
-            <Flex ml={130} w={450} direction="column" justify="center" gap={40}>
+            <Flex ml={130} w={450} direction="column" justify="center" gap="xl">
               <Text mb={-30} fw={900} c="violet.5" tt="uppercase">{product.category}</Text>
               <Title size={45} >{product.title}</Title>
               <Tooltip label={`Rating ${product.rating.rate} out of 5`}>
@@ -76,9 +75,9 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
               <Text mt={-30} size="xs" c="dimmed">Based on {product.rating.count} reviews</Text>
               <Text c="dimmed">{product.description}</Text>
 
-              <Flex direction="column" gap={20} w="100%">
+              <Flex direction="column" w="100%">
                 <Title order={1} fw={700}>$ {product.price}</Title>
-                <Flex direction="row" align="center" justify="space-between" gap={15} mt={20}>
+                <Flex direction="row" align="center" justify="space-between" mt={20}>
                   <Group bg={computedColorScheme === "light" ? "gray.1" : "gray.8"} className="rounded-md">
                     <ActionIcon
                       size="xl"

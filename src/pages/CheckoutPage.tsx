@@ -30,7 +30,7 @@ export const CheckoutPage = () => {
       mt={10}
       p="xl"
     >
-      <Stepper active={checkoutStep} color="indigo" size="sm" onStepClick={setCheckoutStep} allowNextStepsSelect={cart.length === 0 ? false : true}>
+      <Stepper active={checkoutStep} size="sm" onStepClick={setCheckoutStep} allowNextStepsSelect={cart.length === 0 ? false : true}>
         <Stepper.Step label="Cart" >
           <CartSummary handleStepForward={() => setCheckoutStep(checkoutStep + 1)} />
         </Stepper.Step>

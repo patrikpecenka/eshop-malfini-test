@@ -8,7 +8,7 @@ export const CompletedPage = () => {
         shadow="sm"
         h={600}
       >
-        <Flex align="center" justify="center" direction="column" h="100%" gap={15}>
+        <Flex align="center" justify="center" direction="column" h="100%">
           <Title order={1}>
             Thank you for your purchase!
           </Title>

@@ -1,8 +1,8 @@
-import { Button, Card, createTheme } from "@mantine/core";
+import { Button, Card, Flex, createTheme } from "@mantine/core";
 
 export const theme = createTheme({
   primaryColor: "violet",
-  primaryShade: 5,
+  primaryShade: 8,
   components: {
     Button: Button.extend({
       defaultProps: {
@@ -23,5 +23,11 @@ export const theme = createTheme({
         radius: "md",
       }
     }),
+
+    Flex: Flex.extend({
+      defaultProps: {
+        gap: "sm"
+      }
+    })
   }
 });

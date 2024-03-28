@@ -20,13 +20,13 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
 
   return (
     <Paper
-      className="border-t-4 border-indigo-500 "
+      className="border-t-4 border-violet-500"
       shadow="xl"
       p={90}
       h="100%"
       mt={20}
     >
-      <Flex direction="column" gap={10}>
+      <Flex direction="column">
         {cart.length === 0
           ? <EmptyCart />
           : cart.map((product) => (
@@ -39,14 +39,14 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
             />
           ))}
       </Flex>
-      <Flex direction="column" mt={30} gap={10} w="100%" >
-        <Flex direction="row" gap={30} justify="end" align="center">
+      <Flex direction="column" mt={30} w="100%" >
+        <Flex direction="row" justify="end" align="center">
           <Text size="sm" > Total excl. VAT:</Text>
           <Text>
             {noVatCalculation()}
           </Text>
         </Flex>
-        <Flex direction="row" gap={30} align="center" justify="end">
+        <Flex direction="row" align="center" justify="end">
           <Text fw={700}> To Pay:</Text>
           <Text
             size="xl"

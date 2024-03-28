@@ -1,11 +1,11 @@
-import { FavoriteItem } from "components/Cart/FavoriteItem";
+import { FavoriteItem } from "components/Favorites/FavoriteItem";
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
 
 interface FavoriteStore {
   favoriteItems: FavoriteItem[];
   history: FavoriteItem[];
-  createFavorite: (favoriteItem: FavoriteItem) => void;
+  createOrUpdateFavorite: (favoriteItem: FavoriteItem) => void;
   // updateFavoriteItems: (newIndex: number, oldIndex: number) => void;
   deleteAndSaveToHistory: (id: string) => void;
   restoreFromHistory: (id: string) => void;
@@ -18,12 +18,13 @@ export const useFavoriteStore = create(
     (set) => ({
       favoriteItems: [],
       history: [],
-      createFavorite: (favoriteItem) =>
+      createOrUpdateFavorite: (favoriteItem) =>
         set((state) => {
           const foundItem = state.favoriteItems.find((item) => item.id === favoriteItem.id);
-
           if (foundItem) {
-            return state;
+            return {
+              favoriteItems: state.favoriteItems.filter((item) => item.id !== favoriteItem.id)
+            };
           } else {
             return {
               favoriteItems: [...state.favoriteItems, favoriteItem],

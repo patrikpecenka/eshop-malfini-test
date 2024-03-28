@@ -11,7 +11,7 @@ interface SummaryCartItemProps extends FlexProps {
 export const SummaryCartItem = ({ cartProduct, ...rest }: SummaryCartItemProps) => {
 
   return (
-    <Flex gap={15} align="center" {...rest} my={8} mx={10}>
+    <Flex align="center" {...rest} my={8} mx={10}>
       <Card w={80} h={80} >
         <Image
           src={cartProduct.image}

@@ -27,7 +27,7 @@ export const SidePanel = () => {
 
 
   return (
-    <Flex direction="column" h="100%" m={20} gap={10} align="center" >
+    <Flex direction="column" h="100%" m={20} align="center" >
       <NumberInput
         w="95%"
         placeholder="Search..."

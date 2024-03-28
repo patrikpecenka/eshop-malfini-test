@@ -14,7 +14,8 @@ export const useOrderStore = create(
       createOrder: (user) =>
         set((state) => ({
           OrderDetailData:
-            [...state.OrderDetailData,
+            [
+              ...state.OrderDetailData,
               user
             ],
         })),
