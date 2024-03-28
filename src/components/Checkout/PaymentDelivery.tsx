@@ -1,4 +1,4 @@
-import { Button, Flex, Group, Paper, Radio, Text, Image, Box, ScrollArea, Title, useComputedColorScheme } from "@mantine/core";
+import { Button, Flex, Paper, Radio, Text, ScrollArea, Title } from "@mantine/core";
 import { useCartStore } from "store/cart.store";
 import { IconCaretLeftFilled } from "@tabler/icons-react";
 import { SummaryCartItem } from "components/Cart/SummaryCartItem";
@@ -13,8 +13,10 @@ import Visa from "../../assets/visa-svgrepo-com.svg";
 import Dhl from "../../assets/dhl-svgrepo-com.svg";
 import DhlExpress from "../../assets/dhl-express-logo-svgrepo-com.svg";
 import Delivery from "../../assets/delivery-svgrepo-com.svg";
+import Package from "../../assets/package-export.svg";
 import { withDefault, StringParam, useQueryParams } from "use-query-params";
 import { currencyFormatter } from "utils/number/currencyFormatter";
+import { RadioCard } from "components/RadioCard";
 
 export const paymentMethods = [
   {
@@ -71,7 +73,7 @@ export const deliveryMethods = [
   {
     id: "dm-1001",
     name: "Pickup",
-    icon: "",
+    icon: Package,
     fee: 0,
   },
   {
@@ -107,14 +109,6 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
     deliveryMethod: withDefault(StringParam, ""),
   });
 
-  const lightThemeSelectors = `hover:cursor-pointer hover:bg-violet-100 border border-transparent has-[:checked]:bg-violet-200 
-    has-[:checked]:border has-[:checked]:border-violet-300 hover:bg-violet-50 bg-stone-100 rounded-md`;
-
-  const darkThemeSelectors = `hover:cursor-pointer hover:bg-neutral-600/[.9] border border-transparent has-[:checked]:bg-violet-500/[.5] 
-    has-[:checked]:border has-[:checked]:border-violet-500 hover:bg-violet-50 bg-neutral-700 rounded-md`;
-
-  const computedColorScheme = useComputedColorScheme();
-
   const getAdditionalFeeValue = (
     paymentMethods.find((p) => p.name === query.paymentMethod)?.fee === undefined
       || deliveryMethods.find((p) => p.name === query.deliveryMethod)?.fee === 0
@@ -129,8 +123,6 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
       : currencyFormatter.format(deliveryMethods.find((p) => p.name === query.deliveryMethod)?.fee as number)
   );
 
-
-
   const noVatCalculation = () => {
     return currencyFormatter.format((totalPriceCalculation() / 121) * 100);
   };
@@ -139,7 +131,7 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
 
   return (
     <Paper
-      className="border-t-4 border-violet-500"
+      className="border-t-4 border-[var(--mantine-primary-color-5)]"
       shadow="xl"
       px={90}
       py={40}
@@ -153,33 +145,22 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
             <Title order={5} p={5}>Delivery Method</Title>
             <Radio.Group onChange={(value) => setQuery({ deliveryMethod: value })} value={query.deliveryMethod} >
               {deliveryMethods.map((item) => (
-                <Flex
-                  component="label"
-                  key={item.name}
+                <RadioCard
                   id={item.id}
-                  h={50}
-                  p={5}
-                  w="100%"
-                  align="center"
-                  direction="row"
-                  className={computedColorScheme === 'light' ? lightThemeSelectors : darkThemeSelectors}
-                  my={5}
+                  key={item.name}
+                  radioValue={item.name}
+                  h={55}
+                  imageSrc={item.icon}
+                  imageAlt={item.name}
                 >
-                  <Group flex="15%" justify="space-evenly" >
-                    <Radio value={item.name} color={computedColorScheme === "light" ? "violet" : "gray.8"}></Radio>
-                    <Box w={40}>
-                      <Image src={item.icon} alt={item.name} w={40} fit="contain" />
-                    </Box>
-                  </Group>
-                  <Text flex="15%" size="sm">{item.name}</Text>
-                  <Text flex="50%" c="btn-violet" ta="right" fw={500}>
+                  <Text size="sm">{item.name}</Text>
+                  <Text c="btn-violet" ta="right" fw={500}>
                     {item.fee === 0
                       ? "Free"
                       : currencyFormatter.format(Number(item.fee))
                     }
                   </Text>
-                  <Text flex="2%"></Text>
-                </Flex>
+                </RadioCard>
               ))}
             </Radio.Group>
           </Paper>
@@ -187,33 +168,22 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
             <Title order={5} p={5}>Payment Method</Title>
             <Radio.Group onChange={(value) => setQuery({ paymentMethod: value })} value={query.paymentMethod} >
               {paymentMethods.map((item) => (
-                <Flex
-                  component="label"
-                  key={item.name}
+                <RadioCard
                   id={item.id}
-                  h={50}
-                  p={5}
-                  w="100%"
-                  align="center"
-                  direction="row"
-                  className={computedColorScheme === 'light' ? lightThemeSelectors : darkThemeSelectors}
-                  my={5}
+                  key={item.name}
+                  radioValue={item.name}
+                  h={55}
+                  imageSrc={item.icon}
+                  imageAlt={item.name}
                 >
-                  <Group flex="15%" justify="space-evenly" >
-                    <Radio value={item.name} color={computedColorScheme === "light" ? "violet" : "gray.8"}></Radio>
-                    <Group w={40}>
-                      <Image src={item.icon} alt={item.name} w={40} fit="contain" />
-                    </Group>
-                  </Group>
-                  <Text flex="15%" size="sm">{item.name}</Text>
-                  <Text flex="50%" c="btn-violet" ta="right" fw={500}>
+                  <Text size="sm">{item.name}</Text>
+                  <Text c="btn-violet" ta="right" fw={500}>
                     {item.fee === 0
                       ? "Free"
                       : currencyFormatter.format(Number(item.fee))
                     }
                   </Text>
-                  <Text flex="2%"></Text>
-                </Flex>
+                </RadioCard>
               ))}
             </Radio.Group>
           </Paper>

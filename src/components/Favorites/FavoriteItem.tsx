@@ -44,15 +44,17 @@ export const FavoriteItem = ({ favoriteItem }: FavoriteItemProps) => {
       color: "yellow",
       message: (
         <Flex align="center" justify="space-between" direction="column" gap={0}>
-          <Flex direction="row" gap={0}>
-            <Image
-              src={favoriteItem.image}
-              w={30}
-              h={30}
-              m={10}
-            />
-            <Text size="sm" lineClamp={1}>{favoriteItem.title}</Text>
-            <Button variant="subtle" onClick={() => handleRestore()} w={150}>
+          <Flex direction="row" gap={0} justify="space-between" w="100%">
+            <Flex direction="row" align="center">
+              <Image
+                src={favoriteItem.image}
+                w={30}
+                h={30}
+                m={10}
+              />
+              <Text size="sm" lineClamp={1}>{favoriteItem.title}</Text>
+            </Flex>
+            <Button variant="subtle" onClick={() => handleRestore()} w={130}>
               Undo
             </Button>
           </Flex>

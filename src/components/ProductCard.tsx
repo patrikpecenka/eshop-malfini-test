@@ -29,7 +29,6 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
 
 
   const handleClick = () => {
-
     setItemAddedCheck(true);
     addCartItems({
       ...product, totalPrice: product.price, amount: 1
@@ -130,7 +129,7 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
                   size="md"
                   fw={700}
                   w={55}
-                  onChange={(value) => updateItemQuantity(product.id, () => Number(value))}
+                  onChange={(value) => value ? deleteItem(product.id) : updateItemQuantity(product.id, () => Number(value))}
                   value={itemAmount}
                   allowNegative={false}
                   hideControls

@@ -10,7 +10,6 @@ export default defineConfig({
     react(),
     viteTsconfigPaths(),
     compression(),
-    svgr()
   ],
   server: {
     open: true,
