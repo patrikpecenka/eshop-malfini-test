@@ -1,14 +1,13 @@
 import { Affix, Button, CloseButton, Flex, Input, SimpleGrid, Transition } from "@mantine/core";
 import { IconArrowUp, IconSearch, IconSortAscending, IconSortDescending } from "@tabler/icons-react";
-import fetcher from "lib/fetcher";
-import { ProductDto } from "lib/dto/types";
-import { useQuery } from "@tanstack/react-query";
-import { Suspense, lazy, useMemo } from "react";
+import fetcher from "@lib/fetcher";
+import ProductCard from "./components/ProductCard";
+import { ProductDto } from "@lib/dto/types";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo } from "react";
 import { useDebouncedValue, useToggle, useWindowScroll } from '@mantine/hooks';
 import { StringParam, useQueryParams, withDefault } from "use-query-params";
-import { ProductCardSkeleton } from "components/Skeletons/ProductCardSkeleton";
-
-const ProductCard = lazy(() => import("../components/ProductCard"));
+import { ProductCardSkeleton } from "@pages/ProductsListPage/components/ProductCardSkeleton";
 
 export const ProductsListPage = () => {
   const [query, setQuery] = useQueryParams({
@@ -17,18 +16,18 @@ export const ProductsListPage = () => {
   });
 
   const [scroll, scrollTo] = useWindowScroll();
-  const [toggledValue, toggle] = useToggle(['desc', 'asc']);
+  const [value, toggle] = useToggle(['asc', 'desc']);
   const [debounced] = useDebouncedValue(query, 300, { leading: true });
 
-  const { data, status } = useQuery({
+  const { data, status, isFetching } = useQuery({
     queryKey: ['products', query.activeSorting],
     queryFn: () => fetcher<ProductDto[]>(`https://fakestoreapi.com/products?sort=${query.activeSorting}`),
+    placeholderData: keepPreviousData
   });
 
-  const toggleSorting = () => {
-    setQuery({ activeSorting: toggledValue });
-    toggle();
-  };
+  useEffect(() => {
+    setQuery({ activeSorting: value });
+  }, [value]);
 
   const filteredProducts = useMemo(
     () =>
@@ -56,17 +55,17 @@ export const ProductsListPage = () => {
       </Affix>
       <Flex justify="start" px={20} pt={20}>
         <Button
-          value={toggledValue}
+          value={value}
           variant="default"
           radius="sm"
           size="sm"
-          onClick={toggleSorting}
+          onClick={() => toggle()}
           w={150}
         >
           {
-            toggledValue === 'desc'
-              ? <Flex gap={5} align="center"><IconSortAscending size={18} /> Ascending</Flex>
-              : <Flex gap={5} align="center"><IconSortDescending size={18} />Descending</Flex>
+            value === 'desc'
+              ? <Flex gap={5} align="center"><IconSortDescending size={18} />Descending </Flex>
+              : <Flex gap={5} align="center"><IconSortAscending size={18} />Ascending</Flex>
           }
         </Button>
         <Input
@@ -90,13 +89,20 @@ export const ProductsListPage = () => {
         p={20}
         cols={{ base: 1, sm: 3, md: 4, lg: 6 }}
       >
-        {filteredProducts.map((product) => (
-          <Suspense fallback={<ProductCardSkeleton />} key={product.id}>
-            <ProductCard
-              product={product}
-            />
-          </Suspense>
-        ))}
+        {
+          isFetching
+            ? (
+              [...Array(20)].map((_, index) => (
+                <ProductCardSkeleton key={index} />
+              ))
+            )
+            : filteredProducts.map((product, index) => (
+              <ProductCard
+                key={index}
+                product={product}
+              />
+            ))
+        }
 
       </SimpleGrid>
     </>

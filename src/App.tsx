@@ -1,25 +1,19 @@
-import { AppShellLayout } from "layouts/AppShellLayout";
-import { ProductsListPage } from "pages/ProductsListPage";
-import { ProductDetailPage } from "pages/ProductDetailPage";
-import { Route, Routes, Navigate, useLocation } from "react-router-dom";
-import { CheckoutPage } from "pages/CheckoutPage";
-import { ProfilePage } from "pages/OrderDetailPage";
-import { FavoritePage } from "pages/FavoritePage";
+import { AppShellLayout } from "@layouts/AppShellLayout";
+import { ProductsListPage } from "@pages/ProductsListPage/ProductsListPage";
+import { ProductDetailPage } from "@pages/ProductDetailPage/ProductDetailPage";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { CheckoutPage } from "@pages/CheckoutPage/CheckoutPage";
+import { OrderDetailPage } from "@pages/OrdersDetailPage/OrderDetailPage";
+import { FavoritePage } from "@pages/FavoritePage/FavoritePage";
 const App = () => {
-  const location = useLocation();
-
   return (
-    <Routes location={location} key={location.pathname}>
+    <Routes >
       <Route element={<AppShellLayout />}>
         <Route path="/products" element={<ProductsListPage />} />
-        <Route path="/products/:id/" element={<ProductDetailPage />} />
+        <Route path="/products/:id" element={<ProductDetailPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/favorite" element={<FavoritePage />} />
-
-        <Route element={<ProfilePage />} >
-          <Route path="/profile/" element={<ProfilePage />} />
-        </Route >
-
+        <Route path="/profile/:id?" element={<OrderDetailPage />} />
         <Route path="*" element={<Navigate to="/products" replace />} />
       </Route>
     </Routes>

@@ -7,7 +7,17 @@
       "esnext",
       "Webworker"
     ],
-    "baseUrl": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@assets/*": ["src/assets/*"],
+      "@components/*": ["src/components/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@lib/*": ["src/lib/*"],
+      "@pages/*": ["src/pages/*"],
+      "@store/*": ["src/store/*"],
+      "@utils/*": ["src/utils/*"]
+    },
     "types": [
       "vite/client"
     ],
@@ -35,17 +45,10 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src",
-    "postcss.config.cjs",
-    "scripts/analyze.js"
+    "src"
   ],
   "exclude": [
-    "node_modules",
-    "build",
-    "dist",
-    "scripts",
-    "config",
-    "webpack.config.js"
+    "node_modules"
   ],
   "references": [
     {

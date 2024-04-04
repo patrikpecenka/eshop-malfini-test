@@ -1,5 +1,5 @@
 import { Flex, Image, Loader, Stack } from "@mantine/core";
-export const LoadingPage = () => {
+export const LoadingScreen = () => {
   return (
     <>
       <Flex w="100dvw" h="100dvh" justify="center" align="center" >

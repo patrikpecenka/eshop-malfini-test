@@ -1,10 +1,11 @@
 import { Button, Flex, Paper, Text } from "@mantine/core";
-import { CartItem } from "components/Cart/CartItem";
-import { useCartStore } from "store/cart.store";
+import { CartProductItem } from "@components/CartItem";
+import { useCartStore } from "@store/cart.store";
 import { IconCaretLeftFilled } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
-import { EmptyCart } from "components/EmptyCart/EmptyCart";
-import { currencyFormatter } from "utils/number/currencyFormatter";
+import { EmptyCart } from "@components/EmptyCart";
+import { currencyFormatter } from "@utils/number/currencyFormatter";
+import { useMemo } from "react";
 
 interface CartSummaryProps {
   handleStepForward: () => void;
@@ -14,13 +15,14 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
   const { cart, totalPriceCalculation } = useCartStore();
   const navigate = useNavigate();
 
-  const noVatCalculation = () => {
-    return currencyFormatter.format((totalPriceCalculation() / 121) * 100);
-  };
+  const noVatCalculation = useMemo(
+    () => currencyFormatter.format((totalPriceCalculation() / 121) * 100),
+    [totalPriceCalculation]
+  );
 
   return (
     <Paper
-      className="border-t-4 border-violet-500"
+      className="border-t-4 border-[var(--mantine-primary-color-filled)]"
       shadow="xl"
       p={90}
       h="100%"
@@ -30,7 +32,7 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
         {cart.length === 0
           ? <EmptyCart />
           : cart.map((product) => (
-            <CartItem
+            <CartProductItem
               key={product.id}
               cartProduct={product}
               disableAnchor={false}
@@ -43,7 +45,7 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
         <Flex direction="row" justify="end" align="center">
           <Text size="sm" > Total excl. VAT:</Text>
           <Text>
-            {noVatCalculation()}
+            {noVatCalculation}
           </Text>
         </Flex>
         <Flex direction="row" align="center" justify="end">
@@ -52,7 +54,6 @@ export const CartSummary = ({ handleStepForward }: CartSummaryProps) => {
             size="xl"
             fw={800}
             variant="gradient"
-            gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
           >
             {currencyFormatter.format(totalPriceCalculation())}
           </Text>

@@ -1,10 +1,10 @@
 import { Card, Flex, Title, Image, Group, Tooltip, ActionIcon, Button, Text, Anchor } from "@mantine/core";
 import { IconHeartOff } from "@tabler/icons-react";
-import { useFavoriteStore } from "store/favorite.store";
+import { useFavoriteStore } from "@store/favorite.store";
 import { UseDraggableArguments } from "@dnd-kit/core";
 import { notifications, showNotification } from "@mantine/notifications";
 import { IconShoppingCartFilled, IconCircleCheckFilled } from "@tabler/icons-react";
-import { useCartStore } from "store/cart.store";
+import { useCartStore } from "@store/cart.store";
 import { Link } from "react-router-dom";
 
 
@@ -92,7 +92,6 @@ export const FavoriteItem = ({ favoriteItem }: FavoriteItemProps) => {
         <Group wrap="nowrap">
           <Tooltip label={filterCartItem ? "In cart" : "Add to cart"}>
             <Button
-              size="ms"
               variant="subtle"
               onClick={
                 filterCartItem

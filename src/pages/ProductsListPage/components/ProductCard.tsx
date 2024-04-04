@@ -1,12 +1,12 @@
 import { ActionIcon, Badge, Button, Card, CardProps, Flex, Group, Image, NumberInput, Rating, Text, Title, Tooltip, useComputedColorScheme } from "@mantine/core";
-import { ProductDto } from "../lib/dto/types";
-import { useCartStore } from "../store/cart.store";
+import { ProductDto } from "@lib/dto/types";
+import { useCartStore } from "@store/cart.store";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { IconMinus, IconPlus, IconHeart, IconHeartFilled } from "@tabler/icons-react";
-import { currencyFormatter } from "utils/number/currencyFormatter";
+import { currencyFormatter } from "@utils/number/currencyFormatter";
 import { useHover } from "@mantine/hooks";
-import { useFavoriteStore } from "store/favorite.store";
+import { useFavoriteStore } from "@store/favorite.store";
 
 interface ProductCardProps extends CardProps {
   product: ProductDto;
@@ -21,7 +21,7 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
   const createFavorite = useFavoriteStore((state) => state.createOrUpdateFavorite);
 
   const { hovered, ref } = useHover();
-  const [itemAddedCheck, setItemAddedCheck] = useState<boolean>(false);
+  const [itemAddedCheck, setItemAddedCheck] = useState(false);
 
   let itemAmount = cart.find((item) => item.id === product.id)?.amount || 0;
   const computedColorScheme = useComputedColorScheme();
@@ -45,13 +45,13 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
           <Image
             className="hover:scale-110 duration-200 "
             src={product.image}
+            alt={product.title}
             w="100%"
             h={150}
             fit="contain"
           />
         </Card.Section>
       </Link>
-
       <Group py={10} justify="space-between">
         <Group gap={5}>
           <Tooltip label={`Rating ${product.rating.rate} out of 5`}>
@@ -85,7 +85,7 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
           <Title
             order={4}
             lineClamp={1}
-            className="hover:text-violet-700"
+            className="hover:text-[var(--mantine-primary-color-filled)]"
           >
             {product.title}
           </Title>
@@ -93,7 +93,7 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
             lineClamp={3}
             size="xs"
             mt={10}
-            className="hover:text-violet-700 "
+            className="hover:text-[var(--mantine-primary-color-filled)]"
           >
             {product.description}
           </Text>
@@ -117,7 +117,14 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
         itemAddedCheck && itemAmount > 0
           ? (
             <Group align="center" justify="center" w="100%" mt={15}>
-              <Flex className="rounded-full" bg={computedColorScheme === "light" ? "gray.1" : "gray.8"} direction="row" align="center" justify="space-evenly" px={20}>
+              <Flex
+                className="rounded-full"
+                bg={computedColorScheme === "light" ? "gray.1" : "gray.8"}
+                direction="row"
+                align="center"
+                justify="space-evenly"
+                px={20}
+              >
                 <ActionIcon
                   size="md"
                   variant="transparent"
@@ -129,11 +136,11 @@ const ProductCard = ({ product, ...rest }: ProductCardProps) => {
                   size="md"
                   fw={700}
                   w={55}
-                  onChange={(value) => value ? deleteItem(product.id) : updateItemQuantity(product.id, () => Number(value))}
                   value={itemAmount}
+                  onChange={(value) => value === "" ? deleteItem(product.id) : updateItemQuantity(product.id, () => Number(value))}
                   allowNegative={false}
                   hideControls
-                  variant="unstiled"
+                  variant="unstyled"
                 />
                 <ActionIcon
                   size="md"

@@ -1,8 +1,8 @@
 import { Card, Flex, Image, Title, Group, Text, ActionIcon, NumberInput, Button, Tooltip, Rating, Box, CardProps, useComputedColorScheme } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
-import { ProductDto } from "lib/dto/types";
+import { ProductDto } from "@lib/dto/types";
 import { useState } from "react";
-import { useCartStore } from "store/cart.store";
+import { useCartStore } from "@store/cart.store";
 
 interface SoloProductProps extends CardProps {
   product: ProductDto;
@@ -31,14 +31,13 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
 
   return (
     <>
-      <Box>
+      <Box >
         <Card
-          p={70}
           {...rest}
         >
-          <Flex justify="center" >
-            <Flex direction="column" >
-              <Card h={550} w={650}>
+          <Flex justify="center" h="100%">
+            <Flex direction="column" h="100%" justify="center">
+              <Card h={550} w={650} >
                 <Image
                   h="100%"
                   alt="Random unsplash image"
@@ -47,7 +46,6 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                 />
               </Card>
               <Group mt={20} justify="space-between">
-
                 {[...Array(4)].map((_, index) => (
                   <Box
                     p={5}
@@ -66,8 +64,8 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                 ))}
               </Group>
             </Flex>
-            <Flex ml={130} w={450} direction="column" justify="center" gap="xl">
-              <Text mb={-30} fw={900} c="violet.5" tt="uppercase">{product.category}</Text>
+            <Flex ml={130} w={450} direction="column" justify="center" gap="xl" >
+              <Text mb={-30} fw={900} variant="gradient" tt="uppercase">{product.category}</Text>
               <Title size={45} >{product.title}</Title>
               <Tooltip label={`Rating ${product.rating.rate} out of 5`}>
                 <Rating value={product.rating.rate} fractions={4} readOnly size="xs" mt={-20} />
@@ -82,7 +80,6 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                     <ActionIcon
                       size="xl"
                       variant="transparent"
-                      color="violet.6"
                       onClick={decreaseAmount}
                     >
                       <IconMinus size="23" />
@@ -99,7 +96,6 @@ const SoloProduct = ({ product, ...rest }: SoloProductProps) => {
                     <ActionIcon
                       size="xl"
                       variant="transparent"
-                      color="violet.6"
                       onClick={increaseAmount}
                       disabled={productInputAmount === 100}
                     >

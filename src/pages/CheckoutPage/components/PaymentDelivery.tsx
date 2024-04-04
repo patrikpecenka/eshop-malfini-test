@@ -1,22 +1,22 @@
 import { Button, Flex, Paper, Radio, Text, ScrollArea, Title } from "@mantine/core";
-import { useCartStore } from "store/cart.store";
+import { useCartStore } from "@store/cart.store";
 import { IconCaretLeftFilled } from "@tabler/icons-react";
-import { SummaryCartItem } from "components/Cart/SummaryCartItem";
-import ApplePay from "../../assets/apple-pay-svgrepo-com.svg";
-import Bank from "../../assets/bank-transfer-svgrepo-com.svg";
-import Bitcoin from "../../assets/bitcoin-svgrepo-com.svg";
-import Cash from "../../assets/cash-money-svgrepo-com.svg";
-import GooglePay from "../../assets/google-pay-svgrepo-com.svg";
-import PayPal from "../../assets/paypal-3-svgrepo-com.svg";
-import Stripe from "../../assets/stripe-svgrepo-com.svg";
-import Visa from "../../assets/visa-svgrepo-com.svg";
-import Dhl from "../../assets/dhl-svgrepo-com.svg";
-import DhlExpress from "../../assets/dhl-express-logo-svgrepo-com.svg";
-import Delivery from "../../assets/delivery-svgrepo-com.svg";
-import Package from "../../assets/package-export.svg";
+import { SummaryCartItem } from "@pages/CheckoutPage/components/SummaryCartItem";
+import ApplePay from "@assets/apple-pay-svgrepo-com.svg";
+import Bank from "@assets/bank-transfer-svgrepo-com.svg";
+import Bitcoin from "@assets/bitcoin-svgrepo-com.svg";
+import Cash from "@assets/cash-money-svgrepo-com.svg";
+import GooglePay from "@assets/google-pay-svgrepo-com.svg";
+import PayPal from "@assets/paypal-3-svgrepo-com.svg";
+import Stripe from "@assets/stripe-svgrepo-com.svg";
+import Visa from "@assets/visa-svgrepo-com.svg";
+import Dhl from "@assets/dhl-svgrepo-com.svg";
+import DhlExpress from "@assets/dhl-express-logo-svgrepo-com.svg";
+import Delivery from "@assets/delivery-svgrepo-com.svg";
+import Package from "@assets/package-export.svg";
 import { withDefault, StringParam, useQueryParams } from "use-query-params";
-import { currencyFormatter } from "utils/number/currencyFormatter";
-import { RadioCard } from "components/RadioCard";
+import { currencyFormatter } from "@utils/number/currencyFormatter";
+import { RadioCard } from "@components/RadioCard";
 
 export const paymentMethods = [
   {
@@ -131,7 +131,7 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
 
   return (
     <Paper
-      className="border-t-4 border-[var(--mantine-primary-color-5)]"
+      className="border-t-4 border-[var(--mantine-primary-color-filled)]"
       shadow="xl"
       px={90}
       py={40}
@@ -148,13 +148,12 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
                 <RadioCard
                   id={item.id}
                   key={item.name}
-                  radioValue={item.name}
+                  value={item.name}
                   h={55}
-                  imageSrc={item.icon}
-                  imageAlt={item.name}
+                  imageProps={{ src: item.icon }}
                 >
                   <Text size="sm">{item.name}</Text>
-                  <Text c="btn-violet" ta="right" fw={500}>
+                  <Text ta="right" fw={500}>
                     {item.fee === 0
                       ? "Free"
                       : currencyFormatter.format(Number(item.fee))
@@ -171,10 +170,9 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
                 <RadioCard
                   id={item.id}
                   key={item.name}
-                  radioValue={item.name}
+                  value={item.name}
                   h={55}
-                  imageSrc={item.icon}
-                  imageAlt={item.name}
+                  imageProps={{ src: item.icon }}
                 >
                   <Text size="sm">{item.name}</Text>
                   <Text c="btn-violet" ta="right" fw={500}>
@@ -252,7 +250,6 @@ export const PaymentDelivery = ({ handleStepBackwards, handleStepForward }: Paym
                 size="lg"
                 fw={800}
                 variant="gradient"
-                gradient={{ from: 'violet', to: 'indigo', deg: 25 }}
               >
                 {currencyFormatter.format(totalPriceCalculation())}
               </Text>

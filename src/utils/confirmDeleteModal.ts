@@ -5,7 +5,7 @@ interface ConfirmDeleteModalProps {
   title: string;
 }
 
-export const openConfirmDeleteModal = ({ onConfirm: confirm, title }: ConfirmDeleteModalProps) => {
+export const confirmDeleteModal = ({ onConfirm, title }: ConfirmDeleteModalProps) => {
 
 
   return modals.openConfirmModal({
@@ -28,6 +28,6 @@ export const openConfirmDeleteModal = ({ onConfirm: confirm, title }: ConfirmDel
       confirm: 'Delete',
       cancel: 'Cancel'
     },
-    onConfirm: () => confirm(),
+    onConfirm: () => onConfirm(),
   });
 };

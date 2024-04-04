@@ -1,6 +1,6 @@
 import { Paper, Tabs, Title } from "@mantine/core";
-import { useFavoriteStore } from "store/favorite.store";
-import { FavoriteItem } from "components/Favorites/FavoriteItem";
+import { useFavoriteStore } from "@store/favorite.store";
+import { FavoriteItem } from "@pages/FavoritePage/components/FavoriteItem";
 import { useEffect, useState } from "react";
 import { IconDiamond, IconDeviceLaptop, IconShirt } from "@tabler/icons-react";
 
@@ -40,7 +40,7 @@ export const FavoritePage = () => {
         p="xl"
       >
         <Paper
-          className="border-t-4 border-indigo-500 "
+          className="border-t-4 border-[var(--mantine-primary-color-filled)]"
           shadow="xl"
           p={30}
           h="100%"

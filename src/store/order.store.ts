@@ -1,21 +1,48 @@
 import { create } from "zustand";
-import { OrderDetails } from "../lib/props/types";
 import { persist } from 'zustand/middleware';
+import { CartItem } from "./cart.store";
+
+export interface OrderDetails {
+  id: string;
+  orderId: number;
+  userDetails: {
+    email: string;
+    phoneNumber: string;
+    firstName: string;
+    lastName: string;
+    address: string;
+    city: string;
+    stateProvince: string | null;
+    country: string | null;
+    zipCode: string;
+  },
+  paymentDetails: {
+    subtotalPrice: number;
+    totalPrice: number;
+    noVatPrice: number;
+    vatPrice: number;
+    discount: number;
+    dateOfOrder: string;
+    paymentId: string;
+    deliveryId: string;
+  };
+  cart: CartItem[];
+}
 
 interface OrderStore {
-  OrderDetailData: OrderDetails[];
+  orderDetailData: OrderDetails[];
   createOrder: (user: OrderDetails) => void;
 }
 
 export const useOrderStore = create(
   persist<OrderStore>(
     (set) => ({
-      OrderDetailData: [],
+      orderDetailData: [],
       createOrder: (user) =>
         set((state) => ({
-          OrderDetailData:
+          orderDetailData:
             [
-              ...state.OrderDetailData,
+              ...state.orderDetailData,
               user
             ],
         })),

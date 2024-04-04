@@ -1,7 +1,15 @@
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
 import { notifications } from "@mantine/notifications";
-import { CartItem } from "components/Cart/CartItem";
+
+export interface CartItem {
+  image: string;
+  title: string;
+  price: number;
+  totalPrice: number;
+  amount: number;
+  id: string;
+}
 
 interface CartStore {
   cart: CartItem[];
@@ -45,13 +53,14 @@ export const useCartStore = create(
               }]
             };
           }
-        }),
-          notifications.show({
-            title: "Success",
-            message: "Item added successfully.",
-            color: "green",
-            autoClose: 1000
-          });
+        });
+
+        notifications.show({
+          title: "Success",
+          message: "Item added successfully.",
+          color: "green",
+          autoClose: 1000
+        });
       },
       updateItemQuantity: (id, updater) => set((state) => ({
         cart: state.cart.map((item) =>

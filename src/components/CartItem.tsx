@@ -1,19 +1,11 @@
 import { ActionIcon, Anchor, Box, Card, Flex, Group, Image, NumberInput, Title } from "@mantine/core";
 import { IconTrash, IconPlus, IconMinus } from "@tabler/icons-react";
-import { useCartStore } from "../../store/cart.store";
-import { openConfirmDeleteModal } from "../../utils/openConfirmDeleteModal";
-import { currencyFormatter } from "utils/number/currencyFormatter";
+import { useCartStore } from "@store/cart.store";
+import { confirmDeleteModal } from "../utils/confirmDeleteModal";
+import { currencyFormatter } from "@utils/number/currencyFormatter";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-
-export interface CartItem {
-  image: string;
-  title: string;
-  price: number;
-  totalPrice: number;
-  amount: number;
-  id: string;
-}
+import { CartItem } from "@store/cart.store";
 
 interface CartItemProps {
   cartProduct: CartItem;
@@ -23,9 +15,7 @@ interface CartItemProps {
   cardHeight?: number;
 }
 
-
-
-export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, cartProduct, ...rest }: CartItemProps) => {
+export const CartProductItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, cartProduct, ...rest }: CartItemProps) => {
   const deleteItem = useCartStore((state) => state.deleteItem);
   const updateItemQuantity = useCartStore((state) => state.updateItemQuantity);
 
@@ -33,8 +23,8 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
     deleteItem(cartProduct.id);
   };
 
-  const deleteConfirmModal = () => {
-    openConfirmDeleteModal({
+  const openModal = () => {
+    confirmDeleteModal({
       onConfirm: () => deleteItem(cartProduct.id),
       title: "Are you sure you want to delete this item?"
     });
@@ -42,18 +32,18 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
 
   useEffect(() => {
     if (cartProduct.amount < 1) {
-      deleteConfirmModal();
+      openModal();
     }
   }, [cartProduct.amount]);
 
   return (
     <Card
-      {...rest}
       padding="xs"
       w="100%"
       mih={cardHeight}
+      {...rest}
     >
-      <Flex h="100%" px={15} align="center"  >
+      <Flex h="100%" px={15} align="center">
         <Image
           src={cartProduct.image}
           fit="contain"
@@ -76,7 +66,7 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
             <Flex direction="row" align="center" justify="space-evenly" >
               <ActionIcon
                 variant="light"
-                onClick={() => cartProduct.amount < 2 ? deleteConfirmModal() : updateItemQuantity(cartProduct.id, (prev) => prev - 1)}
+                onClick={() => cartProduct.amount < 2 ? openModal() : updateItemQuantity(cartProduct.id, (prev) => prev - 1)}
               >
                 <IconMinus size="20" />
               </ActionIcon>
@@ -84,7 +74,7 @@ export const CartItem = ({ cardHeight, textBoxWidth, disableAnchor, lineClamp, c
                 size="xs"
                 w={45}
                 value={cartProduct.amount}
-                onChange={(value) => updateItemQuantity(cartProduct.id, () => Number(value))}
+                onChange={(value) => value === "" ? null : updateItemQuantity(cartProduct.id, () => Number(value))}
                 hideControls
                 min={1}
                 allowNegative={false}

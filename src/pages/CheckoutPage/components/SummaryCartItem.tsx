@@ -1,7 +1,7 @@
 import { Flex, Image, Text, Card, FlexProps, Box } from "@mantine/core";
-import { CartItem } from "./CartItem";
 import { Link } from "react-router-dom";
-import { currencyFormatter } from "utils/number/currencyFormatter";
+import { currencyFormatter } from "@utils/number/currencyFormatter";
+import { CartItem } from "@store/cart.store";
 
 
 interface SummaryCartItemProps extends FlexProps {

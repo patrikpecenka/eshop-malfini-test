@@ -1,24 +1,24 @@
 import { Button, Flex, NumberInput, Paper, Select, TextInput, Title, Text } from "@mantine/core";
-import { useForm, isEmail, isNotEmpty, hasLength } from "@mantine/form";
+import { useForm, isEmail, isNotEmpty, hasLength, matches } from "@mantine/form";
 import { useQuery } from "@tanstack/react-query";
-import { CountriesDto } from "lib/dto/types";
-import fetcher from "lib/fetcher";
+import { CountriesDto } from "@lib/dto/types";
+import fetcher from "@lib/fetcher";
 import { useMemo, useState } from "react";
-import { useCartStore } from "store/cart.store";
-import { useOrderStore } from "store/order.store";
+import { useCartStore } from "@store/cart.store";
+import { useOrderStore } from "@store/order.store";
 import { IconCubeSend, IconLock, IconLockOpen } from "@tabler/icons-react";
-import { withDefault, StringParam, useQueryParams } from "use-query-params";
-import { currencyFormatter } from "utils/number/currencyFormatter";
-import { deliveryMethods, paymentMethods } from "../Checkout/PaymentDelivery";
+import { withDefault, StringParam, useQueryParams, NumberParam } from "use-query-params";
+import { currencyFormatter } from "@utils/number/currencyFormatter";
+import { deliveryMethods, paymentMethods } from "./PaymentDelivery";
 
-interface AddressProps {
+interface AddressAndCompletionProps {
   handleStepCompleted: () => void;
 }
 
-export const Address = ({ handleStepCompleted }: AddressProps) => {
+export const AddressAndCompletion = ({ handleStepCompleted }: AddressAndCompletionProps) => {
   const createNewOrder = useOrderStore((state) => state.createOrder);
   const { cart, totalPriceCalculation, clearCart, getSumCartItems } = useCartStore();
-  const { OrderDetailData: userData } = useOrderStore();
+  const { orderDetailData: userData } = useOrderStore();
 
   //USE STATES
   const [loading, setLoading] = useState(false);
@@ -26,6 +26,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
   const [query, setQuery] = useQueryParams({
     paymentMethod: withDefault(StringParam, ""),
     deliveryMethod: withDefault(StringParam, ""),
+    order: withDefault(NumberParam, undefined),
   });
 
   //FORM VALIDATION
@@ -43,7 +44,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
     },
     validate: {
       email: isEmail("Invalid email"),
-      phoneNumber: isNotEmpty("Invalid phone number"),
+      phoneNumber: matches(/^\+[1-9]\d{1,14}$/, "Invalid phone number, provide country code with your phone number"),
       firstName: hasLength({ min: 2, max: 20 }, "Invalid first name"),
       lastName: hasLength({ min: 2, max: 40 }, "Invalid last name"),
       zipCode: (value) => hasLength(5, "Invalid zip code")(value.toString()),
@@ -75,6 +76,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
   const deliveryValues = deliveryMethods.find((p) => p.name === query.deliveryMethod);
   let discount = 13.89;
   const finalTotalPrice = (totalPriceCalculation() + (paymentValues?.fee ?? 0) + (deliveryValues?.fee ?? 0)) - discount;
+  const createOrderId = userData.length === 0 ? 1000001 : userData[userData.length - 1].orderId + 1;
 
   //CALCULATIONS
   const noVatCalculation = () => {
@@ -92,7 +94,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
     setTimeout(() => {
       createNewOrder({
         id: crypto.randomUUID(),
-        orderId: userData.length === 0 ? 1000001 : userData[userData.length - 1].orderId + 1,
+        orderId: createOrderId,
         userDetails: {
           ...form.values
         },
@@ -102,9 +104,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
           noVatPrice: totalPriceCalculation() - (totalPriceCalculation() / 1.21),
           vatPrice: Number(vatCalculation()),
           discount: discount,
-          paymentMethod: query.paymentMethod,
           paymentId: paymentValues?.id ?? "",
-          deliveryMethod: query.deliveryMethod,
           deliveryId: deliveryValues?.id ?? "",
           dateOfOrder: new Date().toISOString(),
         },
@@ -114,7 +114,8 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
         handleStepCompleted(),
         setQuery({
           paymentMethod: undefined,
-          deliveryMethod: undefined
+          deliveryMethod: undefined,
+          order: createOrderId,
         });
       clearCart();
 
@@ -126,12 +127,11 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
 
   return (
     <Paper
-      className="justify-center border-t-4 border-violet-500"
+      className="justify-center border-t-4 border-[var(--mantine-primary-color-filled)]"
       shadow="xl"
       p="xl"
       h="70dvh"
       mt={20}
-
     >
       <form onSubmit={form.onSubmit(handleCreateNewOrder)}>
         <Flex w="100%" align="center" justify="center" direction="row" >
@@ -159,7 +159,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
                     disabled={loading}
                     flex={1}
                     label="Phone number"
-                    placeholder="123 456 789"
+                    placeholder="+420123456789"
                     {...form.getInputProps("phoneNumber")}
                   />
 
@@ -240,7 +240,7 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
                 <Flex direction="column" >
                   {
                     (deliveryValues?.fee ?? 0) + (paymentValues?.fee ?? 0) === 0
-                      ? <Flex c="violet.8" align="center">
+                      ? <Flex c="var(--mantine-primary-color-filled)" align="center">
                         <IconCubeSend size={22} />
                         <Text fw={700} size="sm">This Order Ships Free!</Text>
                       </Flex>
@@ -258,14 +258,14 @@ export const Address = ({ handleStepCompleted }: AddressProps) => {
                   <Flex justify="space-between">
                     <Text>Payment fee: </Text>
                     {paymentValues?.fee === 0
-                      ? <Text fw={700} c="violet.8">Free</Text>
+                      ? <Text fw={700} c="var(--mantine-primary-color-filled)">Free</Text>
                       : currencyFormatter.format(paymentValues?.fee ?? 0)
                     }
                   </Flex>
                   <Flex justify="space-between">
                     <Text>Delivery: </Text>
                     {deliveryValues?.fee === 0
-                      ? <Text fw={700} c="violet.8">Free</Text>
+                      ? <Text fw={700} c="var(--mantine-primary-color-filled)">Free</Text>
                       : currencyFormatter.format(deliveryValues?.fee ?? 0)
                     }
                   </Flex>

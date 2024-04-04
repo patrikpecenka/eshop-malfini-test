@@ -2,15 +2,40 @@ import {
   Badge,
   Drawer,
   Flex,
-  Group, Indicator, Image, Title, Button, Text, Avatar, Stack, Menu, ActionIcon, Tooltip, useComputedColorScheme, useMantineColorScheme, UnstyledButton
+  Group,
+  Indicator,
+  Image,
+  Title,
+  Button,
+  Text,
+  Avatar,
+  Stack,
+  Menu, ActionIcon, Tooltip, useComputedColorScheme, useMantineColorScheme, UnstyledButton, SimpleGrid
 } from "@mantine/core";
-import { useDisclosure, useHover } from "@mantine/hooks";
+import { readLocalStorageValue, useDisclosure, useHover } from "@mantine/hooks";
 import { IconShoppingCartFilled, IconTool, IconReceipt, IconHeartFilled, IconMoon, IconSun } from '@tabler/icons-react';
-import { CartItem } from "components/Cart/CartItem";
-import { useCartStore } from "../store/cart.store";
+import { CartProductItem } from "@components/CartItem";
+import { useCartStore } from "@store/cart.store";
 import { Link, useNavigate } from "react-router-dom";
-import { EmptyCart } from "components/EmptyCart/EmptyCart";
-import { currencyFormatter } from "utils/number/currencyFormatter";
+import { EmptyCart } from "@components/EmptyCart";
+import { currencyFormatter } from "@utils/number/currencyFormatter";
+
+export let primaryColor = readLocalStorageValue({ key: "easyShopPrimaryColor", defaultValue: "blue" });
+
+const COLOR_OPTIONS = [
+  { id: 1, colValue: "red" },
+  { id: 2, colValue: "pink" },
+  { id: 3, colValue: "grape" },
+  { id: 4, colValue: "violet" },
+  { id: 5, colValue: "indigo" },
+  { id: 6, colValue: "blue" },
+  { id: 7, colValue: "cyan" },
+  { id: 8, colValue: "teal" },
+  { id: 9, colValue: "green" },
+  { id: 10, colValue: "lime" },
+  { id: 11, colValue: "yellow" },
+  { id: 12, colValue: "orange" },
+];
 
 export const Navbar = () => {
   const { totalPriceCalculation, clearCart } = useCartStore();
@@ -34,6 +59,15 @@ export const Navbar = () => {
   const handleCheckoutRedirect = () => {
     close();
     navigate("/checkout");
+  };
+
+  const handleThemeChange = (selectedColor: string) => {
+    if (primaryColor === selectedColor) {
+      return;
+    }
+
+    localStorage.setItem("easyShopPrimaryColor", selectedColor);
+    location.reload();
   };
 
   return (
@@ -61,7 +95,6 @@ export const Navbar = () => {
               component="div"
               size="sm"
               variant={hovered ? "light" : "transparent"}
-              color="violet"
               leftSection={
                 <Avatar
                   size="sm"
@@ -75,7 +108,31 @@ export const Navbar = () => {
               </Stack>
             </Button>
           </Menu.Target>
-          <Menu.Dropdown w={200} >
+          <Menu.Dropdown w={210} >
+            <Menu.Label>Color scheme selector</Menu.Label>
+            <Menu.Item>
+              <SimpleGrid cols={6} spacing="xs" verticalSpacing="xs">
+                {COLOR_OPTIONS.map((color) => {
+                  return (
+                    <Tooltip label={color.colValue} key={color.id} >
+                      <ActionIcon
+                        size="sm"
+                        className={
+                          primaryColor === color.colValue
+                            ? 'active'
+                            : 'opacity-20 hover:opacity-100 hover:scale-110 transition-all'
+                        }
+                        color={color.colValue}
+                        onClick={() => handleThemeChange(color.colValue)}
+                      >
+                      </ActionIcon>
+                    </Tooltip>
+                  );
+                })}
+              </SimpleGrid>
+            </Menu.Item>
+
+            <Menu.Label>Other</Menu.Label>
             <Menu.Item
               leftSection={<IconTool size={18} color="grey" />}
             >
@@ -211,7 +268,7 @@ export const Navbar = () => {
               cart.length === 0
                 ? <EmptyCart />
                 : cart.map((product) => (
-                  <CartItem
+                  <CartProductItem
                     key={product.id}
                     disableAnchor={true}
                     cartProduct={product}

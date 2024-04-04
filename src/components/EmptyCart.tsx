@@ -1,5 +1,5 @@
-import { Card, Flex, Image, Title } from "@mantine/core"
-import img from "../../assets/empty-cart.png"
+import { Card, Flex, Image, Title } from "@mantine/core";
+import img from "@assets/empty-cart.png";
 
 export const EmptyCart = () => {
   return (
@@ -20,5 +20,5 @@ export const EmptyCart = () => {
         </Title>
       </Flex>
     </Card >
-  )
-}
+  );
+};

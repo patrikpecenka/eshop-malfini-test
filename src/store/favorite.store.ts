@@ -1,4 +1,4 @@
-import { FavoriteItem } from "components/Favorites/FavoriteItem";
+import { FavoriteItem } from "@pages/FavoritePage/components/FavoriteItem";
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
 

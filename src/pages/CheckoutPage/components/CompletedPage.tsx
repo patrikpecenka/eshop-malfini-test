@@ -1,7 +1,17 @@
 import { Button, Flex, Group, Title, Text, Paper } from "@mantine/core";
 import { Link } from "react-router-dom";
+import { useQueryParam } from "use-query-params";
 
 export const CompletedPage = () => {
+  const [order] = useQueryParam("order");
+
+  const checkRedirect = () => {
+    if (order === undefined) {
+      return `/profile`;
+    }
+    return `/profile/${order}`;
+  };
+
   return (
     <>
       <Paper
@@ -18,14 +28,14 @@ export const CompletedPage = () => {
           <Group>
             <Button
               component={Link}
-              to={"/profile"}
+              to={`${checkRedirect()}`}
               variant="light"
             >
-              Check orders
+              Check order
             </Button>
             <Button
               component={Link}
-              to={"/products"}
+              to="/products"
             >
               Done
             </Button>

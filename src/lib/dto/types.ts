@@ -11,8 +11,7 @@ export interface ProductDto {
   };
 }
 
-interface Country {
-  [x: string]: any;
+interface CountryDto {
   name: string;
   iso3: string;
   iso2: string;
@@ -25,5 +24,5 @@ interface Country {
 export interface CountriesDto {
   error: boolean;
   msg: string;
-  data: Country[];
+  data: CountryDto[];
 }

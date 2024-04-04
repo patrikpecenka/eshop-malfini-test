@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { SoloProductSkeleton } from "components/Skeletons/SoloProductSkeleton";
-import { ProductDto } from "lib/dto/types";
-import fetcher from "lib/fetcher";
+import { SoloProductSkeleton } from "@pages/ProductDetailPage/components/SoloProductSkeleton";
+import { ProductDto } from "@lib/dto/types";
+import fetcher from "@lib/fetcher";
 import { Suspense, lazy } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
-const SoloProduct = lazy(() => import("../components/SoloProduct"));
+const SoloProduct = lazy(() => import("./components/SoloProduct"));
 
 
 export const ProductDetailPage = () => {
@@ -22,7 +22,12 @@ export const ProductDetailPage = () => {
 
   return (
     <Suspense fallback={<SoloProductSkeleton />}>
-      <SoloProduct product={data} />
+      <SoloProduct
+        key={data.id}
+        h="calc(100dvh - var(--app-shell-header-height)"
+        withBorder={false}
+        product={data}
+      />
     </Suspense>
   );
 };

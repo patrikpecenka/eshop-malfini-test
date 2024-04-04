@@ -1,21 +1,19 @@
-import { Card, Skeleton, Group, Box, Flex } from "@mantine/core";
+import { Card, Skeleton, Group, Box, Flex, BoxProps } from "@mantine/core";
 
 
-export const SoloProductSkeleton = () => {
+export const SoloProductSkeleton = ({ ...rest }: BoxProps) => {
   return (
     <>
-      <Box>
-        <Card
-          p={70}
-        >
+      <Box {...rest}>
+        <Card p={70}>
           <Flex justify="center" >
             <Flex direction="column">
               <Box h={550} w={650}>
                 <Skeleton h="100%" radius="lg" />
               </Box>
               <Group mt={20} justify="space-between">
-                {[...Array(4)].map((_,) => (
-                  <Skeleton w={150} h={120} radius="lg" />
+                {[...Array(4)].map((_, index) => (
+                  <Skeleton key={index} w={150} h={120} radius="lg" />
                 ))}
 
               </Group>
